@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>馋香鸡 - 支持</title>
+  <style>
+    :root {
+      --bg: #f6faf5;
+      --card: #ffffff;
+      --text: #142018;
+      --muted: #5d6d62;
+      --line: #d9e8dc;
+      --accent: #0a7a3a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(160deg, #f9fcf8 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
+    }
+
+    .wrap {
+      width: min(820px, calc(100% - 32px));
+      margin: 40px auto 56px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(18, 52, 32, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      margin: 8px 0;
+      line-height: 1.65;
+      color: #1f2d23;
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+      line-height: 1.7;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 3px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 22px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <article class="card">
+      <h1>馋香鸡支持</h1>
+      <p class="meta">最后更新：2026年2月20日</p>
+      <p>感谢使用馋香鸡。这个页面用于提供使用帮助与反馈入口。</p>
+
+      <h2>联系与反馈</h2>
+      <p>你可以通过以下方式联系开发者：</p>
+      <ul>
+        <li>小红书主页：<a href="https://www.xiaohongshu.com/user/profile/66a6d5f2000000001d020f1b" target="_blank" rel="noopener noreferrer">https://www.xiaohongshu.com/user/profile/66a6d5f2000000001d020f1b</a></li>
+        <li>GitHub 主页：<a href="https://github.com/ljmng7" target="_blank" rel="noopener noreferrer">https://github.com/ljmng7</a></li>
+      </ul>
+
+      <h2>常见说明（基于当前版本实际行为）</h2>
+      <ul>
+        <li>菜谱内容来自 App 内置本地菜谱库（`Library` 目录），不依赖在线接口拉取。</li>
+        <li>收藏功能会把菜品标识保存在设备本地（`UserDefaults`）。</li>
+        <li>搜索、筛选与推荐逻辑在本机运行，不会上传你的搜索词。</li>
+      </ul>
+
+      <h2>问题反馈建议</h2>
+      <ul>
+        <li>请附上设备型号与 iOS 版本。</li>
+        <li>请描述操作步骤、预期结果与实际结果。</li>
+        <li>如有崩溃或界面异常，附截图更有助于定位问题。</li>
+      </ul>
+
+      <a class="back" href="./index.html">返回首页</a>
+    </article>
+  </main>
+</body>
+</html>

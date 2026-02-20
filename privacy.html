@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>馋香鸡 - 隐私政策</title>
+  <style>
+    :root {
+      --bg: #f6faf5;
+      --card: #ffffff;
+      --text: #142018;
+      --muted: #5d6d62;
+      --line: #d9e8dc;
+      --accent: #0a7a3a;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(160deg, #f9fcf8 0%, var(--bg) 100%);
+      color: var(--text);
+      font-family: "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
+    }
+
+    .wrap {
+      width: min(860px, calc(100% - 32px));
+      margin: 40px auto 56px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(18, 52, 32, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 32px;
+      letter-spacing: -0.02em;
+    }
+
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      margin: 8px 0;
+      line-height: 1.65;
+      color: #1f2d23;
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+      line-height: 1.7;
+    }
+
+    li {
+      margin: 6px 0;
+    }
+
+    a {
+      color: var(--accent);
+      text-underline-offset: 3px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 22px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <article class="card">
+      <h1>馋香鸡隐私政策</h1>
+      <p class="meta">最后更新：2026年2月20日</p>
+      <p>本政策说明馋香鸡在当前版本中如何处理数据。</p>
+
+      <h2>1. 我们收集什么信息</h2>
+      <p>当前版本不要求注册账号，也不提供登录功能。我们不会主动收集你的姓名、手机号、邮箱、身份证号等个人身份信息。</p>
+
+      <h2>2. 数据如何产生与存储</h2>
+      <ul>
+        <li>菜谱与图片内容来自 App 内置本地资源（`Library` 目录）。</li>
+        <li>你手动收藏的菜品标识会保存到设备本地 `UserDefaults`（键名：`favorite_recipe_ids_v1`）。</li>
+        <li>搜索词仅用于本机搜索匹配，不会上传至服务器。</li>
+      </ul>
+
+      <h2>3. 网络与第三方服务</h2>
+      <ul>
+        <li>当前代码未使用在线菜谱接口进行数据拉取。</li>
+        <li>当前版本未集成广告 SDK、统计分析 SDK 或个性化追踪 SDK。</li>
+        <li>当前版本未实现将你的使用数据传输到开发者服务器的逻辑。</li>
+      </ul>
+
+      <h2>4. 权限使用</h2>
+      <p>当前版本核心功能（浏览、搜索、收藏、步骤查看）不依赖通讯录、定位、相机、麦克风、相册等敏感权限。</p>
+
+      <h2>5. 数据控制与删除</h2>
+      <p>收藏数据保存在本机。你可以通过取消收藏移除单条数据，也可以通过卸载 App 清除本地存储的数据。</p>
+
+      <h2>6. 外部链接</h2>
+      <p>支持页面可能包含外部网站链接（如小红书、GitHub）。这些站点有其独立隐私政策，访问后将适用对应平台规则。</p>
+
+      <h2>7. 政策更新</h2>
+      <p>如果后续版本引入新的数据处理方式（例如账号系统、云同步或统计服务），本页面会同步更新并标注新的更新时间。</p>
+
+      <h2>8. 联系方式</h2>
+      <p>如对本政策有疑问，请访问支持页面：<a href="./support.html">支持</a></p>
+
+      <a class="back" href="./index.html">返回首页</a>
+    </article>
+  </main>
+</body>
+</html>
