@@ -784,7 +784,7 @@
       const updateScrollDrivenMotion = () => {
         if (!reduceMotion) {
           const parallaxProgress = readParallaxProgress();
-          const mobileStaggerScale = window.matchMedia('(max-width: 734px)').matches ? 0.46 : 1;
+          const mobileStaggerScale = window.matchMedia('(max-width: 734px)').matches ? 0.48 : 1;
 
           phoneUnits.forEach((unit) => {
             const startOffset = Number(unit.dataset.start || 0);
