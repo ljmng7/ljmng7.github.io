@@ -2,41 +2,815 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>馋香鸡</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="preload" href="./烹饪跟随_动画.mp4" as="video" type="video/mp4">
+  <title>YumChick | 馋香鸡</title>
   <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      font-family: "SF Pro Display", "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", sans-serif;
-      background: #ffffff;
-      color: #111111;
+    :root {
+      --accent: rgb(20, 120, 62);
+      --accent-strong: rgb(16, 103, 53);
+      --text-primary: #1d1d1f;
+      --text-secondary: #424245;
+      --text-tertiary: #6e6e73;
+      --surface: #f5f5f7;
+      --surface-soft: #f2f2f5;
+      --border: #d2d2d7;
+      --radius-xl: 34px;
+      --radius-lg: 26px;
+      --radius-md: 16px;
+      --content-max: 1120px;
+      --local-nav-h: 52px;
+      --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    nav {
-      display: flex;
-      gap: 24px;
-      font-size: 16px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--surface);
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "SF Pro Text", "SF Pro Display", "SF Pro SC",
+        "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC",
+        "Microsoft YaHei", "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      color: var(--text-primary);
+      background: var(--surface);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+      overflow-x: hidden;
+    }
+
+    /* Language-specific tuning: keep Latin glyphs in system/SF, CJK in CJK system fonts */
+    :lang(zh), :lang(zh-CN), :lang(zh-Hans) {
+      font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC",
+        "Microsoft YaHei", system-ui, -apple-system, BlinkMacSystemFont,
+        "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    }
+
+    :lang(en) {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* Enable numeric features similar to Apple typography */
+    body {
+      font-kerning: normal;
+      font-variant-numeric: tabular-nums;
+      font-feature-settings: "kern" 1, "liga" 1;
     }
 
     a {
-      color: #0a7a3a;
+      color: inherit;
       text-decoration: none;
-      border-bottom: 1px solid #0a7a3a33;
-      padding-bottom: 2px;
     }
 
-    a:hover {
-      border-bottom-color: #0a7a3a;
+    .local-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--local-nav-h);
+      z-index: 100;
+      background: rgba(245, 245, 247, 0.88);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid #d9d9de;
+    }
+
+    .local-nav-inner {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .local-title {
+      font-size: 21px;
+      font-weight: 600;
+      font-family: inherit;
+      letter-spacing: -0.02em;
+      color: #1d1d1f;
+    }
+
+    .local-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 13px;
+      color: #515154;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      font-size: 14px;
+      line-height: 1;
+      white-space: nowrap;
+      transition: all 0.28s var(--ease);
+      border: 0;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      padding: 9px 18px;
+      font-weight: 500;
+    }
+
+    .local-nav .btn-primary {
+      font-size: 13px;
+      padding: 8px 16px;
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-strong);
+      transform: translateY(-1px);
+    }
+
+    .main {
+      padding-top: var(--local-nav-h);
+      background: var(--surface);
+    }
+
+    .section {
+      position: relative;
+      background: var(--surface);
+    }
+
+    .section-content {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .hero {
+      background: var(--surface);
+      text-align: center;
+      padding-top: 98px;
+      padding-bottom: 56px;
+    }
+
+    .hero-app {
+      width: 88px;
+      height: 88px;
+      border-radius: 20px;
+      object-fit: cover;
+      box-shadow: 0 8px 20px rgba(20, 27, 22, 0.18);
+    }
+
+    .hero-product {
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: #1d1d1f;
+    }
+
+    .hero-title {
+      margin: 22px auto 14px;
+      max-width: 980px;
+      font-size: clamp(32px, 4.2vw, 66px);
+      line-height: 1.18;
+      letter-spacing: -0.04em;
+      font-weight: 600;
+      text-wrap: normal;
+    }
+
+    .hero-title .accent {
+      color: var(--accent);
+    }
+
+    .hero-copy {
+      max-width: 980px;
+      margin: 0 auto;
+      font-size: clamp(15px, 1.2vw, 20px);
+      line-height: 1.45;
+      letter-spacing: -0.015em;
+      color: var(--text-secondary);
+      text-wrap: normal;
+    }
+
+    .hero-cta {
+      margin-top: 30px;
+    }
+
+    .hero-cta .btn-primary {
+      padding: 14px 28px;
+    }
+
+    .device-panorama {
+      background: var(--surface);
+      padding-top: 112px;
+      padding-bottom: 20px;
+      overflow-x: clip;
+      overflow-y: visible;
+    }
+
+    .device-strip {
+      width: min(2860px, 190vw);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 0;
+      padding: 0;
+      position: relative;
+      left: 50%;
+      transform: translateX(-50%);
+      isolation: isolate;
+    }
+
+    .phone-unit {
+      width: clamp(340px, 30.5vw, 560px);
+      flex: 0 0 auto;
+      position: relative;
+      transform: translate3d(0, var(--y, 0px), 0);
+      will-change: transform;
+    }
+
+    /* Apple-style overlap: only let transparent shadow areas overlap */
+    .phone-unit + .phone-unit {
+      margin-left: clamp(-158px, -9.4vw, -94px);
+    }
+
+    .phone-unit:nth-child(3) { z-index: 5; }
+    .phone-unit:nth-child(2),
+    .phone-unit:nth-child(4) { z-index: 4; }
+    .phone-unit:nth-child(1),
+    .phone-unit:nth-child(5) { z-index: 3; }
+
+    .phone-unit img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: translateX(16.65%);
+      will-change: transform;
+    }
+
+    .panorama-message {
+      background: var(--surface);
+      padding: 40px 0 112px;
+    }
+
+    .panorama-message .section-title {
+      margin-bottom: 0;
+      font-size: clamp(24px, 3.2vw, 42px);
+      line-height: 1.28;
+      letter-spacing: -0.034em;
+    }
+
+    .panorama-sequence {
+      display: grid;
+      justify-items: center;
+      gap: clamp(52px, 8.4vh, 108px);
+    }
+
+    .panorama-slogan {
+      text-align: center;
+      opacity: 0;
+      transform: translate3d(0, 56px, 0);
+      will-change: opacity, transform;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      font-size: 13px;
+      color: var(--text-tertiary);
+      margin-bottom: 10px;
+      letter-spacing: 0.02em;
+    }
+
+    .section-title {
+      font-size: clamp(36px, 4.6vw, 62px);
+      line-height: 1.18;
+      letter-spacing: -0.045em;
+      font-weight: 600;
+      font-family: inherit;
+      margin-bottom: 16px;
+      text-wrap: normal;
+      color: #1d1d1f;
+    }
+
+    .section-title .accent {
+      color: var(--accent);
+    }
+
+    /* Center text optically by excluding trailing punctuation from layout width (Apple-style) */
+    .punct-anchor {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .punct-anchor::after {
+      content: attr(data-punct);
+      position: absolute;
+      top: 0;
+      left: 100%;
+      margin-left: 0em; /* tighten punctuation spacing (tweak if needed) */
+      color: currentColor;
+      font: inherit;
+      line-height: inherit;
+      letter-spacing: inherit;
+      pointer-events: none;
+    }
+
+    /* Allow punctuation to inherit accent color when the anchor itself is accented */
+    .punct-anchor.accent {
+      color: var(--accent);
+    }
+
+    .section-copy {
+      max-width: 840px;
+      margin: 0 auto;
+      font-size: clamp(20px, 2.1vw, 34px);
+      line-height: 1.42;
+      letter-spacing: -0.016em;
+      color: var(--text-secondary);
+      text-wrap: normal;
+    }
+
+    .cooking-follow {
+      padding: 40px 0 112px;
+      background: var(--surface);
+    }
+
+    .follow-layout {
+      display: flex;
+      justify-content: center;
+    }
+
+    .follow-replay {
+      display: block;
+      margin: 16px auto 0;
+      padding: 10px 20px;
+      border-radius: 999px;
+      border: 1px solid #c8c8ce;
+      background: #fff;
+      color: #2f2f33;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
+    }
+
+    .follow-replay:hover {
+      background: #f7f7f9;
+      border-color: #b8b8bf;
+      transform: translateY(-1px);
+    }
+
+    .follow-replay:focus-visible {
+      outline: 2px solid rgba(20, 120, 62, 0.55);
+      outline-offset: 2px;
+    }
+
+    .follow-cta {
+      margin-top: 48px;
+      text-align: center;
+    }
+
+    .follow-cta .btn-primary {
+      padding: 14px 28px;
+    }
+
+    .follow-media {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .follow-media video {
+      width: min(100%, 360px);
+      height: auto;
+      display: block;
+      margin: 0 auto;
+      border-radius: 0;
+      border: 0;
+      box-shadow: none;
+      background: transparent;
+      -webkit-clip-path: inset(0.5px 0 0.25px 0);
+      clip-path: inset(0.5px 0 0.25px 0);
+    }
+
+    footer {
+      background: var(--surface);
+      padding: 22px 0 26px;
+    }
+
+    .footer-inner {
+      width: min(100%, var(--content-max));
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-divider {
+      width: min(100%, 980px);
+      margin: 0 auto 14px;
+      border-top: 1px solid #d7d7dc;
+    }
+
+    .footer-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      font-size: 12px;
+      line-height: 1.5;
+      white-space: nowrap;
+    }
+
+    .footer-copy {
+      color: #7f7f87;
+    }
+
+    .footer-link {
+      color: #5e5e66;
+      font-weight: 500;
+    }
+
+    .footer-right {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .footer-sep {
+      color: #9a9aa1;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s var(--ease), transform 0.8s var(--ease);
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 1068px) {
+      .follow-media video {
+        width: min(100%, 340px);
+      }
+
+      .device-strip {
+        width: min(2240px, 220vw);
+      }
+
+      .phone-unit {
+        width: clamp(280px, 36vw, 460px);
+      }
+
+      .phone-unit + .phone-unit {
+        margin-left: clamp(-130px, -8.4vw, -70px);
+      }
+    }
+
+    @media (max-width: 734px) {
+      :root {
+        --local-nav-h: 56px;
+      }
+
+      .local-nav-inner {
+        padding: 0 14px;
+      }
+
+      .local-title {
+        font-size: 20px;
+      }
+
+      .local-actions a:not(.btn) {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 62px;
+        padding-bottom: 40px;
+      }
+
+      .hero-app {
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+      }
+
+      .hero-title {
+        margin-top: 16px;
+        font-size: clamp(30px, 8.5vw, 48px);
+      }
+
+      .hero-product {
+        font-size: 14px;
+      }
+
+      .hero-copy {
+        font-size: 16px;
+      }
+
+      .device-panorama {
+        padding-top: 72px;
+        padding-bottom: 12px;
+      }
+
+      .device-strip {
+        width: 280vw;
+        gap: 0;
+      }
+
+      .phone-unit {
+        width: min(64vw, 340px);
+      }
+
+      .phone-unit + .phone-unit {
+        margin-left: -56px;
+      }
+
+      .phone-unit:nth-child(5) {
+        display: none;
+      }
+
+      .panorama-message {
+        padding: 40px 0 86px;
+      }
+
+      .panorama-sequence {
+        gap: 56px;
+      }
+
+      .cooking-follow {
+        padding-bottom: 84px;
+      }
+
+      .follow-media video {
+        width: min(100%, 300px);
+        border-radius: 0;
+      }
+
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+
+      html {
+        scroll-behavior: auto;
+      }
+
+      .panorama-slogan {
+        opacity: 1;
+        transform: none;
+      }
     }
   </style>
 </head>
 <body>
-  <nav aria-label="页面链接">
-    <a href="./support.html">支持</a>
-    <a href="./privacy.html">隐私政策</a>
-  </nav>
+  <header class="local-nav" aria-label="本地导航">
+    <div class="local-nav-inner">
+      <a href="#" class="local-title">馋香鸡</a>
+      <div class="local-actions">
+        <a href="./support.html">支持</a>
+        <a href="./privacy.html">隐私</a>
+        <a class="btn btn-primary" href="https://testflight.apple.com/join/xyzeBYgG">获取app</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="main" id="main">
+    <section class="section hero" id="download">
+      <div class="section-content">
+        <img class="hero-app reveal" src="./YumChick-iOS-Default-1024x1024@1x.png" alt="YumChick 应用图标">
+        <p class="hero-product reveal">馋香鸡</p>
+        <h1 class="hero-title reveal"><span class="punct-anchor" data-punct="，">把厨房变简单</span><br><span class="punct-anchor" data-punct="。">从今天开始做一顿</span></h1>
+        <p class="hero-copy reveal">馋香鸡是一款极简菜谱与烹饪跟随 App。每日推荐、清晰步骤与干净界面，帮你更轻松地走进厨房。<br>无广告、无多余社交，专注做菜这件事。</p>
+        <div class="hero-cta reveal">
+          <a class="btn btn-primary" href="https://testflight.apple.com/join/xyzeBYgG">获取app</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section device-panorama" id="screens" aria-label="多设备截图展示">
+      <div class="device-strip">
+        <figure class="phone-unit" data-start="20" data-exp="0.78">
+          <img src="./菜谱.png" alt="YumChick 每日推荐页面">
+        </figure>
+        <figure class="phone-unit" data-start="-35" data-exp="1.4">
+          <img src="./菜谱详情.png" alt="YumChick 菜谱列表页面">
+        </figure>
+        <figure class="phone-unit" data-start="20" data-exp="0.78">
+          <img src="./每日推荐.png" alt="YumChick 菜谱详情页面">
+        </figure>
+        <figure class="phone-unit" data-start="-35" data-exp="1.4">
+          <img src="./烹饪跟随.png" alt="YumChick 烹饪跟随页面">
+        </figure>
+        <figure class="phone-unit" data-start="20" data-exp="0.78">
+          <img src="./收藏.png" alt="YumChick 收藏页面">
+        </figure>
+      </div>
+    </section>
+
+    <section class="section panorama-message">
+      <div class="section-content panorama-sequence" aria-label="滚动浮现文案">
+        <article class="panorama-slogan">
+          <h2 class="section-title"><span class="punct-anchor accent" data-punct="，">每日推荐</span><br><span class="punct-anchor" data-punct="。">轻松下厨无压力</span></h2>
+        </article>
+        <article class="panorama-slogan">
+          <h2 class="section-title"><span class="punct-anchor accent" data-punct="，">步骤清晰</span><br><span class="punct-anchor" data-punct="。">一眼就懂，立刻出美味</span></h2>
+        </article>
+        <article class="panorama-slogan">
+          <h2 class="section-title"><span class="punct-anchor accent" data-punct="，">烹饪跟随</span><br><span class="punct-anchor" data-punct="。">边做边看，不用来回切屏</span></h2>
+        </article>
+        <article class="panorama-slogan">
+          <h2 class="section-title"><span class="punct-anchor accent" data-punct="，">收藏整理</span><br><span class="punct-anchor" data-punct="。">把常做的菜留在身边</span></h2>
+        </article>
+      </div>
+    </section>
+
+    <section class="section cooking-follow" id="cook-follow">
+      <div class="section-content">
+        <header class="reveal" style="text-align:center; margin-bottom:26px;">
+          <span class="eyebrow">烹饪跟随</span>
+          <h2 class="section-title"><span class="punct-anchor accent" data-punct="，">一步一滑</span><br><span class="punct-anchor" data-punct="。">专注灶台当下</span></h2>
+          <p class="hero-copy">大字步骤加滑动式卡片，手忙的时候也能一眼看清。卡片一滑，从备菜到出锅更顺。</p>
+        </header>
+        <div class="follow-layout">
+          <figure class="follow-media reveal">
+            <video src="./烹饪跟随_动画.mp4" autoplay muted playsinline preload="auto" poster="./烹饪跟随.png" aria-label="烹饪跟随功能演示视频"></video>
+            <button class="follow-replay" type="button" aria-label="重播视频">重播演示</button>
+          </figure>
+        </div>
+        <div class="follow-cta reveal">
+          <a class="btn btn-primary" href="https://testflight.apple.com/join/xyzeBYgG">获取app</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-divider" aria-hidden="true"></div>
+      <p class="footer-meta">
+        <span class="footer-copy">Copyright © 2026 Jazmín. 保留所有权利。</span>
+        <span class="footer-right">
+          <a class="footer-link" href="./support.html">支持</a>
+          <span class="footer-sep">|</span>
+          <a class="footer-link" href="./privacy.html">隐私政策</a>
+        </span>
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const revealEls = document.querySelectorAll('.reveal');
+      const panorama = document.querySelector('.device-panorama');
+      const settlePoint = document.querySelector('.panorama-message');
+      const panoramaMessage = document.querySelector('.panorama-message');
+      const panoramaSlogans = panoramaMessage
+        ? Array.from(panoramaMessage.querySelectorAll('.panorama-slogan'))
+        : [];
+      const phoneUnits = panorama ? Array.from(panorama.querySelectorAll('.phone-unit')) : [];
+      const followVideo = document.querySelector('.follow-media video');
+      const followReplayButton = document.querySelector('.follow-replay');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const smoothstep = (value) => value * value * (3 - 2 * value);
+
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, {
+        threshold: 0.18,
+        rootMargin: '0px 0px -8% 0px'
+      });
+
+      revealEls.forEach((el) => revealObserver.observe(el));
+
+      if (followVideo) {
+        followVideo.loop = false;
+      }
+
+      if (followVideo && followReplayButton) {
+        followReplayButton.addEventListener('click', () => {
+          followVideo.currentTime = 0;
+          const playPromise = followVideo.play();
+          if (playPromise && typeof playPromise.catch === 'function') {
+            playPromise.catch(() => {});
+          }
+        });
+      }
+
+      let rafPending = false;
+      const readParallaxProgress = () => {
+        if (!panorama || phoneUnits.length === 0) {
+          return 1;
+        }
+        const viewportH = window.innerHeight;
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const start = 0;
+        const settleY = settlePoint
+          ? settlePoint.offsetTop - viewportH * 0.74
+          : panorama.offsetTop + panorama.offsetHeight * 0.54;
+        const end = Math.max(start + 1, settleY);
+        return clamp((scrollTop - start) / (end - start), 0, 1);
+      };
+
+      const readSloganProgress = () => {
+        if (!panoramaMessage) {
+          return 1;
+        }
+        const viewportH = window.innerHeight;
+        const scrollTop = window.scrollY || window.pageYOffset;
+        const timelineLeadOffset = 40;
+        const start = panoramaMessage.offsetTop + timelineLeadOffset - viewportH;
+        const end = panoramaMessage.offsetTop + panoramaMessage.offsetHeight - viewportH * 0.66;
+        return clamp((scrollTop - start) / Math.max(1, end - start), 0, 1);
+      };
+
+      const updateSlogans = (globalProgress) => {
+        if (panoramaSlogans.length === 0) {
+          return;
+        }
+
+        const segment = 1 / panoramaSlogans.length;
+
+        panoramaSlogans.forEach((item, index) => {
+          const enterStart = segment * index;
+          const enterEnd = segment * (index + 1);
+          const localProgress = smoothstep(clamp(
+            (globalProgress - enterStart) / Math.max(0.001, enterEnd - enterStart),
+            0,
+            1
+          ));
+          const yOffset = (1 - localProgress) * 56;
+          item.style.opacity = localProgress.toFixed(3);
+          item.style.transform = `translate3d(0, ${yOffset.toFixed(2)}px, 0)`;
+        });
+      };
+
+      const updateScrollDrivenMotion = () => {
+        if (!reduceMotion) {
+          const parallaxProgress = readParallaxProgress();
+
+          phoneUnits.forEach((unit) => {
+            const startOffset = Number(unit.dataset.start || 0);
+            const exponent = Number(unit.dataset.exp || 1);
+            const eased = Math.pow(parallaxProgress, exponent);
+            const staggerOffset = startOffset * (1 - eased);
+            unit.style.setProperty('--y', `${staggerOffset}px`);
+          });
+
+          updateSlogans(readSloganProgress());
+        } else {
+          phoneUnits.forEach((unit) => unit.style.setProperty('--y', '0px'));
+          updateSlogans(1);
+        }
+        rafPending = false;
+      };
+
+      const requestTick = () => {
+        if (rafPending) {
+          return;
+        }
+        rafPending = true;
+        window.requestAnimationFrame(updateScrollDrivenMotion);
+      };
+
+      if (!reduceMotion) {
+        window.addEventListener('scroll', requestTick, { passive: true });
+        window.addEventListener('resize', requestTick);
+      }
+      requestTick();
+    })();
+  </script>
 </body>
 </html>
