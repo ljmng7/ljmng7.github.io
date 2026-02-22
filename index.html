@@ -541,7 +541,7 @@
       }
 
       .phone-unit {
-        width: min(65vw, 340px);
+        width: min(68vw, 340px);
       }
 
       .phone-unit + .phone-unit {
@@ -553,7 +553,7 @@
       }
 
       .panorama-message .section-title {
-        font-size: clamp(25px, 6.7vw, 36px);
+        font-size: clamp(25px, 7.4vw, 36px);
         line-height: 1.16;
       }
 
@@ -784,7 +784,7 @@
       const updateScrollDrivenMotion = () => {
         if (!reduceMotion) {
           const parallaxProgress = readParallaxProgress();
-          const mobileStaggerScale = window.matchMedia('(max-width: 734px)').matches ? 0.40 : 1;
+          const mobileStaggerScale = window.matchMedia('(max-width: 734px)').matches ? 0.46 : 1;
 
           phoneUnits.forEach((unit) => {
             const startOffset = Number(unit.dataset.start || 0);
