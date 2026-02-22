@@ -530,8 +530,8 @@
       }
 
       .device-panorama {
-        padding-top: 72px;
-        padding-bottom: 12px;
+        padding-top: 52px;
+        padding-bottom: 8px;
         overflow: hidden;
       }
 
@@ -541,11 +541,11 @@
       }
 
       .phone-unit {
-        width: min(58vw, 300px);
+        width: min(65vw, 340px);
       }
 
       .phone-unit + .phone-unit {
-        margin-left: clamp(-78px, -17vw, -56px);
+        margin-left: clamp(-96px, -22vw, -68px);
       }
 
       .panorama-message {
@@ -553,8 +553,8 @@
       }
 
       .panorama-message .section-title {
-        font-size: clamp(34px, 10.5vw, 52px);
-        line-height: 1.14;
+        font-size: clamp(25px, 6.7vw, 36px);
+        line-height: 1.16;
       }
 
       .panorama-sequence {
@@ -609,7 +609,7 @@
         <img class="hero-app reveal" src="./YumChick-iOS-Default-1024x1024@1x.png" alt="YumChick 应用图标">
         <p class="hero-product reveal">馋香鸡</p>
         <h1 class="hero-title reveal"><span class="punct-anchor" data-punct="，">把厨房变简单</span><br><span class="punct-anchor" data-punct="。">从今天开始做一顿</span></h1>
-        <p class="hero-copy reveal">馋香鸡是一款极简菜谱与烹饪跟随 App。每日推荐、清晰步骤与干净界面，帮你更轻松地走进厨房。<br>无广告、无多余社交，专注做菜这件事。</p>
+        <p class="hero-copy reveal">馋香鸡是一款极简菜谱工具。每日推荐、清晰步骤与干净界面，帮你更轻松地走进厨房。<br>无广告、无多余社交，专注做菜这件事。</p>
         <div class="hero-cta reveal">
           <a class="btn btn-primary" href="https://testflight.apple.com/join/xyzeBYgG">获取app</a>
         </div>
@@ -784,12 +784,13 @@
       const updateScrollDrivenMotion = () => {
         if (!reduceMotion) {
           const parallaxProgress = readParallaxProgress();
+          const mobileStaggerScale = window.matchMedia('(max-width: 734px)').matches ? 0.40 : 1;
 
           phoneUnits.forEach((unit) => {
             const startOffset = Number(unit.dataset.start || 0);
             const exponent = Number(unit.dataset.exp || 1);
             const eased = Math.pow(parallaxProgress, exponent);
-            const staggerOffset = startOffset * (1 - eased);
+            const staggerOffset = startOffset * mobileStaggerScale * (1 - eased);
             unit.style.setProperty('--y', `${staggerOffset}px`);
           });
 
