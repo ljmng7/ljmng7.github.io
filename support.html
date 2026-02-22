@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" type="image/png" href="./YumChick-iOS-Default-1024x1024@1x.png">
+  <link rel="apple-touch-icon" href="./YumChick-iOS-Default-1024x1024@1x.png">
   <title>支持与帮助 | YumChick</title>
   <style>
     :root {
@@ -176,6 +178,14 @@
       font-weight: 600;
     }
 
+    button.text-link {
+      background: none;
+      border: 0;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
     .text-link:hover {
       text-decoration: underline;
     }
@@ -209,19 +219,16 @@
       border-radius: 10px;
     }
 
+    .wechat-preview.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
     @media (hover: hover) and (pointer: fine) {
       .wechat-trigger:hover .wechat-preview {
         opacity: 1;
         transform: translateY(0);
-      }
-
-      .wechat-trigger .wechat-link {
-        pointer-events: none;
-        cursor: default;
-      }
-
-      .wechat-trigger:hover .wechat-link {
-        text-decoration: underline;
       }
     }
 
@@ -335,8 +342,8 @@
               <li><a class="text-link" href="https://github.com/ljmng7" target="_blank" rel="noopener noreferrer">GitHub: ljmng7</a></li>
               <li class="wechat-item">
                 <span class="wechat-trigger">
-                  <a class="text-link wechat-link" href="https://weixin.qq.com/r/mp/xSBje7PEXO4jrfcY93XX" target="_blank" rel="noopener noreferrer">微信公众号: Jazmin.dev</a>
-                  <span class="wechat-preview" aria-hidden="true">
+                  <button type="button" class="text-link wechat-link" aria-expanded="false" aria-controls="wechat-preview">微信公众号: Jazmin.dev（点击查看二维码）</button>
+                  <span class="wechat-preview" id="wechat-preview" aria-hidden="true">
                     <img src="./微信公众号.JPG" alt="微信公众号预览图">
                   </span>
                 </span>
@@ -387,23 +394,32 @@
   <script>
     (() => {
       const wechatLink = document.querySelector(".wechat-link");
-      if (!wechatLink) return;
+      const wechatPreview = document.querySelector(".wechat-preview");
+      const wechatTrigger = document.querySelector(".wechat-trigger");
+      if (!wechatLink || !wechatPreview || !wechatTrigger) return;
 
-      const desktopQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
-      const syncDisabledState = () => {
-        wechatLink.setAttribute("aria-disabled", desktopQuery.matches ? "true" : "false");
+      const setVisible = (visible) => {
+        wechatPreview.classList.toggle("is-visible", visible);
+        wechatPreview.setAttribute("aria-hidden", visible ? "false" : "true");
+        wechatLink.setAttribute("aria-expanded", visible ? "true" : "false");
       };
 
-      syncDisabledState();
-      if (desktopQuery.addEventListener) {
-        desktopQuery.addEventListener("change", syncDisabledState);
-      } else if (desktopQuery.addListener) {
-        desktopQuery.addListener(syncDisabledState);
-      }
-
       wechatLink.addEventListener("click", (event) => {
-        if (desktopQuery.matches) {
-          event.preventDefault();
+        event.preventDefault();
+        event.stopPropagation();
+        const nextVisible = wechatLink.getAttribute("aria-expanded") !== "true";
+        setVisible(nextVisible);
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!wechatTrigger.contains(event.target)) {
+          setVisible(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          setVisible(false);
         }
       });
     })();

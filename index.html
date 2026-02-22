@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <link rel="icon" type="image/png" href="./YumChick-iOS-Default-1024x1024@1x.png">
+  <link rel="apple-touch-icon" href="./YumChick-iOS-Default-1024x1024@1x.png">
   <link rel="preload" href="./烹饪跟随_动画.mp4" as="video" type="video/mp4">
   <title>YumChick | 馋香鸡</title>
   <style>
@@ -530,27 +532,29 @@
       .device-panorama {
         padding-top: 72px;
         padding-bottom: 12px;
+        overflow: hidden;
       }
 
       .device-strip {
-        width: 280vw;
+        width: max-content;
         gap: 0;
       }
 
       .phone-unit {
-        width: min(64vw, 340px);
+        width: min(58vw, 300px);
       }
 
       .phone-unit + .phone-unit {
-        margin-left: -56px;
-      }
-
-      .phone-unit:nth-child(5) {
-        display: none;
+        margin-left: clamp(-78px, -17vw, -56px);
       }
 
       .panorama-message {
         padding: 40px 0 86px;
+      }
+
+      .panorama-message .section-title {
+        font-size: clamp(34px, 10.5vw, 52px);
+        line-height: 1.14;
       }
 
       .panorama-sequence {
