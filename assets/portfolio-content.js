@@ -1,6 +1,6 @@
 window.portfolioContent = {
   meta: {
-    title: "[YOUR_NAME] | Personal Homepage",
+    title: "Jazmín‘s Homepage",
     description: "A quiet personal homepage focused on identity and selected app work."
   },
   profile: {

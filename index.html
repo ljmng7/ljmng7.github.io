@@ -180,19 +180,27 @@
 
     .mobile-menu-toggle {
       appearance: none;
-      width: 32px;
-      height: 32px;
+      width: 54px;
+      height: 54px;
       padding: 0;
-      border: 0;
+      border: 1px solid rgba(255, 255, 255, 0.24);
       border-radius: 999px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       gap: 4px;
-      background: transparent;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.62), rgba(255, 255, 255, 0.28)),
+        linear-gradient(180deg, rgba(247, 242, 232, 0.32), rgba(247, 242, 232, 0.12));
       color: rgba(84, 88, 98, 0.82);
       cursor: pointer;
+      box-shadow:
+        0 20px 42px rgba(20, 24, 28, 0.07),
+        inset 0 1px 0 rgba(255, 255, 255, 0.68),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(24px) saturate(155%);
+      -webkit-backdrop-filter: blur(24px) saturate(155%);
       transition: background-color 0.22s var(--ease), box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
     }
 
@@ -200,10 +208,13 @@
     .mobile-menu-toggle:focus-visible,
     .mobile-menu-toggle[aria-expanded="true"] {
       outline: none;
-      background: rgba(255, 255, 255, 0.2);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(255, 255, 255, 0.34)),
+        linear-gradient(180deg, rgba(247, 242, 232, 0.36), rgba(247, 242, 232, 0.14));
       box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.42),
-        0 4px 12px rgba(20, 24, 28, 0.04);
+        0 20px 42px rgba(20, 24, 28, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.72),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.14);
       transform: translateY(-0.5px);
     }
 
@@ -222,16 +233,16 @@
       width: min(248px, calc(100vw - 24px));
       padding: 12px;
       border-radius: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.24);
+      border: 1px solid rgba(255, 255, 255, 0.34);
       background:
-        linear-gradient(180deg, rgba(255, 255, 255, 0.54), rgba(255, 255, 255, 0.16)),
-        linear-gradient(180deg, rgba(247, 242, 232, 0.22), rgba(247, 242, 232, 0.08));
+        linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7)),
+        linear-gradient(180deg, rgba(247, 242, 232, 0.5), rgba(247, 242, 232, 0.3));
       box-shadow:
-        0 20px 42px rgba(20, 24, 28, 0.07),
-        inset 0 1px 0 rgba(255, 255, 255, 0.68),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(24px) saturate(155%);
-      -webkit-backdrop-filter: blur(24px) saturate(155%);
+        0 22px 46px rgba(20, 24, 28, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(28px) saturate(160%);
+      -webkit-backdrop-filter: blur(28px) saturate(160%);
     }
 
     .mobile-menu-panel[hidden] {
@@ -388,7 +399,8 @@
     .menu-contact-link:hover,
     .menu-contact-link:focus-visible {
       transform: none;
-      background: rgba(255, 255, 255, 0.28);
+      background: transparent;
+      box-shadow: none;
     }
 
     .menu-contact-label {
@@ -467,6 +479,7 @@
       align-items: center;
       gap: 10px;
       flex: 0 0 auto;
+      position: relative;
     }
 
     .footer-contact-links {
@@ -999,11 +1012,21 @@
         align-items: center;
         justify-content: flex-end;
         flex-direction: row;
-        padding: 8px 10px;
-        width: max-content;
-        max-width: calc(100% - 24px);
+        padding: 0;
+        width: auto;
+        max-width: none;
         margin-right: 12px;
-        border-radius: 18px;
+        border-radius: 0;
+        border: 0;
+        background: transparent;
+        box-shadow: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+      }
+
+      .topbar-inner::before,
+      .topbar-inner::after {
+        display: none;
       }
 
       .topbar {
@@ -1060,6 +1083,17 @@
       .footer-right {
         margin-left: 0;
         width: 100%;
+      }
+
+      .footer-right .contact-popover {
+        position: static;
+      }
+
+      .footer-right .contact-qr-panel {
+        left: 50%;
+        right: auto;
+        width: min(182px, calc(100vw - 32px));
+        transform: translateX(-50%);
       }
 
       .code-block {

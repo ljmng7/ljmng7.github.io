@@ -541,6 +541,22 @@
     });
   }
 
+  let lastScrollY = window.scrollY || window.pageYOffset || 0;
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      const nextScrollY = window.scrollY || window.pageYOffset || 0;
+
+      if (Math.abs(nextScrollY - lastScrollY) > 4) {
+        closeAllQrPanels();
+        setMobileMenuOpen(false);
+        lastScrollY = nextScrollY;
+      }
+    },
+    { passive: true }
+  );
+
   document.addEventListener("click", (event) => {
     if (!(event.target instanceof Element)) {
       return;
