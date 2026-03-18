@@ -536,30 +536,33 @@
     .map((toggle) => {
       const panelId = toggle.getAttribute("aria-controls");
       const panel = panelId ? document.getElementById(panelId) : null;
+      const popover = toggle.closest(".contact-popover");
 
-      if (!panel) {
+      if (!panel || !popover) {
         return null;
       }
 
-      return { toggle, panel };
+      return { toggle, panel, popover };
     })
     .filter(Boolean);
 
   const closeAllQrPanels = () => {
-    qrPairs.forEach(({ toggle, panel }) => {
+    qrPairs.forEach(({ toggle, panel, popover }) => {
       panel.hidden = true;
       toggle.setAttribute("aria-expanded", "false");
+      popover.classList.remove("is-open");
     });
   };
 
   if (qrPairs.length > 0) {
-    qrPairs.forEach(({ toggle, panel }) => {
+    qrPairs.forEach(({ toggle, panel, popover }) => {
       toggle.addEventListener("click", (event) => {
         event.stopPropagation();
         const shouldOpen = panel.hidden;
         closeAllQrPanels();
         panel.hidden = !shouldOpen;
         toggle.setAttribute("aria-expanded", shouldOpen ? "true" : "false");
+        popover.classList.toggle("is-open", shouldOpen);
       });
     });
   }
