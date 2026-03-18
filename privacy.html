@@ -218,6 +218,7 @@
 
     .footer-copy {
       color: #7f7f87;
+      flex: 0 1 auto;
     }
 
     .footer-link {
@@ -230,6 +231,7 @@
       display: inline-flex;
       align-items: center;
       gap: 10px;
+      flex: 0 0 auto;
     }
 
     .footer-sep {
@@ -262,8 +264,13 @@
         flex-wrap: wrap;
       }
 
+      .footer-copy {
+        width: 100%;
+      }
+
       .footer-right {
         margin-left: 0;
+        width: 100%;
       }
     }
   </style>
@@ -271,8 +278,9 @@
 <body>
   <header class="local-nav" aria-label="本地导航">
     <div class="local-nav-inner">
-      <a href="./index.html" class="local-title">馋香鸡</a>
+      <a href="./YumChicken.html" class="local-title">馋香鸡</a>
       <div class="local-actions">
+        <a href="./index.html">作者主页</a>
         <a href="./support.html">支持</a>
         <a href="./privacy.html" class="active">隐私</a>
         <a class="btn btn-primary" href="https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913">获取app</a>
@@ -342,6 +350,8 @@
       <p class="footer-meta">
         <span class="footer-copy">Copyright © 2026 Jazmín. 保留所有权利。</span>
         <span class="footer-right">
+          <a class="footer-link" href="./index.html">作者主页</a>
+          <span class="footer-sep">|</span>
           <a class="footer-link" href="./support.html">支持</a>
           <span class="footer-sep">|</span>
           <a class="footer-link" href="./privacy.html">隐私政策</a>
