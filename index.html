@@ -45,6 +45,16 @@
       --footer-divider: #d7d7dc;
       --footer-copy: #7f7f87;
       --contact-icon-filter: none;
+      --hero-accent-shadow: 0 10px 24px rgba(63, 100, 95, 0.08);
+      --hero-accent-shadow-strong: 0 16px 36px rgba(63, 100, 95, 0.16);
+      --hero-avatar-shadow: 0 10px 24px rgba(20, 24, 28, 0.08);
+      --hero-avatar-shadow-strong: 0 16px 34px rgba(20, 24, 28, 0.14);
+      --app-icon-filter-rest: drop-shadow(0 7px 14px rgba(20, 24, 28, 0.08));
+      --app-icon-filter-strong: drop-shadow(0 14px 24px rgba(20, 24, 28, 0.18));
+      --app-store-filter-rest: drop-shadow(0 8px 18px rgba(20, 24, 28, 0.08));
+      --app-store-filter-strong: drop-shadow(0 14px 26px rgba(20, 24, 28, 0.16));
+      --app-website-shadow-rest: 0 10px 22px rgba(56, 118, 68, 0.22);
+      --app-website-shadow-strong: 0 16px 32px rgba(56, 118, 68, 0.3);
     }
 
     * {
@@ -566,7 +576,7 @@
       border-radius: 50%;
       object-fit: cover;
       border: 1px solid rgba(36, 45, 48, 0.08);
-      box-shadow: 0 10px 24px rgba(20, 24, 28, 0.08);
+      box-shadow: var(--hero-avatar-shadow);
       flex: 0 0 auto;
       transform: translateZ(0) scale(1);
       transform-origin: center;
@@ -633,9 +643,10 @@
       font-style: italic;
       display: block;
       margin: 0 auto;
+      text-shadow: var(--hero-accent-shadow);
       transform: translateZ(0) scale(1);
       transform-origin: center;
-      transition: transform 0.22s var(--ease);
+      transition: transform 0.22s var(--ease), text-shadow 0.22s var(--ease);
     }
 
     .hero-copy + .surface,
@@ -907,9 +918,7 @@
       border-color: rgba(255, 255, 255, 0.24);
     }
 
-    .app-card:hover .app-icon,
     .app-card:hover .app-icon-fallback,
-    .app-card:focus-visible .app-icon,
     .app-card:focus-visible .app-icon-fallback {
       box-shadow: 0 10px 20px rgba(20, 24, 28, 0.1);
     }
@@ -918,13 +927,13 @@
     .app-icon-fallback {
       width: 58px;
       height: 58px;
-      border-radius: 17px;
-      overflow: hidden;
+      border-radius: 0;
+      overflow: visible;
       border: 0;
-      box-shadow: 0 10px 20px rgba(20, 24, 28, 0.1);
+      box-shadow: none;
       transform: translateZ(0) scale(1);
       transform-origin: center;
-      transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+      transition: transform 0.22s var(--ease);
       flex: 0 0 auto;
       background: transparent;
     }
@@ -939,7 +948,9 @@
     .app-icon-image {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      filter: var(--app-icon-filter-rest);
+      transition: filter 0.22s var(--ease);
     }
 
     .app-icon-fallback {
@@ -998,7 +1009,7 @@
       line-height: 1;
       letter-spacing: -0.01em;
       font-weight: 600;
-      box-shadow: 0 10px 22px rgba(56, 118, 68, 0.22);
+      box-shadow: var(--app-website-shadow-rest);
       transform: translateZ(0) scale(1);
       transform-origin: center;
       transition: transform 0.22s var(--ease), background-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
@@ -1019,6 +1030,8 @@
       display: block;
       width: auto;
       height: 52px;
+      filter: var(--app-store-filter-rest);
+      transition: filter 0.22s var(--ease);
     }
 
     .app-availability {
@@ -1059,11 +1072,13 @@
       .hero-accent:hover,
       .hero-accent:focus-visible {
         transform: translateZ(0) scale(1.018);
+        text-shadow: var(--hero-accent-shadow-strong);
       }
 
       .hero-avatar:hover,
       .hero-avatar:focus-visible {
         transform: translateZ(0) scale(1.04);
+        box-shadow: var(--hero-avatar-shadow-strong);
       }
 
       .app-icon:hover,
@@ -1071,6 +1086,13 @@
       .app-icon-fallback:hover,
       .app-icon-fallback:focus-visible {
         transform: translateZ(0) scale(1.045);
+      }
+
+      .app-icon:hover img,
+      .app-icon:hover .app-icon-image,
+      .app-icon:focus-visible img,
+      .app-icon:focus-visible .app-icon-image {
+        filter: var(--app-icon-filter-strong);
       }
 
       .app-preview-shell:hover .app-preview-image,
@@ -1083,6 +1105,16 @@
       .app-store-link:hover,
       .app-store-link:focus-visible {
         transform: translateZ(0) scale(1.035);
+      }
+
+      .app-website-link:hover,
+      .app-website-link:focus-visible {
+        box-shadow: var(--app-website-shadow-strong);
+      }
+
+      .app-store-link:hover .app-store-badge,
+      .app-store-link:focus-visible .app-store-badge {
+        filter: var(--app-store-filter-strong);
       }
     }
 
@@ -1117,6 +1149,16 @@
         --menu-contact-tone: rgba(218, 224, 232, 0.9);
         --footer-divider: rgba(255, 255, 255, 0.12);
         --footer-copy: rgba(154, 163, 174, 0.82);
+        --hero-accent-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+        --hero-accent-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.3);
+        --hero-avatar-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+        --hero-avatar-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.34);
+        --app-icon-filter-rest: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
+        --app-icon-filter-strong: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.3));
+        --app-store-filter-rest: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.14));
+        --app-store-filter-strong: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.24));
+        --app-website-shadow-rest: 0 12px 26px rgba(56, 118, 68, 0.24);
+        --app-website-shadow-strong: 0 18px 34px rgba(56, 118, 68, 0.34);
       }
 
       .contact-icon-img.is-default,
@@ -1202,7 +1244,6 @@
 
       .hero-avatar {
         border-color: rgba(255, 255, 255, 0.08);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
       }
 
       .hero-meta-name,
@@ -1261,14 +1302,11 @@
           inset 0 -1px 0 rgba(255, 255, 255, 0.04);
       }
 
-      .app-card:hover .app-icon,
       .app-card:hover .app-icon-fallback,
-      .app-card:focus-visible .app-icon,
       .app-card:focus-visible .app-icon-fallback {
         box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
       }
 
-      .app-icon,
       .app-icon-fallback {
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.26);
       }
@@ -1283,7 +1321,7 @@
       }
 
       .app-preview-image {
-        filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.32));
+        filter: none;
       }
     }
 
