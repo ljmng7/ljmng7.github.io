@@ -41,19 +41,24 @@ window.portfolioContent = {
         websiteHref: "./YumChicken.html",
         websiteLabel: "访问官网",
         iconSrc: "./assets/YumChicken/YumChick-iOS-Default-1024x1024@1x.png",
+        darkIconSrc: "./assets/YumChicken/YumChick-iOS-Dark-1024x1024@1x.png",
         iconAlt: "馋香鸡 app icon",
         summary: "专注做饭的极简工具",
         previewSrc: "./assets/YumChicken.png",
+        darkPreviewSrc: "./assets/YumChicken_Dark.png",
         storeHref: "https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913",
         storeBadgeSrc: "./assets/Download_on_App_Store/Download_on_the_App_Store_Badge_CNSC_RGB_blk_092917.svg",
+        darkStoreBadgeSrc: "./assets/Download_on_App_Store/Download_on_the_App_Store_Badge_CNSC_RGB_wht_092917.svg",
         storeBadgeAlt: "Download on the App Store"
       },
       {
         name: "Musio",
         iconSrc: "./assets/Musio/Musio-iOS-Default-1024x1024@1x.png",
+        darkIconSrc: "./assets/Musio/Musio-iOS-Dark-1024x1024@1x.png",
         iconAlt: "Musio app icon",
         summary: "臻藏你的音乐品味",
         previewSrc: "./assets/Musio.png",
+        darkPreviewSrc: "./assets/Musio_Dark.png",
         availabilityText: "COMING SOON"
       }
     ]

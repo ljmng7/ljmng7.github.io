@@ -8,7 +8,7 @@
   <title>[YOUR_NAME] | Personal Homepage</title>
   <style>
     :root {
-      color-scheme: light;
+      color-scheme: light dark;
       --bg: #f7f2e8;
       --bg-soft: #f2ece1;
       --panel: rgba(255, 251, 245, 0.72);
@@ -35,6 +35,16 @@
       --content-max: 920px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
       --topbar-h: 64px;
+      --icon-tone: rgba(84, 88, 98, 0.8);
+      --icon-tone-strong: rgba(23, 24, 27, 0.92);
+      --icon-button-hover-bg: rgba(255, 255, 255, 0.2);
+      --icon-button-hover-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.42),
+        0 4px 12px rgba(20, 24, 28, 0.04);
+      --menu-contact-tone: rgba(35, 39, 44, 0.88);
+      --footer-divider: #d7d7dc;
+      --footer-copy: #7f7f87;
+      --contact-icon-filter: none;
     }
 
     * {
@@ -163,6 +173,10 @@
       mix-blend-mode: screen;
     }
 
+    .topbar-inner::after {
+      display: none;
+    }
+
     .topbar-right {
       display: flex;
       align-items: center;
@@ -278,7 +292,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: rgba(84, 88, 98, 0.8);
+      color: var(--icon-tone);
       background: transparent;
       border: 0;
       cursor: pointer;
@@ -321,31 +335,40 @@
       width: 100%;
       height: 100%;
       display: block;
+      filter: none;
       transition: opacity 0.18s var(--ease);
     }
 
-    .contact-icon-img.is-hover {
+    .contact-icon-img.is-hover,
+    .contact-icon-img.is-active {
       opacity: 0;
     }
 
     .contact-icon-button:hover,
-    .contact-icon-button:focus-visible {
-      color: rgba(23, 24, 27, 0.92);
+    .contact-icon-button:focus-visible,
+    .contact-icon-button[aria-expanded="true"],
+    .contact-link[aria-current="page"],
+    .contact-link.is-active {
+      color: var(--icon-tone-strong);
       outline: none;
-      background: rgba(255, 255, 255, 0.2);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.42),
-        0 4px 12px rgba(20, 24, 28, 0.04);
+      background: var(--icon-button-hover-bg);
+      box-shadow: var(--icon-button-hover-shadow);
       transform: translateY(-0.5px);
     }
 
     .contact-icon-button:hover .contact-icon-img.is-default,
-    .contact-icon-button:focus-visible .contact-icon-img.is-default {
+    .contact-icon-button:focus-visible .contact-icon-img.is-default,
+    .contact-icon-button[aria-expanded="true"] .contact-icon-img.is-default,
+    .contact-link[aria-current="page"] .contact-icon-img.is-default,
+    .contact-link.is-active .contact-icon-img.is-default {
       opacity: 0;
     }
 
     .contact-icon-button:hover .contact-icon-img.is-hover,
-    .contact-icon-button:focus-visible .contact-icon-img.is-hover {
+    .contact-icon-button:focus-visible .contact-icon-img.is-hover,
+    .contact-icon-button[aria-expanded="true"] .contact-icon-img.is-hover,
+    .contact-link[aria-current="page"] .contact-icon-img.is-hover,
+    .contact-link.is-active .contact-icon-img.is-hover {
       opacity: 1;
     }
 
@@ -393,7 +416,7 @@
       gap: 12px;
       padding: 10px 12px;
       border-radius: 14px;
-      color: rgba(35, 39, 44, 0.86);
+      color: var(--menu-contact-tone);
     }
 
     .menu-contact-link:hover,
@@ -407,7 +430,7 @@
       font-size: 14px;
       line-height: 1.2;
       letter-spacing: -0.01em;
-      color: rgba(35, 39, 44, 0.88);
+      color: var(--menu-contact-tone);
       white-space: nowrap;
     }
 
@@ -454,7 +477,7 @@
     .footer-divider {
       width: min(100%, 980px);
       margin: 0 auto 14px;
-      border-top: 1px solid #d7d7dc;
+      border-top: 1px solid var(--footer-divider);
     }
 
     .footer-meta {
@@ -469,7 +492,7 @@
     }
 
     .footer-copy {
-      color: #7f7f87;
+      color: var(--footer-copy);
       flex: 0 1 auto;
     }
 
@@ -490,7 +513,7 @@
     }
 
     .footer-right .contact-link {
-      color: rgba(94, 94, 102, 0.82);
+      color: var(--icon-tone);
     }
 
     .footer-right .contact-icon-button {
@@ -499,11 +522,10 @@
     }
 
     .footer-right .contact-icon-button:hover,
-    .footer-right .contact-icon-button:focus-visible {
-      background: rgba(255, 255, 255, 0.28);
-      box-shadow:
-        inset 0 1px 0 rgba(255, 255, 255, 0.4),
-        0 4px 10px rgba(20, 24, 28, 0.03);
+    .footer-right .contact-icon-button:focus-visible,
+    .footer-right .contact-icon-button[aria-expanded="true"] {
+      background: var(--icon-button-hover-bg);
+      box-shadow: var(--icon-button-hover-shadow);
     }
 
     .footer-right .contact-qr-panel {
@@ -540,6 +562,9 @@
       border: 1px solid rgba(36, 45, 48, 0.08);
       box-shadow: 0 10px 24px rgba(20, 24, 28, 0.08);
       flex: 0 0 auto;
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
     }
 
     .hero-meta-copy {
@@ -602,6 +627,9 @@
       font-style: italic;
       display: block;
       margin: 0 auto;
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease);
     }
 
     .hero-copy + .surface,
@@ -620,6 +648,8 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
+      transform: translateZ(0);
+      will-change: transform, box-shadow;
       transition: border-color 0.22s var(--ease), box-shadow 0.22s var(--ease), transform 0.22s var(--ease);
     }
 
@@ -638,7 +668,7 @@
     .surface:focus-within {
       border-color: rgba(34, 38, 41, 0.12);
       box-shadow: 0 22px 48px rgba(20, 24, 28, 0.07);
-      transform: translateY(-1px);
+      transform: translate3d(0, -1px, 0);
     }
 
     .code-panel {
@@ -826,6 +856,10 @@
       mix-blend-mode: screen;
     }
 
+    .app-card::after {
+      display: none;
+    }
+
     .app-card-topline {
       display: flex;
       align-items: flex-start;
@@ -871,7 +905,6 @@
     .app-card:hover .app-icon-fallback,
     .app-card:focus-visible .app-icon,
     .app-card:focus-visible .app-icon-fallback {
-      transform: none;
       box-shadow: 0 10px 20px rgba(20, 24, 28, 0.1);
     }
 
@@ -883,12 +916,21 @@
       overflow: hidden;
       border: 0;
       box-shadow: 0 10px 20px rgba(20, 24, 28, 0.1);
-      transition: none;
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
       flex: 0 0 auto;
       background: transparent;
     }
 
-    .app-icon img {
+    .app-icon picture {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .app-icon img,
+    .app-icon-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -926,6 +968,14 @@
       display: inline-flex;
       width: fit-content;
       border-radius: 12px;
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+    }
+
+    .app-store-link picture,
+    .app-preview-shell picture {
+      display: block;
     }
 
     .app-website-link {
@@ -943,6 +993,9 @@
       letter-spacing: -0.01em;
       font-weight: 600;
       box-shadow: 0 10px 22px rgba(56, 118, 68, 0.22);
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease), background-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
     }
 
     .app-website-link:hover,
@@ -989,6 +1042,241 @@
       margin-bottom: -224px;
       pointer-events: none;
       user-select: none;
+      transform: translateZ(0) scale(1);
+      transform-origin: center top;
+      transition: transform 0.24s var(--ease), filter 0.24s var(--ease);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .hero-accent:hover,
+      .hero-accent:focus-visible {
+        transform: translateZ(0) scale(1.018);
+      }
+
+      .hero-avatar:hover,
+      .hero-avatar:focus-visible {
+        transform: translateZ(0) scale(1.04);
+      }
+
+      .app-icon:hover,
+      .app-icon:focus-visible,
+      .app-icon-fallback:hover,
+      .app-icon-fallback:focus-visible {
+        transform: translateZ(0) scale(1.045);
+      }
+
+      .app-preview-shell:hover .app-preview-image,
+      .app-preview-shell:focus-visible .app-preview-image {
+        transform: translateZ(0) scale(1.026);
+      }
+
+      .app-website-link:hover,
+      .app-website-link:focus-visible,
+      .app-store-link:hover,
+      .app-store-link:focus-visible {
+        transform: translateZ(0) scale(1.035);
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        color-scheme: dark;
+        --bg: #14171c;
+        --bg-soft: #1a1f25;
+        --panel: rgba(18, 23, 30, 0.72);
+        --panel-strong: rgba(18, 23, 30, 0.86);
+        --glass-fill: rgba(32, 38, 47, 0.5);
+        --glass-fill-strong: rgba(44, 52, 63, 0.62);
+        --glass-edge: rgba(255, 255, 255, 0.14);
+        --glass-edge-soft: rgba(255, 255, 255, 0.08);
+        --glass-shadow: 0 18px 38px rgba(0, 0, 0, 0.3), 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+        --line: rgba(255, 255, 255, 0.08);
+        --line-strong: rgba(255, 255, 255, 0.14);
+        --ink: #edf1f6;
+        --ink-soft: #b2bbc8;
+        --ink-faint: #83909f;
+        --accent: #8eb0aa;
+        --accent-soft: rgba(142, 176, 170, 0.12);
+        --shadow:
+          0 22px 52px rgba(0, 0, 0, 0.24),
+          0 6px 18px rgba(0, 0, 0, 0.16);
+        --icon-tone: rgba(176, 183, 192, 0.84);
+        --icon-tone-strong: rgba(211, 216, 224, 0.92);
+        --icon-button-hover-bg: rgba(255, 255, 255, 0.06);
+        --icon-button-hover-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          0 10px 24px rgba(0, 0, 0, 0.18);
+        --menu-contact-tone: rgba(218, 224, 232, 0.9);
+        --footer-divider: rgba(255, 255, 255, 0.12);
+        --footer-copy: rgba(154, 163, 174, 0.82);
+      }
+
+      .contact-icon-img.is-default,
+      .contact-icon-stack.is-neutral-original .contact-icon-img.is-hover,
+      .contact-icon-stack.is-neutral-original .contact-icon-img.is-static {
+        filter: grayscale(1) brightness(0) invert(0.68);
+      }
+
+      html {
+        background:
+          radial-gradient(circle at top, rgba(103, 124, 148, 0.18), transparent 30%),
+          linear-gradient(180deg, #0f1217 0%, var(--bg) 38%, #181d24 100%);
+      }
+
+      body::before {
+        background:
+          linear-gradient(rgba(238, 243, 250, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(238, 243, 250, 0.04) 1px, transparent 1px);
+        opacity: 0.28;
+      }
+
+      .topbar-inner {
+        border-color: rgba(255, 255, 255, 0.1);
+        background:
+          linear-gradient(180deg, rgba(24, 29, 36, 0.54), rgba(15, 19, 25, 0.3)),
+          linear-gradient(180deg, rgba(122, 139, 160, 0.03), rgba(18, 23, 30, 0.02));
+        box-shadow:
+          0 18px 36px rgba(0, 0, 0, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      .topbar-inner::before {
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.015) 42%, rgba(255, 255, 255, 0.03)),
+          radial-gradient(circle at 18% -10%, rgba(255, 255, 255, 0.07), transparent 26%),
+          radial-gradient(circle at 82% 110%, rgba(255, 255, 255, 0.04), transparent 32%);
+        opacity: 0.72;
+      }
+
+      .topbar-inner::after {
+        display: none;
+      }
+
+      .mobile-menu-toggle {
+        border-color: rgba(255, 255, 255, 0.1);
+        background:
+          linear-gradient(180deg, rgba(28, 34, 42, 0.88), rgba(18, 23, 30, 0.62)),
+          linear-gradient(180deg, rgba(122, 139, 160, 0.08), rgba(18, 23, 30, 0.04));
+        color: var(--icon-tone);
+        box-shadow:
+          0 20px 42px rgba(0, 0, 0, 0.22),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .mobile-menu-toggle:hover,
+      .mobile-menu-toggle:focus-visible,
+      .mobile-menu-toggle[aria-expanded="true"] {
+        background:
+          linear-gradient(180deg, rgba(34, 41, 51, 0.94), rgba(20, 25, 32, 0.7)),
+          linear-gradient(180deg, rgba(136, 153, 175, 0.1), rgba(20, 25, 32, 0.04));
+        box-shadow:
+          0 20px 42px rgba(0, 0, 0, 0.26),
+          inset 0 1px 0 rgba(255, 255, 255, 0.1),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+      }
+
+      .mobile-menu-panel,
+      .contact-qr-panel {
+        border-color: rgba(255, 255, 255, 0.1);
+        background:
+          linear-gradient(180deg, rgba(26, 31, 39, 0.92), rgba(17, 22, 29, 0.82)),
+          linear-gradient(180deg, rgba(122, 139, 160, 0.08), rgba(18, 23, 30, 0.04));
+        box-shadow:
+          0 22px 46px rgba(0, 0, 0, 0.24),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .topbar {
+        background: transparent;
+      }
+
+      .hero-avatar {
+        border-color: rgba(255, 255, 255, 0.08);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+      }
+
+      .hero-meta-name,
+      .work-label {
+        color: rgba(237, 241, 246, 0.92);
+      }
+
+      .hero-meta-role {
+        color: rgba(176, 183, 192, 0.72);
+      }
+
+      .surface:hover,
+      .surface:focus-within {
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 28px 64px rgba(0, 0, 0, 0.3),
+          0 10px 24px rgba(0, 0, 0, 0.16);
+      }
+
+      .code-panel {
+        box-shadow:
+          0 26px 64px rgba(8, 11, 17, 0.32),
+          0 8px 22px rgba(0, 0, 0, 0.18);
+      }
+
+      .code-panel:hover,
+      .code-panel:focus-within {
+        box-shadow:
+          0 30px 74px rgba(8, 11, 17, 0.36),
+          0 12px 28px rgba(0, 0, 0, 0.2);
+      }
+
+      .app-card {
+        background:
+          linear-gradient(180deg, rgba(25, 31, 39, 0.86), rgba(17, 22, 29, 0.74)),
+          linear-gradient(180deg, rgba(122, 139, 160, 0.07), rgba(18, 23, 30, 0.04));
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow:
+          0 24px 58px rgba(0, 0, 0, 0.28),
+          0 8px 22px rgba(0, 0, 0, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .app-card::after {
+        display: none;
+      }
+
+      .app-card:hover,
+      .app-card:focus-visible {
+        border-color: rgba(255, 255, 255, 0.12);
+        box-shadow:
+          0 28px 68px rgba(0, 0, 0, 0.34),
+          0 12px 28px rgba(0, 0, 0, 0.18),
+          inset 0 1px 0 rgba(255, 255, 255, 0.08),
+          inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .app-card:hover .app-icon,
+      .app-card:hover .app-icon-fallback,
+      .app-card:focus-visible .app-icon,
+      .app-card:focus-visible .app-icon-fallback {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.24);
+      }
+
+      .app-icon,
+      .app-icon-fallback {
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.26);
+      }
+
+      .app-summary,
+      .app-availability {
+        color: rgba(176, 183, 192, 0.76);
+      }
+
+      .app-store-link:focus-visible {
+        outline-color: rgba(237, 241, 246, 0.28);
+      }
+
+      .app-preview-image {
+        filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.32));
+      }
     }
 
     .reveal-on-scroll {

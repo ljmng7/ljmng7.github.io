@@ -25,11 +25,43 @@
     safeHref(value) === "#"
       ? ""
       : ' target="_blank" rel="noopener noreferrer"';
+  const renderThemeImage = ({ lightSrc, darkSrc, alt = "", className = "" }) => {
+    if (!lightSrc && !darkSrc) {
+      return "";
+    }
+
+    const resolvedLightSrc = lightSrc || darkSrc;
+    const resolvedDarkSrc = darkSrc || lightSrc;
+    const classAttr = className ? ` class="${escapeHtml(className)}"` : "";
+
+    if (!resolvedLightSrc) {
+      return "";
+    }
+
+    if (!darkSrc) {
+      return `<img${classAttr} src="${escapeHtml(resolvedLightSrc)}" alt="${escapeHtml(alt)}">`;
+    }
+
+    return `
+      <picture>
+        <source srcset="${escapeHtml(resolvedDarkSrc)}" media="(prefers-color-scheme: dark)">
+        <img${classAttr} src="${escapeHtml(resolvedLightSrc)}" alt="${escapeHtml(alt)}">
+      </picture>
+    `;
+  };
 
   let qrPanelIndex = 0;
 
   const renderContactIcon = (type, options = {}) => {
     const defaultState = options.defaultState === "original" ? "original" : "black";
+    const neutralOriginalTypes = new Set(["github", "x"]);
+    const stackClassName = [
+      "contact-icon-stack",
+      neutralOriginalTypes.has(type) ? "is-neutral-original" : "",
+      defaultState === "original" ? "is-static" : ""
+    ]
+      .filter(Boolean)
+      .join(" ");
     const figmaIcons = {
       github: {
         black: "./assets/figma-social-icons/github-black.svg",
@@ -64,14 +96,14 @@
     if (figmaIcons[type]) {
       if (defaultState === "original") {
         return `
-          <span class="contact-icon-stack is-static" aria-hidden="true">
+          <span class="${stackClassName}" aria-hidden="true">
             <img class="contact-icon-img is-static" src="${figmaIcons[type].original}" alt="">
           </span>
         `;
       }
 
       return `
-        <span class="contact-icon-stack" aria-hidden="true">
+        <span class="${stackClassName}" aria-hidden="true">
           <img class="contact-icon-img is-default" src="${figmaIcons[type].black}" alt="">
           <img class="contact-icon-img is-hover" src="${figmaIcons[type].original}" alt="">
         </span>
@@ -242,9 +274,12 @@
     data.work.projects
       .map((project) => {
         const icon = project.iconSrc
-          ? `<div class="app-icon"><img src="${escapeHtml(project.iconSrc)}" alt="${escapeHtml(
-              project.iconAlt || project.name
-            )}"></div>`
+          ? `<div class="app-icon">${renderThemeImage({
+              lightSrc: project.iconSrc,
+              darkSrc: project.darkIconSrc,
+              alt: project.iconAlt || project.name,
+              className: "app-icon-image"
+            })}</div>`
           : `<div class="app-icon-fallback" aria-hidden="true">${escapeHtml(project.iconText || "AP")}</div>`;
 
         const summary = project.summary
@@ -254,7 +289,12 @@
         const preview = project.previewSrc
           ? `
               <div class="app-preview-shell" aria-hidden="true">
-                <img class="app-preview-image" src="${escapeHtml(project.previewSrc)}" alt="">
+                ${renderThemeImage({
+                  lightSrc: project.previewSrc,
+                  darkSrc: project.darkPreviewSrc,
+                  alt: "",
+                  className: "app-preview-image"
+                })}
               </div>
             `
           : "";
@@ -274,9 +314,12 @@
               <a class="app-store-link" href="${escapeHtml(safeHref(project.storeHref))}"${linkAttrs(
                 project.storeHref
               )}>
-                <img class="app-store-badge" src="${escapeHtml(project.storeBadgeSrc)}" alt="${escapeHtml(
-                  project.storeBadgeAlt || "App Store"
-                )}">
+                ${renderThemeImage({
+                  lightSrc: project.storeBadgeSrc,
+                  darkSrc: project.darkStoreBadgeSrc,
+                  alt: project.storeBadgeAlt || "App Store",
+                  className: "app-store-badge"
+                })}
               </a>
             `
           : project.availabilityText
