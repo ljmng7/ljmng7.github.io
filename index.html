@@ -6,6 +6,16 @@
   <meta name="description" content="A quiet personal homepage focused on identity and selected app work.">
   <link rel="icon" href="./assets/avatar.ico">
   <title>[YOUR_NAME] | Personal Homepage</title>
+  <script>
+    if ("scrollRestoration" in history) {
+      history.scrollRestoration = "manual";
+    }
+
+    window.scrollTo(0, 0);
+    window.addEventListener("pageshow", () => {
+      window.scrollTo(0, 0);
+    });
+  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -34,6 +44,8 @@
       --radius-md: 16px;
       --content-max: 920px;
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
+      --hover-ease-soft: cubic-bezier(0.2, 0.78, 0.24, 1);
+      --intro-move-ease: cubic-bezier(0.18, 0.9, 0.24, 1.04);
       --topbar-h: 64px;
       --icon-tone: rgba(84, 88, 98, 0.8);
       --icon-tone-strong: rgba(23, 24, 27, 0.92);
@@ -49,8 +61,8 @@
       --hero-accent-shadow-strong: 0 16px 36px rgba(63, 100, 95, 0.16);
       --hero-avatar-shadow: 0 10px 24px rgba(20, 24, 28, 0.08);
       --hero-avatar-shadow-strong: 0 16px 34px rgba(20, 24, 28, 0.14);
-      --app-icon-filter-rest: drop-shadow(0 7px 14px rgba(20, 24, 28, 0.08));
-      --app-icon-filter-strong: drop-shadow(0 14px 24px rgba(20, 24, 28, 0.18));
+      --app-icon-shadow-rest: 0 7px 14px rgba(20, 24, 28, 0.08);
+      --app-icon-shadow-strong: 0 14px 24px rgba(20, 24, 28, 0.18);
       --app-store-filter-rest: drop-shadow(0 8px 18px rgba(20, 24, 28, 0.08));
       --app-store-filter-strong: drop-shadow(0 14px 26px rgba(20, 24, 28, 0.16));
       --app-website-shadow-rest: 0 10px 22px rgba(56, 118, 68, 0.22);
@@ -631,6 +643,8 @@
       margin: 0;
       max-width: none;
       text-align: center;
+      display: inline-block;
+      width: 100%;
     }
 
     .hero-accent {
@@ -644,9 +658,121 @@
       display: block;
       margin: 0 auto;
       text-shadow: var(--hero-accent-shadow);
-      transform: translateZ(0) scale(1);
+      transform: translate3d(0, 0, 0) scale(1);
       transform-origin: center;
-      transition: transform 0.22s var(--ease), text-shadow 0.22s var(--ease);
+      will-change: transform, text-shadow;
+      transition: transform 0.42s var(--hover-ease-soft), text-shadow 0.42s var(--hover-ease-soft);
+    }
+
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 80;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    .intro-overlay.is-fading {
+      opacity: 0;
+    }
+
+    .intro-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      max-width: min(calc(100vw - 32px), 920px);
+      font-family: var(--serif);
+      font-size: clamp(62px, 9vw, 110px);
+      line-height: 0.92;
+      letter-spacing: -0.045em;
+      font-weight: 500;
+      color: rgba(63, 100, 95, 0.9);
+      font-style: italic;
+      text-align: center;
+      text-shadow: var(--hero-accent-shadow);
+      transform-origin: top left;
+      will-change: transform, opacity;
+    }
+
+    .intro-ghost.is-floating {
+      position: fixed;
+      max-width: none;
+    }
+
+    .intro-ghost.is-moving {
+      transition: transform 1.28s var(--intro-move-ease);
+    }
+
+    .intro-copy {
+      display: block;
+      min-height: 0.92em;
+    }
+
+    .intro-line {
+      position: relative;
+      display: inline-block;
+    }
+
+    .intro-cursor {
+      position: absolute;
+      left: calc(100% + 0.08em);
+      top: 50%;
+      width: 0.075em;
+      min-width: 0.075em;
+      height: 0.9em;
+      border-radius: 999px;
+      background: rgba(23, 24, 27, 0.94);
+      transform: translateY(-56%);
+      transition: opacity 0.3s ease;
+    }
+
+    .intro-cursor.is-blinking {
+      animation: intro-cursor-blink 0.28s steps(1, end) 2;
+    }
+
+    .intro-cursor.is-hidden {
+      opacity: 0;
+    }
+
+    @keyframes intro-cursor-blink {
+      0%, 100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0;
+      }
+    }
+
+    [data-intro-target] {
+      transition: opacity 0.2s var(--ease);
+    }
+
+    body.intro-active {
+      overflow: hidden;
+    }
+
+    body.intro-active [data-intro-target] {
+      opacity: 0;
+    }
+
+    body.intro-active.intro-landed [data-intro-target] {
+      opacity: 1;
+    }
+
+    .intro-fade-ready {
+      transition: opacity 0.68s var(--ease), transform 0.68s var(--ease), filter 0.68s var(--ease);
+    }
+
+    body.intro-active .intro-fade-ready {
+      opacity: 0;
+      transform: translateY(20px);
+      filter: blur(8px);
+      pointer-events: none;
     }
 
     .hero-copy + .surface,
@@ -927,15 +1053,25 @@
     .app-icon-fallback {
       width: 58px;
       height: 58px;
-      border-radius: 0;
-      overflow: visible;
       border: 0;
-      box-shadow: none;
       transform: translateZ(0) scale(1);
       transform-origin: center;
       transition: transform 0.22s var(--ease);
       flex: 0 0 auto;
       background: transparent;
+    }
+
+    .app-icon {
+      border-radius: 16px;
+      overflow: visible;
+      box-shadow: var(--app-icon-shadow-rest);
+      transition: transform 0.22s var(--ease), box-shadow 0.22s var(--ease);
+    }
+
+    .app-icon-fallback {
+      border-radius: 0;
+      overflow: visible;
+      box-shadow: none;
     }
 
     .app-icon picture {
@@ -949,8 +1085,8 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: var(--app-icon-filter-rest);
-      transition: filter 0.22s var(--ease);
+      display: block;
+      filter: none;
     }
 
     .app-icon-fallback {
@@ -1069,10 +1205,9 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-      .hero-accent:hover,
       .hero-accent:focus-visible {
-        transform: translateZ(0) scale(1.018);
-        text-shadow: var(--hero-accent-shadow-strong);
+        transform: translate3d(0, -2px, 0) scale(1.017);
+        text-shadow: 0 16px 34px rgba(63, 100, 95, 0.18);
       }
 
       .hero-avatar:hover,
@@ -1088,11 +1223,9 @@
         transform: translateZ(0) scale(1.045);
       }
 
-      .app-icon:hover img,
-      .app-icon:hover .app-icon-image,
-      .app-icon:focus-visible img,
-      .app-icon:focus-visible .app-icon-image {
-        filter: var(--app-icon-filter-strong);
+      .app-icon:hover,
+      .app-icon:focus-visible {
+        box-shadow: var(--app-icon-shadow-strong);
       }
 
       .app-preview-shell:hover .app-preview-image,
@@ -1153,8 +1286,8 @@
         --hero-accent-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.3);
         --hero-avatar-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
         --hero-avatar-shadow-strong: 0 18px 40px rgba(0, 0, 0, 0.34);
-        --app-icon-filter-rest: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.12));
-        --app-icon-filter-strong: drop-shadow(0 14px 26px rgba(0, 0, 0, 0.3));
+        --app-icon-shadow-rest: 0 8px 16px rgba(0, 0, 0, 0.12);
+        --app-icon-shadow-strong: 0 14px 26px rgba(0, 0, 0, 0.3);
         --app-store-filter-rest: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.14));
         --app-store-filter-strong: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.24));
         --app-website-shadow-rest: 0 12px 26px rgba(56, 118, 68, 0.24);
@@ -1403,6 +1536,10 @@
         font-size: clamp(48px, 11vw, 72px);
       }
 
+      .intro-ghost {
+        font-size: clamp(48px, 11vw, 72px);
+      }
+
       .main {
         padding-top: 24px;
       }
@@ -1609,6 +1746,23 @@
       .reveal-on-scroll {
         opacity: 1;
         transform: none;
+      }
+
+      .intro-overlay {
+        display: none;
+      }
+
+      .intro-fade-ready,
+      [data-intro-target] {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .intro-cursor {
+        background: rgba(255, 255, 255, 0.94);
       }
     }
   </style>

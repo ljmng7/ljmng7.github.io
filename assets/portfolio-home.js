@@ -6,6 +6,27 @@
     return;
   }
 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const shouldRunIntro = !reduceMotion;
+  const introFadeClass = shouldRunIntro ? " intro-fade-ready" : "";
+  const introTargetAttr = shouldRunIntro ? ' data-intro-target="true"' : "";
+  const introOverlayMarkup = shouldRunIntro
+    ? `
+        <div class="intro-overlay" data-intro-overlay aria-hidden="true">
+          <div class="intro-ghost" data-intro-ghost>
+            <span class="intro-line">
+              <span class="intro-copy" data-intro-copy></span>
+              <span class="intro-cursor" data-intro-cursor></span>
+            </span>
+          </div>
+        </div>
+      `
+    : "";
+
+  if (shouldRunIntro) {
+    document.body.classList.add("intro-active");
+  }
+
   const isPlaceholderValue = (value) =>
     typeof value === "string" && /^\[[A-Z0-9_]+\]$/.test(value.trim());
 
@@ -358,7 +379,9 @@
       .join("");
 
   root.innerHTML = `
-    <header class="topbar">
+    ${introOverlayMarkup}
+
+    <header class="topbar${introFadeClass}">
       <div class="container topbar-inner">
         <div class="topbar-right">
           <div class="contact-links topbar-contact-links" aria-label="Contact links">
@@ -390,13 +413,13 @@
     <main class="main">
       <section class="about">
         <div class="container about-stack">
-          <div class="hero-copy reveal-on-scroll">
-            <h1 class="hero-title" aria-label="${escapeHtml(
+          <div class="hero-copy">
+            <h1 class="hero-title" data-hero-title aria-label="${escapeHtml(
               data.about.accentLine
             )}">
-              <span class="hero-accent">${escapeHtml(data.about.accentLine)}</span>
+              <span class="hero-accent" data-hero-accent${introTargetAttr}>${escapeHtml(data.about.accentLine)}</span>
             </h1>
-            <div class="hero-meta">
+            <div class="hero-meta${introFadeClass}">
               <img class="hero-avatar" src="./assets/avatar.png" alt="${escapeHtml(data.profile.displayName || data.profile.name)} avatar">
               <div class="hero-meta-copy">
                 <div class="hero-meta-name">${escapeHtml(data.profile.displayName || data.profile.name)}</div>
@@ -405,7 +428,7 @@
             </div>
           </div>
 
-          <aside class="code-panel surface reveal-on-scroll" data-pointer-surface>
+          <aside class="code-panel surface${introFadeClass}" data-pointer-surface>
             <div class="code-toolbar">
               <div class="code-lights" aria-hidden="true">
                 <span class="code-light red"></span>
@@ -423,7 +446,7 @@
         </div>
       </section>
 
-      <section class="work">
+      <section class="work${introFadeClass}">
         <div class="container">
           <div class="work-head reveal-on-scroll">
             <div class="work-label">${escapeHtml(data.work.eyebrow)}</div>
@@ -435,7 +458,7 @@
       </section>
     </main>
 
-    <footer>
+    <footer class="${shouldRunIntro ? "intro-fade-ready" : ""}">
       <div class="footer-inner">
         <div class="footer-divider" aria-hidden="true"></div>
         <div class="footer-meta">
@@ -466,8 +489,18 @@
   const mobileMenuPanel = document.querySelector("[data-mobile-menu-panel]");
   const codeTabs = Array.from(document.querySelectorAll("[data-code-tab]"));
   const codeBlock = document.querySelector("[data-code-block]");
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const heroTitle = document.querySelector("[data-hero-title]");
+  const heroAccent = document.querySelector("[data-hero-accent]");
+  const introOverlay = document.querySelector("[data-intro-overlay]");
+  const introGhost = document.querySelector("[data-intro-ghost]");
+  const introCopy = document.querySelector("[data-intro-copy]");
+  const introCursor = document.querySelector("[data-intro-cursor]");
+  const introTarget = document.querySelector("[data-intro-target]");
+  const introFadeEls = Array.from(document.querySelectorAll(".intro-fade-ready"));
   const codeSnippets = createCodeSnippets();
+  const sleep = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+  const raf = () => new Promise((resolve) => window.requestAnimationFrame(resolve));
+  let heroAccentAnimation = null;
 
   const setCodeLanguage = (language) => {
     if (!codeBlock || !codeSnippets[language]) {
@@ -493,6 +526,149 @@
     });
     setCodeLanguage("cpp");
   }
+
+  const setHeroAccentHover = (active) => {
+    if (!heroAccent) {
+      return;
+    }
+
+    const rootStyle = getComputedStyle(document.documentElement);
+    const restShadow = rootStyle.getPropertyValue("--hero-accent-shadow").trim() || "0 10px 24px rgba(63, 100, 95, 0.08)";
+    const hoverShadow = "0 16px 34px rgba(63, 100, 95, 0.18)";
+    const targetTransform = active ? "translate3d(0, -2px, 0) scale(1.017)" : "translate3d(0, 0, 0) scale(1)";
+    const currentStyle = getComputedStyle(heroAccent);
+    const fromTransform =
+      currentStyle.transform && currentStyle.transform !== "none"
+        ? currentStyle.transform
+        : "translate3d(0, 0, 0) scale(1)";
+    const fromTextShadow = currentStyle.textShadow && currentStyle.textShadow !== "none"
+      ? currentStyle.textShadow
+      : restShadow;
+    const targetTextShadow = active ? hoverShadow : restShadow;
+
+    heroAccentAnimation?.cancel();
+    heroAccentAnimation = heroAccent.animate(
+      [
+        {
+          transform: fromTransform,
+          textShadow: fromTextShadow
+        },
+        {
+          transform: targetTransform,
+          textShadow: targetTextShadow
+        }
+      ],
+      {
+        duration: 420,
+        easing: "cubic-bezier(0.2, 0.78, 0.24, 1)",
+        fill: "forwards"
+      }
+    );
+
+    heroAccentAnimation.onfinish = () => {
+      heroAccent.style.transform = targetTransform;
+      heroAccent.style.textShadow = targetTextShadow;
+    };
+  };
+
+  if (!reduceMotion && heroTitle && heroAccent && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    heroTitle.addEventListener("pointerenter", () => {
+      setHeroAccentHover(true);
+    });
+
+    heroTitle.addEventListener("pointerleave", () => {
+      setHeroAccentHover(false);
+    });
+  }
+
+  const finishIntroImmediately = () => {
+    document.body.classList.remove("intro-active", "intro-landed");
+    introFadeEls.forEach((el) => el.classList.remove("intro-fade-ready"));
+    introOverlay?.remove();
+  };
+
+  const runIntroSequence = async () => {
+    if (!shouldRunIntro) {
+      return;
+    }
+
+    if (!introOverlay || !introGhost || !introCopy || !introCursor || !introTarget) {
+      finishIntroImmediately();
+      return;
+    }
+
+    const fullText = (introTarget.textContent || data.about.accentLine || "").trim();
+
+    if (!fullText) {
+      finishIntroImmediately();
+      return;
+    }
+
+    if (document.fonts?.ready) {
+      await Promise.race([document.fonts.ready, sleep(400)]);
+    }
+
+    await raf();
+    await raf();
+
+    introCursor.classList.add("is-blinking");
+    await sleep(580);
+    introCursor.classList.remove("is-blinking");
+
+    const typingDelay = window.innerWidth <= 640 ? 58 : 72;
+
+    for (const char of fullText) {
+      introCopy.textContent += char;
+      await sleep(char === " " ? Math.max(typingDelay * 0.45, 28) : typingDelay);
+    }
+
+    introCursor.classList.add("is-hidden");
+    await sleep(300);
+    await raf();
+
+    const currentRect = introCopy.getBoundingClientRect();
+    const targetRect = introTarget.getBoundingClientRect();
+
+    if (!currentRect.width || !currentRect.height || !targetRect.width || !targetRect.height) {
+      finishIntroImmediately();
+      return;
+    }
+
+    introGhost.classList.add("is-floating");
+    introGhost.style.top = `${currentRect.top}px`;
+    introGhost.style.left = `${currentRect.left}px`;
+    introGhost.style.width = `${currentRect.width}px`;
+    introGhost.style.height = `${currentRect.height}px`;
+
+    await raf();
+
+    const currentCenterX = currentRect.left + currentRect.width / 2;
+    const currentCenterY = currentRect.top + currentRect.height / 2;
+    const targetCenterX = targetRect.left + targetRect.width / 2;
+    const targetCenterY = targetRect.top + targetRect.height / 2;
+    const deltaX = targetCenterX - currentCenterX;
+    const deltaY = targetCenterY - currentCenterY;
+
+    introGhost.classList.add("is-moving");
+    introGhost.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0)`;
+
+    await sleep(1280);
+
+    document.body.classList.add("intro-landed");
+    introOverlay.classList.add("is-fading");
+
+    await sleep(120);
+
+    document.body.classList.remove("intro-active");
+    window.setTimeout(() => {
+      introFadeEls.forEach((el) => el.classList.remove("intro-fade-ready"));
+    }, 760);
+
+    await sleep(240);
+
+    document.body.classList.remove("intro-landed");
+    introOverlay.remove();
+  };
 
   if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(
@@ -623,4 +799,6 @@
       setMobileMenuOpen(false);
     }
   });
+
+  runIntroSequence().catch(finishIntroImmediately);
 })();
