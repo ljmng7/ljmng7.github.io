@@ -307,6 +307,15 @@
           ? `<p class="app-summary">${escapeHtml(project.summary)}</p>`
           : "";
 
+        const description = Array.isArray(project.descriptionParts) && project.descriptionParts.length > 0
+          ? `<p class="app-description">${project.descriptionParts
+              .map(
+                (part, index) =>
+                  `<span class="app-description-segment${index > 0 ? " is-mobile-break" : ""}">${escapeHtml(part)}</span>`
+              )
+              .join("")}</p>`
+          : "";
+
         const preview = project.previewSrc
           ? `
               <div class="app-preview-shell" aria-hidden="true">
@@ -367,6 +376,7 @@
                     ${summary}
                   </div>
                 </div>
+                ${description}
                 <div class="app-card-action">
                   ${action}
                 </div>

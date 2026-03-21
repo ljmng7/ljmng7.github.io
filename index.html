@@ -65,8 +65,8 @@
       --app-icon-shadow-strong: 0 14px 24px rgba(20, 24, 28, 0.18);
       --app-store-filter-rest: drop-shadow(0 8px 18px rgba(20, 24, 28, 0.08));
       --app-store-filter-strong: drop-shadow(0 14px 26px rgba(20, 24, 28, 0.16));
-      --app-website-shadow-rest: 0 10px 22px rgba(56, 118, 68, 0.22);
-      --app-website-shadow-strong: 0 16px 32px rgba(56, 118, 68, 0.3);
+      --app-website-shadow-rest: 0 8px 18px rgba(20, 24, 28, 0.08);
+      --app-website-shadow-strong: 0 14px 26px rgba(20, 24, 28, 0.16);
     }
 
     * {
@@ -980,9 +980,10 @@
     }
 
     .app-card-copy {
-      display: grid;
-      align-content: start;
-      grid-template-rows: auto auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
       padding: 38px 28px 34px 38px;
     }
 
@@ -1004,10 +1005,10 @@
     }
 
     .app-card-topline {
-      display: flex;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
       align-items: flex-start;
       gap: 18px;
-      margin-top: 86px;
       width: fit-content;
       max-width: 100%;
       margin-left: auto;
@@ -1019,10 +1020,26 @@
       gap: 4px;
       min-width: 0;
       padding-top: 3px;
+      text-align: left;
+    }
+
+    .app-description {
+      width: min(100%, 430px);
+      margin: 54px auto 0;
+      color: #17181b;
+      font-family: var(--sans);
+      font-size: 17px;
+      line-height: 1.78;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    .app-description-segment {
+      display: inline;
     }
 
     .app-card-action {
-      margin-top: 72px;
+      margin-top: 56px;
       width: fit-content;
       max-width: 100%;
       margin-left: auto;
@@ -1030,9 +1047,11 @@
     }
 
     .app-actions {
-      display: grid;
-      justify-items: start;
-      gap: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
     }
 
     .app-card:focus-visible {
@@ -1135,13 +1154,13 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 142px;
+      width: 141.5px;
       height: 52px;
-      border-radius: 999px;
+      border-radius: 10px;
       background: #387644;
       color: #f8fbf6;
       font-family: var(--sans);
-      font-size: 14px;
+      font-size: 15px;
       line-height: 1;
       letter-spacing: -0.01em;
       font-weight: 600;
@@ -1290,8 +1309,8 @@
         --app-icon-shadow-strong: 0 14px 26px rgba(0, 0, 0, 0.3);
         --app-store-filter-rest: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.14));
         --app-store-filter-strong: drop-shadow(0 16px 30px rgba(0, 0, 0, 0.24));
-        --app-website-shadow-rest: 0 12px 26px rgba(56, 118, 68, 0.24);
-        --app-website-shadow-strong: 0 18px 34px rgba(56, 118, 68, 0.34);
+        --app-website-shadow-rest: 0 10px 22px rgba(0, 0, 0, 0.14);
+        --app-website-shadow-strong: 0 16px 30px rgba(0, 0, 0, 0.24);
       }
 
       .contact-icon-img.is-default,
@@ -1592,15 +1611,12 @@
       }
 
       .app-card-topline {
-        margin-top: 58px;
-      }
-
-      .app-card-action {
-        margin-top: 52px;
+        width: fit-content;
+        max-width: 100%;
       }
 
       .app-actions {
-        gap: 28px;
+        gap: 14px;
       }
 
       .app-name {
@@ -1611,14 +1627,25 @@
         font-size: 14px;
       }
 
+      .app-description {
+        width: min(100%, 380px);
+        margin-top: 40px;
+        font-size: 15px;
+      }
+
+      .app-card-action {
+        margin-top: 44px;
+      }
+
       .app-store-badge {
         height: 46px;
       }
 
       .app-website-link {
-        width: 125px;
+        width: 125.2px;
         height: 46px;
-        font-size: 13px;
+        border-radius: 9px;
+        font-size: 14px;
       }
 
       .app-availability {
@@ -1660,12 +1687,22 @@
       }
 
       .app-card-topline {
-        margin-top: 26px;
         gap: 14px;
+      }
+
+      .app-description {
+        width: 100%;
+        margin-top: 26px;
+        font-size: 15px;
+        line-height: 1.72;
       }
 
       .app-card-action {
         margin-top: 18px;
+      }
+
+      .app-description-segment.is-mobile-break {
+        display: block;
       }
 
       .app-preview-shell {
@@ -1703,9 +1740,10 @@
       }
 
       .app-website-link {
-        width: 114px;
+        width: 114.3px;
         height: 42px;
-        font-size: 12px;
+        border-radius: 8px;
+        font-size: 13px;
       }
 
       .app-availability {

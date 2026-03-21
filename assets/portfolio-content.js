@@ -44,6 +44,7 @@ window.portfolioContent = {
         darkIconSrc: "./assets/YumChicken/YumChick-iOS-Dark-web-256.png",
         iconAlt: "馋香鸡 app icon",
         summary: "专注做饭的极简工具",
+        descriptionParts: ["清晰步骤与轻量界面，", "陪你完成一次烹饪。"],
         previewSrc: "./assets/YumChicken.png",
         darkPreviewSrc: "./assets/YumChicken_Dark.png",
         storeHref: "https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913",
@@ -57,6 +58,7 @@ window.portfolioContent = {
         darkIconSrc: "./assets/Musio/Musio-iOS-Dark-web-256.png",
         iconAlt: "Musio app icon",
         summary: "臻藏你的音乐品味",
+        descriptionParts: ["收藏喜欢的音乐，", "也留住每一次想记录的瞬间。"],
         previewSrc: "./assets/Musio.png",
         darkPreviewSrc: "./assets/Musio_Dark.png",
         availabilityText: "COMING SOON"
