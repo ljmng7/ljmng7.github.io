@@ -1024,7 +1024,6 @@
     }
 
     .app-description {
-      width: min(100%, 430px);
       margin: 54px auto 0;
       color: #17181b;
       font-family: var(--sans);
@@ -1034,8 +1033,36 @@
       text-align: center;
     }
 
-    .app-description-segment {
-      display: inline;
+    .app-description-desktop,
+    .app-description-mobile {
+      display: block;
+      max-width: min(100%, 430px);
+      margin: 0 auto;
+    }
+
+    .app-description-mobile {
+      display: none;
+    }
+
+    .app-punct-anchor {
+      position: relative;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .app-punct-anchor::after {
+      content: attr(data-punct);
+      position: absolute;
+      top: 0;
+      left: 100%;
+      color: currentColor;
+      font: inherit;
+    }
+
+    .app-description-mobile-line {
+      display: table;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .app-card-action {
@@ -1628,9 +1655,13 @@
       }
 
       .app-description {
-        width: min(100%, 380px);
         margin-top: 40px;
         font-size: 15px;
+      }
+
+      .app-description-desktop,
+      .app-description-mobile {
+        max-width: min(100%, 380px);
       }
 
       .app-card-action {
@@ -1691,7 +1722,6 @@
       }
 
       .app-description {
-        width: 100%;
         margin-top: 26px;
         font-size: 15px;
         line-height: 1.72;
@@ -1701,7 +1731,11 @@
         margin-top: 18px;
       }
 
-      .app-description-segment.is-mobile-break {
+      .app-description-desktop {
+        display: none;
+      }
+
+      .app-description-mobile {
         display: block;
       }
 

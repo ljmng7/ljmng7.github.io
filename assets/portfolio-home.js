@@ -308,12 +308,32 @@
           : "";
 
         const description = Array.isArray(project.descriptionParts) && project.descriptionParts.length > 0
-          ? `<p class="app-description">${project.descriptionParts
-              .map(
-                (part, index) =>
-                  `<span class="app-description-segment${index > 0 ? " is-mobile-break" : ""}">${escapeHtml(part)}</span>`
-              )
-              .join("")}</p>`
+          ? (() => {
+              const splitTrailingPunctuation = (text) => {
+                const match = typeof text === "string" ? text.match(/^(.*?)([，。！？；：])$/u) : null;
+
+                return {
+                  text: match ? match[1] : text,
+                  punctuation: match ? match[2] : ""
+                };
+              };
+
+              const mobileLines = project.descriptionParts.map(splitTrailingPunctuation);
+              const fullText = project.descriptionParts.join("");
+              const desktopLine = splitTrailingPunctuation(fullText);
+
+              const renderPunctAnchor = (line, className = "") =>
+                `<span class="app-punct-anchor${className ? ` ${className}` : ""}"${
+                  line.punctuation ? ` data-punct="${escapeHtml(line.punctuation)}"` : ""
+                }>${escapeHtml(line.text)}</span>`;
+
+              return `<p class="app-description">
+                <span class="app-description-desktop">${renderPunctAnchor(desktopLine)}</span>
+                <span class="app-description-mobile">${mobileLines
+                  .map((line) => renderPunctAnchor(line, "app-description-mobile-line"))
+                  .join("")}</span>
+              </p>`;
+            })()
           : "";
 
         const preview = project.previewSrc
