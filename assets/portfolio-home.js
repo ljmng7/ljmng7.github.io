@@ -412,32 +412,6 @@
     ${introOverlayMarkup}
 
     <header class="topbar${introFadeClass}">
-      <div class="container topbar-inner">
-        <div class="topbar-right">
-          <div class="contact-links topbar-contact-links" aria-label="Contact links">
-            ${renderContacts({ layout: "compact" })}
-          </div>
-          <div class="mobile-menu">
-            <button
-              class="mobile-menu-toggle"
-              type="button"
-              aria-label="打开联系方式菜单"
-              aria-expanded="false"
-              aria-controls="mobile-contact-menu"
-              data-mobile-menu-toggle
-            >
-              <span class="mobile-menu-bar"></span>
-              <span class="mobile-menu-bar"></span>
-              <span class="mobile-menu-bar"></span>
-            </button>
-            <div class="mobile-menu-panel" id="mobile-contact-menu" data-mobile-menu-panel hidden>
-              <div class="contact-links mobile-contact-links" aria-label="Mobile contact links">
-                ${renderContacts({ layout: "menu" })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </header>
 
     <main class="main">
