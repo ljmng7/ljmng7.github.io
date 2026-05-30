@@ -376,11 +376,31 @@
             ? `<div class="app-availability">${escapeHtml(project.availabilityText)}</div>`
             : "";
 
-        const action = websiteAction || primaryAction
+        const androidAction = project.androidHref
+          ? `
+              <a class="android-download-link" data-apk-download-link href="${escapeHtml(safeHref(project.androidHref))}"${linkAttrs(
+                project.androidHref
+              )} aria-label="${escapeHtml(project.androidLabel || "下载 APK")}">
+                <img class="android-logo" src="./assets/Android_logo_2023.svg" alt="" aria-hidden="true">
+                <span>${escapeHtml(project.androidLabel || "下载 APK")}</span>
+              </a>
+            `
+          : "";
+
+        const downloadActions = primaryAction || androidAction
+          ? `
+              <div class="app-download-actions">
+                ${primaryAction}
+                ${androidAction}
+              </div>
+            `
+          : "";
+
+        const action = websiteAction || downloadActions
           ? `
               <div class="app-actions">
                 ${websiteAction}
-                ${primaryAction}
+                ${downloadActions}
               </div>
             `
           : "";
@@ -485,6 +505,135 @@
   if (descriptionTag && typeof data.meta?.description === "string") {
     descriptionTag.setAttribute("content", data.meta.description);
   }
+
+  const fallbackApkDownloadUrl = "https://github.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.2/YumChick-v1.2.2.apk";
+  const fallbackGiteeApkDownloadUrl = "https://gitee.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.2/YumChick-v1.2.2.apk";
+  const giteeMirrorReady = true;
+  let latestApkDownloadPromise = null;
+  let mainlandChinaDetectionPromise = null;
+
+  const buildGiteeApkDownloadUrl = (githubDownloadUrl) => {
+    const match = githubDownloadUrl.match(/\/releases\/download\/([^/]+)\/([^/?#]+)/);
+
+    if (!match) {
+      return fallbackGiteeApkDownloadUrl;
+    }
+
+    return `https://gitee.com/ljmng7/YumChicken-Android-Release/releases/download/${match[1]}/${match[2]}`;
+  };
+
+  const fetchLatestApkDownloadInfo = () => {
+    if (latestApkDownloadPromise) {
+      return latestApkDownloadPromise;
+    }
+
+    latestApkDownloadPromise = (async () => {
+      try {
+        const response = await window.fetch(
+          "https://api.github.com/repos/ljmng7/YumChicken-Android-Release/releases/latest",
+          {
+            headers: {
+              Accept: "application/vnd.github+json"
+            }
+          }
+        );
+
+        if (!response.ok) {
+          return {
+            githubUrl: fallbackApkDownloadUrl,
+            giteeUrl: fallbackGiteeApkDownloadUrl
+          };
+        }
+
+        const release = await response.json();
+        const apk = Array.isArray(release.assets)
+          ? release.assets.find((asset) =>
+              typeof asset.name === "string" &&
+              asset.name.toLowerCase().endsWith(".apk") &&
+              typeof asset.browser_download_url === "string"
+          )
+          : null;
+        const githubUrl = apk?.browser_download_url || fallbackApkDownloadUrl;
+
+        return {
+          githubUrl,
+          giteeUrl: buildGiteeApkDownloadUrl(githubUrl)
+        };
+      } catch {
+        return {
+          githubUrl: fallbackApkDownloadUrl,
+          giteeUrl: fallbackGiteeApkDownloadUrl
+        };
+      }
+    })();
+
+    return latestApkDownloadPromise;
+  };
+
+  const detectMainlandChina = () => {
+    if (mainlandChinaDetectionPromise) {
+      return mainlandChinaDetectionPromise;
+    }
+
+    mainlandChinaDetectionPromise = (async () => {
+      try {
+        const response = await window.fetch("https://ipapi.co/json/");
+
+        if (response.ok) {
+          const data = await response.json();
+          if (typeof data.country_code === "string") {
+            return data.country_code.toUpperCase() === "CN";
+          }
+        }
+      } catch {}
+
+      try {
+        const response = await window.fetch("https://ipwho.is/");
+
+        if (response.ok) {
+          const data = await response.json();
+          if (typeof data.country_code === "string") {
+            return data.country_code.toUpperCase() === "CN";
+          }
+        }
+      } catch {}
+
+      return false;
+    })();
+
+    return mainlandChinaDetectionPromise;
+  };
+
+  const chooseApkDownloadUrl = async () => {
+    const [downloadInfo, isMainlandChina] = await Promise.all([
+      fetchLatestApkDownloadInfo(),
+      detectMainlandChina()
+    ]);
+
+    return giteeMirrorReady && isMainlandChina ? downloadInfo.giteeUrl : downloadInfo.githubUrl;
+  };
+
+  const resolveLatestApkDownload = async () => {
+    const links = Array.from(document.querySelectorAll("[data-apk-download-link]"));
+
+    if (links.length === 0 || typeof window.fetch !== "function") {
+      return;
+    }
+
+    links.forEach((link) => {
+      link.addEventListener("click", async (event) => {
+        event.preventDefault();
+        window.location.assign(await chooseApkDownloadUrl());
+      });
+    });
+
+    const apkDownloadUrl = await chooseApkDownloadUrl();
+    links.forEach((link) => {
+      link.href = apkDownloadUrl;
+    });
+  };
+
+  resolveLatestApkDownload();
 
   const revealEls = Array.from(document.querySelectorAll(".reveal-on-scroll"));
   const pointerSurfaces = Array.from(document.querySelectorAll("[data-pointer-surface]"));

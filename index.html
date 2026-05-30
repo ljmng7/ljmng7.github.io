@@ -1077,6 +1077,14 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .app-download-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       gap: 18px;
       flex-wrap: wrap;
     }
@@ -1197,10 +1205,47 @@
       transition: transform 0.22s var(--ease), background-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
     }
 
+    .android-download-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 141.5px;
+      height: 52px;
+      border: 1px solid rgba(33, 36, 40, 0.12);
+      border-radius: 10px;
+      background: #fff;
+      color: #2b3134;
+      font-family: var(--sans);
+      font-size: 15px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+      box-shadow: var(--app-website-shadow-rest);
+      transform: translateZ(0) scale(1);
+      transform-origin: center;
+      transition: transform 0.22s var(--ease), background-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
+    }
+
+    .android-download-link .android-logo {
+      width: 22px;
+      height: 22px;
+      object-fit: contain;
+      flex: 0 0 auto;
+    }
+
     .app-website-link:hover,
-    .app-website-link:focus-visible {
+    .app-website-link:focus-visible,
+    .android-download-link:hover,
+    .android-download-link:focus-visible {
       background: #346f3f;
       outline: none;
+    }
+
+    .android-download-link:hover,
+    .android-download-link:focus-visible {
+      background: #f7fbf8;
+      border-color: rgba(33, 36, 40, 0.18);
     }
 
     .app-store-link:focus-visible {
@@ -1281,13 +1326,17 @@
 
       .app-website-link:hover,
       .app-website-link:focus-visible,
+      .android-download-link:hover,
+      .android-download-link:focus-visible,
       .app-store-link:hover,
       .app-store-link:focus-visible {
         transform: translateZ(0) scale(1.035);
       }
 
       .app-website-link:hover,
-      .app-website-link:focus-visible {
+      .app-website-link:focus-visible,
+      .android-download-link:hover,
+      .android-download-link:focus-visible {
         box-shadow: var(--app-website-shadow-strong);
       }
 
@@ -1683,6 +1732,18 @@
         font-size: 14px;
       }
 
+      .android-download-link {
+        width: 125.2px;
+        height: 46px;
+        border-radius: 9px;
+        font-size: 14px;
+      }
+
+      .android-download-link .android-logo {
+        width: 20px;
+        height: 20px;
+      }
+
       .app-availability {
         font-size: 14px;
       }
@@ -1782,6 +1843,18 @@
         height: 42px;
         border-radius: 8px;
         font-size: 13px;
+      }
+
+      .android-download-link {
+        width: 114.3px;
+        height: 42px;
+        border-radius: 8px;
+        font-size: 13px;
+      }
+
+      .android-download-link .android-logo {
+        width: 19px;
+        height: 19px;
       }
 
       .app-availability {

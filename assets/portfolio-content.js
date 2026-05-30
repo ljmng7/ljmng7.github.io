@@ -50,7 +50,9 @@ window.portfolioContent = {
         storeHref: "https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913",
         storeBadgeSrc: "./assets/Download_on_App_Store/Download_on_the_App_Store_Badge_CNSC_RGB_blk_092917.svg",
         darkStoreBadgeSrc: "./assets/Download_on_App_Store/Download_on_the_App_Store_Badge_CNSC_RGB_wht_092917.svg",
-        storeBadgeAlt: "Download on the App Store"
+        storeBadgeAlt: "Download on the App Store",
+        androidHref: "https://github.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.2/YumChick-v1.2.2.apk",
+        androidLabel: "下载 APK"
       },
       {
         name: "Musio",
