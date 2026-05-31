@@ -828,65 +828,126 @@
       const fallbackApkDownloadUrl = 'https://github.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.2/YumChick-v1.2.2.apk';
       const fallbackGiteeApkDownloadUrl = 'https://gitee.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.2/YumChick-v1.2.2.apk';
       const giteeMirrorReady = true;
-      let latestApkDownloadPromise = null;
+      const apkDownloadSources = {
+        github: {
+          latestReleaseUrl: 'https://api.github.com/repos/ljmng7/YumChicken-Android-Release/releases/latest',
+          fallbackUrl: fallbackApkDownloadUrl,
+          accept: 'application/vnd.github+json'
+        },
+        gitee: {
+          latestReleaseUrl: 'https://gitee.com/api/v5/repos/ljmng7/YumChicken-Android-Release/releases/latest',
+          fallbackUrl: fallbackGiteeApkDownloadUrl,
+          accept: 'application/json'
+        }
+      };
+      const latestApkDownloadPromises = {};
       let mainlandChinaDetectionPromise = null;
 
-      const buildGiteeApkDownloadUrl = (githubDownloadUrl) => {
-        const match = githubDownloadUrl.match(/\/releases\/download\/([^/]+)\/([^/?#]+)/);
-
-        if (!match) {
-          return fallbackGiteeApkDownloadUrl;
+      const normalizeDownloadUrl = (url, sourceName) => {
+        if (typeof url !== 'string' || url.trim() === '') {
+          return '';
         }
 
-        return `https://gitee.com/ljmng7/YumChicken-Android-Release/releases/download/${match[1]}/${match[2]}`;
+        const normalizedUrl = url.trim();
+        if (sourceName === 'gitee' && normalizedUrl.startsWith('/')) {
+          return `https://gitee.com${normalizedUrl}`;
+        }
+
+        return normalizedUrl;
       };
 
-      const fetchLatestApkDownloadInfo = () => {
-        if (latestApkDownloadPromise) {
-          return latestApkDownloadPromise;
+      const getAssetDownloadUrl = (asset, sourceName) =>
+        normalizeDownloadUrl(asset.browser_download_url || asset.download_url || '', sourceName);
+
+      const findApkAsset = (assets, sourceName) =>
+        assets.find(
+          (asset) =>
+            typeof asset.name === 'string' &&
+            asset.name.toLowerCase().endsWith('.apk') &&
+            getAssetDownloadUrl(asset, sourceName)
+        );
+
+      const fetchGiteeReleaseAttachFiles = async (release) => {
+        const releaseId = Number(release.id);
+
+        if (!Number.isFinite(releaseId) || releaseId <= 0) {
+          return [];
         }
 
-        latestApkDownloadPromise = (async () => {
+        const response = await window.fetch(
+          `${apkDownloadSources.gitee.latestReleaseUrl.split('/releases/')[0]}/releases/${releaseId}/attach_files`,
+          {
+            headers: {
+              Accept: apkDownloadSources.gitee.accept
+            }
+          }
+        );
+
+        if (!response.ok) {
+          return [];
+        }
+
+        const attachFiles = await response.json();
+        return Array.isArray(attachFiles) ? attachFiles : [];
+      };
+
+      const getReleaseAssets = async (release, sourceName) => {
+        if (Array.isArray(release.assets)) {
+          return release.assets;
+        }
+
+        if (Array.isArray(release.attach_files)) {
+          return release.attach_files;
+        }
+
+        return sourceName === 'gitee' ? fetchGiteeReleaseAttachFiles(release) : [];
+      };
+
+      const isMainlandChinaCountryValue = (value) =>
+        typeof value === 'string' &&
+        (value.toUpperCase() === 'CN' || value.toLowerCase() === 'china' || value === '中国');
+
+      const getKnownCountryValues = (data) =>
+        [data.country_code, data.countryCode, data.country].filter(
+          (value) => typeof value === 'string' && value.trim() !== ''
+        );
+
+      const fetchLatestApkDownloadUrl = (sourceName, fallbackOnFailure = true) => {
+        const source = apkDownloadSources[sourceName];
+
+        if (!source) {
+          return Promise.resolve(fallbackOnFailure ? fallbackApkDownloadUrl : null);
+        }
+
+        const cacheKey = fallbackOnFailure ? sourceName : `${sourceName}:no-fallback`;
+
+        if (latestApkDownloadPromises[cacheKey]) {
+          return latestApkDownloadPromises[cacheKey];
+        }
+
+        latestApkDownloadPromises[cacheKey] = (async () => {
           try {
-            const response = await window.fetch(
-              'https://api.github.com/repos/ljmng7/YumChicken-Android-Release/releases/latest',
-              {
-                headers: {
-                  Accept: 'application/vnd.github+json'
-                }
+            const response = await window.fetch(source.latestReleaseUrl, {
+              headers: {
+                Accept: source.accept
               }
-            );
+            });
 
             if (!response.ok) {
-              return {
-                githubUrl: fallbackApkDownloadUrl,
-                giteeUrl: fallbackGiteeApkDownloadUrl
-              };
+              return fallbackOnFailure ? source.fallbackUrl : null;
             }
 
             const release = await response.json();
-            const apk = Array.isArray(release.assets)
-              ? release.assets.find((asset) =>
-                  typeof asset.name === 'string' &&
-                  asset.name.toLowerCase().endsWith('.apk') &&
-                  typeof asset.browser_download_url === 'string'
-              )
-              : null;
-            const githubUrl = apk?.browser_download_url || fallbackApkDownloadUrl;
+            const releaseAssets = await getReleaseAssets(release, sourceName);
+            const apk = findApkAsset(releaseAssets, sourceName);
 
-            return {
-              githubUrl,
-              giteeUrl: buildGiteeApkDownloadUrl(githubUrl)
-            };
+            return apk ? getAssetDownloadUrl(apk, sourceName) : fallbackOnFailure ? source.fallbackUrl : null;
           } catch {
-            return {
-              githubUrl: fallbackApkDownloadUrl,
-              giteeUrl: fallbackGiteeApkDownloadUrl
-            };
+            return fallbackOnFailure ? source.fallbackUrl : null;
           }
         })();
 
-        return latestApkDownloadPromise;
+        return latestApkDownloadPromises[cacheKey];
       };
 
       const detectMainlandChina = () => {
@@ -900,8 +961,9 @@
 
             if (response.ok) {
               const data = await response.json();
-              if (typeof data.country_code === 'string') {
-                return data.country_code.toUpperCase() === 'CN';
+              const countryValues = getKnownCountryValues(data);
+              if (countryValues.length > 0) {
+                return countryValues.some(isMainlandChinaCountryValue);
               }
             }
           } catch {}
@@ -911,8 +973,21 @@
 
             if (response.ok) {
               const data = await response.json();
-              if (typeof data.country_code === 'string') {
-                return data.country_code.toUpperCase() === 'CN';
+              const countryValues = getKnownCountryValues(data);
+              if (countryValues.length > 0) {
+                return countryValues.some(isMainlandChinaCountryValue);
+              }
+            }
+          } catch {}
+
+          try {
+            const response = await window.fetch('https://api.country.is/');
+
+            if (response.ok) {
+              const data = await response.json();
+              const countryValues = getKnownCountryValues(data);
+              if (countryValues.length > 0) {
+                return countryValues.some(isMainlandChinaCountryValue);
               }
             }
           } catch {}
@@ -924,12 +999,13 @@
       };
 
       const chooseApkDownloadUrl = async () => {
-        const [downloadInfo, isMainlandChina] = await Promise.all([
-          fetchLatestApkDownloadInfo(),
-          detectMainlandChina()
-        ]);
+        const isMainlandChina = await detectMainlandChina();
 
-        return giteeMirrorReady && isMainlandChina ? downloadInfo.giteeUrl : downloadInfo.githubUrl;
+        if (giteeMirrorReady && isMainlandChina) {
+          return (await fetchLatestApkDownloadUrl('gitee', false)) || fetchLatestApkDownloadUrl('github');
+        }
+
+        return fetchLatestApkDownloadUrl('github');
       };
 
       const resolveLatestApkDownload = async () => {
