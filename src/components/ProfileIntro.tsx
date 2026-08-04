@@ -5,8 +5,25 @@ import { useLanguage } from "./LanguageProvider";
 import { SpinningText } from "./SpinningText";
 import { Text3DFlip } from "./Text3DFlip";
 
+function splitBioPhrases(text: string): string[] {
+  const match = text.match(/^(.+?[，,])(\s*)(.+)$/u);
+
+  if (!match) {
+    return [text];
+  }
+
+  const [, lead, spacing, tail] = match;
+
+  if (!lead || tail === undefined) {
+    return [text];
+  }
+
+  return [lead, `${spacing ?? ""}${tail}`];
+}
+
 export function ProfileIntro() {
   const { messages } = useLanguage();
+  const bioPhrases = splitBioPhrases(messages.profile.bio);
 
   return (
     <section className="profile-intro">
@@ -43,7 +60,13 @@ export function ProfileIntro() {
                 </Text3DFlip>
               </h1>
             </div>
-            <p className="profile-intro-bio">{messages.profile.bio}</p>
+            <p className="profile-intro-bio">
+              {bioPhrases.map((phrase, index) => (
+                <span className="profile-intro-bio-phrase" key={`${index}-${phrase}`}>
+                  {phrase}
+                </span>
+              ))}
+            </p>
             <GitHubButton
               ariaLabel={messages.profile.githubAriaLabel}
               href={profile.githubUrl}
