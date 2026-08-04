@@ -938,6 +938,12 @@ html[data-floating-profile] .profile-intro-name-face {
   scroll-margin-top: 88px;
 }
 
+@media (max-width: 720px) {
+  .floating-header-commit-count {
+    display: none;
+  }
+}
+
 .repositories-preview-title {
   margin-bottom: clamp(24px, 2.5vw, 32px);
 }
@@ -1522,16 +1528,8 @@ html[data-floating-profile] .profile-intro-name-face {
   }
 
   .floating-header-content {
-    padding: 0 7px;
-    gap: 6px;
-  }
-
-  .floating-header-identity {
+    padding: 0 9px;
     gap: 8px;
-  }
-
-  .floating-header-name-cluster {
-    gap: 4px;
   }
 
   .floating-header-navigation {
@@ -1539,15 +1537,8 @@ html[data-floating-profile] .profile-intro-name-face {
   }
 
   .floating-header-nav-link {
-    padding: 6px 4px;
-    font-size: 12.5px;
-  }
-
-  .floating-header-commit-count {
-    min-width: 82px;
-    margin-left: 2px;
-    padding-left: 10px;
-    font-size: 11.5px;
+    padding: 6px;
+    font-size: 13px;
   }
 
   .floating-header-avatar-target,
@@ -1710,46 +1701,6 @@ html[data-floating-profile] .profile-intro-name-face {
 }
 
 @media (max-width: 380px) {
-  .floating-header-content {
-    padding: 0 6px;
-    gap: 4px;
-  }
-
-  .floating-header-identity {
-    gap: 6px;
-  }
-
-  .floating-header-name-cluster {
-    gap: 3px;
-  }
-
-  .floating-header-avatar-target,
-  .floating-header-github {
-    width: 30px;
-    height: 30px;
-  }
-
-  .floating-header-name-target {
-    font-size: 19px;
-  }
-
-  .floating-header-github-target {
-    width: 19px;
-    height: 19px;
-  }
-
-  .floating-header-nav-link {
-    padding: 5px 3px;
-    font-size: 11.5px;
-  }
-
-  .floating-header-commit-count {
-    min-width: 76px;
-    margin-left: 1px;
-    padding-left: 8px;
-    font-size: 10.5px;
-  }
-
   .container {
     width: min(100% - 32px, var(--content-width));
   }

@@ -58,7 +58,7 @@ export function Globe({
         ? {
             ...config,
             dark: 1,
-            baseColor: [0.07, 0.09, 0.12],
+            baseColor: [1, 1, 1],
             glowColor: [0.05, 0.07, 0.1],
             mapBrightness: 1.35,
           }
