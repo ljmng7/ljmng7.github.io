@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   workflow_run:
     workflows:
-      - Sync GitHub contribution data
+      - Sync GitHub profile data
     types:
       - completed
 
