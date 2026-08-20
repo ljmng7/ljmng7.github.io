@@ -1,8 +1,19 @@
 {
   "username": "ljmng7",
-  "generatedAt": "2026-08-20T13:11:46.432Z",
+  "generatedAt": "2026-08-20T18:59:37.815Z",
   "scope": "all public repositories owned by the GitHub user, including forks",
   "repositories": [
+    {
+      "name": "YumChicken-Android-Release",
+      "htmlUrl": "https://github.com/ljmng7/YumChicken-Android-Release",
+      "description": "馋香鸡 安卓版 专注做饭的极简工具",
+      "language": null,
+      "starsCount": 1,
+      "forksCount": 0,
+      "fork": false,
+      "archived": false,
+      "pushedAt": "2026-08-20T16:27:20Z"
+    },
     {
       "name": "ljmng7.github.io",
       "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
@@ -12,7 +23,7 @@
       "forksCount": 0,
       "fork": false,
       "archived": false,
-      "pushedAt": "2026-08-20T07:07:18Z"
+      "pushedAt": "2026-08-20T13:11:47Z"
     },
     {
       "name": "MacMix",
@@ -68,17 +79,6 @@
       "fork": true,
       "archived": false,
       "pushedAt": "2026-06-03T10:38:19Z"
-    },
-    {
-      "name": "YumChicken-Android-Release",
-      "htmlUrl": "https://github.com/ljmng7/YumChicken-Android-Release",
-      "description": "馋香鸡 安卓版 专注做饭的极简工具",
-      "language": null,
-      "starsCount": 1,
-      "forksCount": 0,
-      "fork": false,
-      "archived": false,
-      "pushedAt": "2026-05-31T04:59:03Z"
     },
     {
       "name": "parameter-golf",
