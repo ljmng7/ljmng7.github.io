@@ -1,19 +1,8 @@
 {
   "username": "ljmng7",
-  "generatedAt": "2026-08-21T01:58:19.425Z",
+  "generatedAt": "2026-08-21T07:08:31.831Z",
   "scope": "all public repositories owned by the GitHub user, including forks",
   "repositories": [
-    {
-      "name": "ljmng7.github.io",
-      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
-      "description": "ljmng7's personal page",
-      "language": "TypeScript",
-      "starsCount": 2,
-      "forksCount": 0,
-      "fork": false,
-      "archived": false,
-      "pushedAt": "2026-08-20T18:59:39Z"
-    },
     {
       "name": "YumChicken-Android-Release",
       "htmlUrl": "https://github.com/ljmng7/YumChicken-Android-Release",
@@ -23,14 +12,25 @@
       "forksCount": 0,
       "fork": false,
       "archived": false,
-      "pushedAt": "2026-08-20T16:27:20Z"
+      "pushedAt": "2026-08-21T03:57:51Z"
+    },
+    {
+      "name": "ljmng7.github.io",
+      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
+      "description": "ljmng7's personal page",
+      "language": "TypeScript",
+      "starsCount": 2,
+      "forksCount": 0,
+      "fork": false,
+      "archived": false,
+      "pushedAt": "2026-08-21T01:58:20Z"
     },
     {
       "name": "MacMix",
       "htmlUrl": "https://github.com/ljmng7/MacMix",
       "description": "A lightweight macOS menu bar audio mixer.",
       "language": "Swift",
-      "starsCount": 43,
+      "starsCount": 44,
       "forksCount": 2,
       "fork": false,
       "archived": false,
