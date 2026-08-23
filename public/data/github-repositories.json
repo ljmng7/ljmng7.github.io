@@ -1,19 +1,8 @@
 {
   "username": "ljmng7",
-  "generatedAt": "2026-08-23T02:00:33.349Z",
+  "generatedAt": "2026-08-23T07:01:33.879Z",
   "scope": "all public repositories owned by the GitHub user, including forks",
   "repositories": [
-    {
-      "name": "ljmng7.github.io",
-      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
-      "description": "ljmng7's personal page",
-      "language": "TypeScript",
-      "starsCount": 2,
-      "forksCount": 0,
-      "fork": false,
-      "archived": false,
-      "pushedAt": "2026-08-22T18:49:56Z"
-    },
     {
       "name": "MacMix",
       "htmlUrl": "https://github.com/ljmng7/MacMix",
@@ -23,7 +12,18 @@
       "forksCount": 2,
       "fork": false,
       "archived": false,
-      "pushedAt": "2026-08-22T01:39:20Z"
+      "pushedAt": "2026-08-23T05:28:31Z"
+    },
+    {
+      "name": "ljmng7.github.io",
+      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
+      "description": "ljmng7's personal page",
+      "language": "TypeScript",
+      "starsCount": 2,
+      "forksCount": 0,
+      "fork": false,
+      "archived": false,
+      "pushedAt": "2026-08-23T02:00:34Z"
     },
     {
       "name": "YumChicken-Android-Release",
