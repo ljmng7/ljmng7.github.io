@@ -2,15 +2,15 @@
   "username": "ljmng7",
   "startDate": "2026-03-01",
   "endDate": "2026-08-29",
-  "generatedAt": "2026-08-23T07:01:33.006Z",
+  "generatedAt": "2026-08-24T01:57:56.626Z",
   "scope": "rolling 26-week GitHub contribution calendar, including anonymized restricted contributions when profile visibility allows",
-  "totalContributions": 293,
-  "restrictedContributionsCount": 185,
+  "totalContributions": 339,
+  "restrictedContributionsCount": 231,
   "days": [
     {
       "date": "2026-03-01",
       "count": 6,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-03-02",
@@ -20,7 +20,7 @@
     {
       "date": "2026-03-03",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-03-04",
@@ -70,7 +70,7 @@
     {
       "date": "2026-03-13",
       "count": 6,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-03-14",
@@ -95,7 +95,7 @@
     {
       "date": "2026-03-18",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-03-19",
@@ -115,7 +115,7 @@
     {
       "date": "2026-03-22",
       "count": 6,
-      "level": 3
+      "level": 2
     },
     {
       "date": "2026-03-23",
@@ -155,7 +155,7 @@
     {
       "date": "2026-03-30",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-03-31",
@@ -170,7 +170,7 @@
     {
       "date": "2026-04-02",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-04-03",
@@ -195,17 +195,17 @@
     {
       "date": "2026-04-07",
       "count": 10,
-      "level": 4
+      "level": 3
     },
     {
       "date": "2026-04-08",
       "count": 9,
-      "level": 4
+      "level": 3
     },
     {
       "date": "2026-04-09",
       "count": 9,
-      "level": 4
+      "level": 3
     },
     {
       "date": "2026-04-10",
@@ -220,12 +220,12 @@
     {
       "date": "2026-04-12",
       "count": 9,
-      "level": 4
+      "level": 3
     },
     {
       "date": "2026-04-13",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-04-14",
@@ -295,7 +295,7 @@
     {
       "date": "2026-04-27",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-04-28",
@@ -450,7 +450,7 @@
     {
       "date": "2026-05-28",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-05-29",
@@ -609,18 +609,18 @@
     },
     {
       "date": "2026-06-29",
-      "count": 4,
+      "count": 7,
       "level": 2
     },
     {
       "date": "2026-06-30",
-      "count": 14,
+      "count": 27,
       "level": 4
     },
     {
       "date": "2026-07-01",
-      "count": 8,
-      "level": 3
+      "count": 15,
+      "level": 4
     },
     {
       "date": "2026-07-02",
@@ -629,8 +629,8 @@
     },
     {
       "date": "2026-07-03",
-      "count": 5,
-      "level": 2
+      "count": 8,
+      "level": 3
     },
     {
       "date": "2026-07-04",
@@ -669,7 +669,7 @@
     },
     {
       "date": "2026-07-11",
-      "count": 3,
+      "count": 5,
       "level": 2
     },
     {
@@ -679,13 +679,13 @@
     },
     {
       "date": "2026-07-13",
-      "count": 2,
-      "level": 1
+      "count": 4,
+      "level": 2
     },
     {
       "date": "2026-07-14",
-      "count": 2,
-      "level": 1
+      "count": 4,
+      "level": 2
     },
     {
       "date": "2026-07-15",
@@ -790,7 +790,7 @@
     {
       "date": "2026-08-04",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-08-05",
@@ -819,8 +819,8 @@
     },
     {
       "date": "2026-08-10",
-      "count": 2,
-      "level": 1
+      "count": 4,
+      "level": 2
     },
     {
       "date": "2026-08-11",
@@ -864,33 +864,33 @@
     },
     {
       "date": "2026-08-19",
-      "count": 8,
-      "level": 3
+      "count": 15,
+      "level": 4
     },
     {
       "date": "2026-08-20",
       "count": 3,
-      "level": 2
+      "level": 1
     },
     {
       "date": "2026-08-21",
-      "count": 3,
+      "count": 5,
       "level": 2
     },
     {
       "date": "2026-08-22",
-      "count": 1,
+      "count": 2,
       "level": 1
     },
     {
       "date": "2026-08-23",
-      "count": 1,
+      "count": 2,
       "level": 1
     },
     {
       "date": "2026-08-24",
-      "count": 0,
-      "level": 0
+      "count": 1,
+      "level": 1
     },
     {
       "date": "2026-08-25",
