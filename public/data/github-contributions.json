@@ -1,47 +1,12 @@
 {
   "username": "ljmng7",
-  "startDate": "2026-03-01",
-  "endDate": "2026-08-29",
-  "generatedAt": "2026-08-29T07:05:39.047Z",
+  "startDate": "2026-03-08",
+  "endDate": "2026-09-05",
+  "generatedAt": "2026-08-29T16:43:55.975Z",
   "scope": "rolling 26-week GitHub contribution calendar, including anonymized restricted contributions when profile visibility allows",
-  "totalContributions": 350,
-  "restrictedContributionsCount": 239,
+  "totalContributions": 341,
+  "restrictedContributionsCount": 228,
   "days": [
-    {
-      "date": "2026-03-01",
-      "count": 6,
-      "level": 2
-    },
-    {
-      "date": "2026-03-02",
-      "count": 5,
-      "level": 2
-    },
-    {
-      "date": "2026-03-03",
-      "count": 3,
-      "level": 1
-    },
-    {
-      "date": "2026-03-04",
-      "count": 0,
-      "level": 0
-    },
-    {
-      "date": "2026-03-05",
-      "count": 1,
-      "level": 1
-    },
-    {
-      "date": "2026-03-06",
-      "count": 1,
-      "level": 1
-    },
-    {
-      "date": "2026-03-07",
-      "count": 0,
-      "level": 0
-    },
     {
       "date": "2026-03-08",
       "count": 2,
@@ -914,8 +879,43 @@
     },
     {
       "date": "2026-08-29",
-      "count": 6,
-      "level": 2
+      "count": 13,
+      "level": 4
+    },
+    {
+      "date": "2026-08-30",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-08-31",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-09-01",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-09-02",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-09-03",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-09-04",
+      "count": 0,
+      "level": 0
+    },
+    {
+      "date": "2026-09-05",
+      "count": 0,
+      "level": 0
     }
   ]
 }
