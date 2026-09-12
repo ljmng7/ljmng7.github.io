@@ -1,19 +1,8 @@
 {
   "username": "ljmng7",
-  "generatedAt": "2026-09-12T10:48:37.319Z",
+  "generatedAt": "2026-09-12T15:32:53.775Z",
   "scope": "all public repositories owned by the GitHub user, including forks",
   "repositories": [
-    {
-      "name": "ljmng7.github.io",
-      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
-      "description": "ljmng7's personal page",
-      "language": "TypeScript",
-      "starsCount": 2,
-      "forksCount": 0,
-      "fork": false,
-      "archived": false,
-      "pushedAt": "2026-09-12T04:36:34Z"
-    },
     {
       "name": "MacMix",
       "htmlUrl": "https://github.com/ljmng7/MacMix",
@@ -23,7 +12,18 @@
       "forksCount": 2,
       "fork": false,
       "archived": false,
-      "pushedAt": "2026-09-09T05:32:38Z"
+      "pushedAt": "2026-09-12T12:12:41Z"
+    },
+    {
+      "name": "ljmng7.github.io",
+      "htmlUrl": "https://github.com/ljmng7/ljmng7.github.io",
+      "description": "ljmng7's personal page",
+      "language": "TypeScript",
+      "starsCount": 2,
+      "forksCount": 0,
+      "fork": false,
+      "archived": false,
+      "pushedAt": "2026-09-12T10:48:38Z"
     },
     {
       "name": "Metal_DLSS5_Research",
