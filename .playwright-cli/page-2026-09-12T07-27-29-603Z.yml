@@ -1,0 +1,47 @@
+- generic [ref=f1e3]:
+  - navigation "个人主页" [ref=f1e4]:
+    - link "Jazmín — 个人主页" [ref=f1e5] [cursor=pointer]:
+      - /url: /
+      - text: Jazmín
+    - generic [ref=f1e6]:
+      - link "作品" [ref=f1e7] [cursor=pointer]:
+        - /url: /#work
+      - link "乐园" [ref=f1e8] [cursor=pointer]:
+        - /url: /play
+      - generic [ref=f1e9]: 联系
+      - button "Switch to English" [ref=f1e10] [cursor=pointer]: EN
+  - main [ref=f1e13]:
+    - generic:
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - paragraph:
+                - text: 我是
+                - generic "Jazmín"
+              - paragraph: 独立开发者、学生
+    - region "精选应用" [ref=f1e14]:
+      - generic [ref=f1e15]:
+        - article [ref=f1e16]:
+          - heading "MacMix" [level=2] [ref=f1e18]
+          - paragraph [ref=f1e19]: 轻量的 macOS 菜单栏音频混音器。
+          - generic [ref=f1e20]:
+            - link "官网" [ref=f1e21] [cursor=pointer]:
+              - /url: https://macmix.jazminli.com/
+            - link "下载 Mac 版" [ref=f1e28] [cursor=pointer]:
+              - /url: https://download.jazminli.com/MacMix/MacMix.dmg
+              - generic [ref=f1e29]:
+                - text: 下载
+                - generic [ref=f1e30]: Mac 版
+            - link "GitHub" [ref=f1e36] [cursor=pointer]:
+              - /url: https://github.com/ljmng7/MacMix
+        - article [ref=f1e43]:
+          - heading "馋香鸡" [level=2] [ref=f1e45]
+          - paragraph [ref=f1e46]: 专注做饭的极简工具
+          - generic [ref=f1e47]:
+            - link "官网" [ref=f1e48] [cursor=pointer]:
+              - /url: https://yumchicken.jazminli.com/
+            - link "App Store" [ref=f1e55] [cursor=pointer]:
+              - /url: https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913
+            - link "下载 APK" [ref=f1e63] [cursor=pointer]:
+              - /url: https://github.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.4/YumChick-v1.2.4.apk

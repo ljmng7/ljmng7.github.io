@@ -1,0 +1,98 @@
+[
+  {
+    "filename": "placeholder-01.jpg",
+    "title": {
+      "zh": "山谷来信",
+      "en": "Valley light"
+    },
+    "width": 960,
+    "height": 720,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1018"
+  },
+  {
+    "filename": "placeholder-02.jpg",
+    "title": {
+      "zh": "向海而行",
+      "en": "By the sea"
+    },
+    "width": 720,
+    "height": 960,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1011"
+  },
+  {
+    "filename": "placeholder-03.jpg",
+    "title": {
+      "zh": "林间留白",
+      "en": "Into the woods"
+    },
+    "width": 720,
+    "height": 960,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1015"
+  },
+  {
+    "filename": "placeholder-04.jpg",
+    "title": {
+      "zh": "远山",
+      "en": "Distant hills"
+    },
+    "width": 960,
+    "height": 720,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1016"
+  },
+  {
+    "filename": "placeholder-05.jpg",
+    "title": {
+      "zh": "静静流过",
+      "en": "Passing quietly"
+    },
+    "width": 720,
+    "height": 960,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1020"
+  },
+  {
+    "filename": "placeholder-06.jpg",
+    "title": {
+      "zh": "日常之外",
+      "en": "Somewhere else"
+    },
+    "width": 720,
+    "height": 960,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1025"
+  },
+  {
+    "filename": "placeholder-07.jpg",
+    "title": {
+      "zh": "风的形状",
+      "en": "Shape of the wind"
+    },
+    "width": 960,
+    "height": 720,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1035"
+  },
+  {
+    "filename": "placeholder-08.jpg",
+    "title": {
+      "zh": "暮色未晚",
+      "en": "Before dusk"
+    },
+    "width": 720,
+    "height": 960,
+    "location": null,
+    "placeholder": true,
+    "source": "https://picsum.photos/id/1043"
+  }
+]

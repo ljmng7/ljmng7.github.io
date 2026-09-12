@@ -1,0 +1,433 @@
+@font-face {
+  font-family: "Newsreader";
+  src: url("/assets/fonts/newsreader/Newsreader-variable.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Homepage GT Super Text";
+  src: url("/assets/fonts/gt-super/gt-super-text-regular.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Homepage Work Noto Serif SC";
+  src: url("/assets/fonts/noto-serif-sc/work-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+3000-303F, U+4E00-9FFF, U+FF00-FFEF;
+}
+/* Restrict the local Song face to CJK so Latin titles use Newsreader. */
+@font-face {
+  font-family: "Homepage Chinese Serif";
+  src: local("Songti SC"), local("STSong"), local("Noto Serif CJK SC"), local("Noto Serif SC"), local("SimSun");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-3134F;
+}
+@font-face {
+  font-family: "Homepage Chinese Serif";
+  src: local("Songti SC Bold"), local("STSongti-SC-Bold"), local("Noto Serif CJK SC Bold"), local("Noto Serif SC Bold"), local("SimSun");
+  font-style: normal;
+  font-weight: 600 700;
+  font-display: swap;
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FE10-FE1F, U+FE30-FE4F, U+FF00-FFEF, U+20000-3134F;
+}
+html:has(.paper-homepage, .play-page) {
+  --page-navigation-height: calc(68px + env(safe-area-inset-top, 0px));
+  --paper-color: #F9F9F7;
+  --page-ink: #30302e;
+  --page-secondary: #777771;
+  --page-line: #e5e5df;
+  --page-hover: #eeeee9;
+  --page-font-body: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Segoe UI", sans-serif;
+  --page-font-heading: "Homepage Chinese Serif", "Newsreader", Georgia, serif;
+  background: var(--paper-color);
+}
+html.dark:has(.paper-homepage, .play-page) {
+  --paper-color: #1C1C1A;
+  --page-ink: #eaeae5;
+  --page-secondary: #aaa9a0;
+  --page-line: #44443f;
+  --page-hover: #373734;
+}
+body:has(.paper-homepage, .play-page) { background: var(--paper-color); }
+/* Match the MacBook's 2.4s smoothstep color interpolation (3t² - 2t³). */
+html:has(.paper-homepage, .play-page),
+body:has(.paper-homepage, .play-page),
+.paper-homepage,
+.page-work-media,
+.page-work-title,
+.page-work-description,
+.page-work-link,
+.page-contact,
+.page-contact-subtitle {
+  transition: background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 2400ms cubic-bezier(.333333, 0, .666667, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.paper-homepage, .play-page), body:has(.paper-homepage, .play-page),
+  .paper-homepage, .page-work-media, .page-work-title, .page-work-description,
+  .page-work-link, .page-contact, .page-contact-subtitle { transition: none; }
+}
+.paper-homepage { min-height: 100svh; background: var(--paper-color); color: var(--page-ink); font-family: var(--page-font-body); font-size: 15px; line-height: var(--reading-line-height, 1.75); }
+.page-gradient-hero {
+  position: sticky;
+  top: calc(var(--page-navigation-height) - 100vh);
+  top: calc(var(--page-navigation-height) - 100svh);
+  z-index: 10;
+  height: 100vh;
+  height: 100svh;
+  pointer-events: none;
+}
+.page-gradient-visual {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100vw;
+  overflow: hidden;
+  isolation: isolate;
+  background: #dedce9;
+  pointer-events: none;
+}
+.page-gradient-colors {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse at 82% 22%, #f4f0edb3 0%, transparent 48%),
+    radial-gradient(ellipse at 12% 18%, #b8b8d080 0%, transparent 48%),
+    radial-gradient(ellipse at 80% 51%, #ffd4a3b3 0%, transparent 43%),
+    linear-gradient(180deg, #e5e3f0 8%, #dedde7 27%, #f5d2b7 46%, #f7b386 61%, #d9897c 75%, #925b70 88%, #4f3c56 100%);
+  animation: page-gradient-drift 36s ease-in-out infinite alternate;
+}
+.page-gradient-colors::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 48%, #f4b89499 0%, transparent 48%),
+    radial-gradient(ellipse at 75% 36%, #fff0d699 0%, transparent 48%),
+    radial-gradient(ellipse at 65% 95%, #71496799 0%, transparent 45%);
+  animation: page-gradient-bloom 24s ease-in-out infinite alternate;
+}
+/* Stationary fine grain keeps the color movement soft, without flickering. */
+.page-gradient-visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23808080' filter='url(%23grain)' d='M0 0h256v256H0z'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: .19;
+  mix-blend-mode: soft-light;
+}
+@keyframes page-gradient-drift {
+  0% { transform: translate(-2%, -2%) rotate(-3deg) scale(1.02); }
+  50% { transform: translate(2%, 1%) rotate(2deg) scale(1.05); }
+  100% { transform: translate(-1%, 3%) rotate(4deg) scale(1.02); }
+}
+@keyframes page-gradient-bloom {
+  from { opacity: .15; transform: translate(-5%, 3%) scale(1.05); }
+  to { opacity: .85; transform: translate(5%, -3%) scale(1.15); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-gradient-colors, .page-gradient-colors::after { animation: none; }
+  .page-gradient-colors::after { opacity: .4; }
+}
+
+.page-navigation a { color: inherit; text-decoration: none; }
+.page-navigation {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--page-navigation-height);
+  padding: env(safe-area-inset-top, 0px) max(32px, env(safe-area-inset-right, 0px)) 0 max(32px, env(safe-area-inset-left, 0px));
+  color: #fff;
+  background: linear-gradient(180deg, #3930441a, transparent);
+  text-shadow: 0 1px 8px #43344e40;
+}
+.page-navigation :is(a, button):focus-visible { outline-color: #fff; }
+.page-identity {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  min-height: 44px;
+  font-family: "Zapfino", "Snell Roundhand", cursive;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.page-navigation-links { display: flex; align-items: center; gap: clamp(24px, 3vw, 48px); }
+.page-navigation-item {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: "Homepage GT Super Text", "Newsreader", Georgia, serif;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: .06em;
+  line-height: 1;
+  text-underline-offset: 6px;
+}
+.page-navigation-links:lang(zh) .page-navigation-item {
+  font-family: "Songti SC", "STSong", "Noto Serif CJK SC", "Noto Serif SC", "SimSun", serif;
+  letter-spacing: .12em;
+}
+.page-navigation-links a:hover { text-decoration: underline; }
+
+.page-navigation[data-play="true"] { background: none; }
+.page-navigation-links [aria-current="page"] { text-decoration: underline; }
+.page-navigation-language {
+  border: 0;
+  background: transparent;
+  padding: 8px 0;
+  color: inherit;
+  font: 12px -apple-system, BlinkMacSystemFont, sans-serif;
+  cursor: pointer;
+}
+.page-navigation-theme {
+  position: relative;
+  flex: none;
+  width: 24px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+.page-navigation-theme svg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  top: 13px;
+  left: 3px;
+  stroke-width: 1.6;
+  transition: opacity 450ms ease, transform 650ms cubic-bezier(.22, 1, .36, 1);
+}
+.page-theme-sun { opacity: 1; transform: rotate(0) scale(1); }
+.page-theme-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+.dark .page-theme-sun { opacity: 0; transform: rotate(90deg) scale(.5); }
+.dark .page-theme-moon { opacity: 1; transform: rotate(0) scale(1); }
+.page-navigation[data-play="true"] .page-navigation-theme svg { transition-duration: 2400ms; }
+@media (prefers-reduced-motion: reduce) {
+  .page-navigation-theme svg { transition: none; }
+}
+
+@font-face {
+  font-family: "Homepage Work Xiangcui";
+  src: url("/assets/fonts/xiangcui/XiangcuiDengcusong.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FF00-FFEF;
+}
+.page-work {
+  --work-top-space: 96px;
+  position: relative;
+  min-height: calc(100svh + var(--work-top-space) / 2);
+  padding: var(--work-top-space) max(32px, env(safe-area-inset-left, 0px)) 96px;
+}
+/* The target is the midpoint between the hero boundary and the project media. */
+.page-work-anchor {
+  position: absolute;
+  top: calc(var(--work-top-space) / 2);
+  scroll-margin-top: var(--page-navigation-height);
+}
+.page-work-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  gap: 24px;
+  max-width: 1280px;
+  margin-inline: auto;
+}
+.page-work-project { min-width: 0; }
+.page-work-project--macmix { grid-column: 1; grid-row: 1; }
+.page-work-project--yumchicken { grid-column: 2; grid-row: 1 / 3; }
+.page-work-more { grid-column: 1; grid-row: 2; align-self: end; min-width: 0; }
+.page-work-more .page-work-description { font-weight: 700; }
+.page-work-more .page-work-link { white-space: normal; color: var(--page-ink); }
+.page-work-media { display: block; width: 100%; overflow: hidden; }
+.page-work-media:focus-visible { outline: 2px solid var(--page-ink); outline-offset: 4px; }
+.page-work-media--macmix { aspect-ratio: 4 / 3; background: #e1e4e8; }
+.page-work-media--yumchicken { aspect-ratio: 1 / 1; background: #e2e6df; }
+.dark .page-work-media--macmix { background: #3d4146; }
+.dark .page-work-media--yumchicken { background: #3e443c; }
+.page-work-title {
+  margin: 18px 0 6px;
+  color: var(--page-ink);
+  font-family: "Homepage Work Xiangcui", "Homepage Exposure", "Homepage GT Super Text", Georgia, serif;
+  font-size: 24px;
+  font-weight: 650;
+  font-variation-settings: "EXPO" -25;
+  line-height: calc(56 / 48);
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.page-work-description {
+  margin: 0;
+  color: var(--page-ink);
+  font-family: "Homepage Work Noto Serif SC", "Homepage GT Super Text", "Homepage Chinese Serif", serif;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: 0;
+  overflow-wrap: anywhere;
+}
+.page-work-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 24px;
+  margin-top: 8px;
+}
+.page-work-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  color: var(--page-secondary);
+  font-family: "Homepage Work Noto Serif SC", "Homepage GT Super Text", "Homepage Chinese Serif", serif;
+  font-size: 17px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.page-work-link:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+.page-work-apple { font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif; font-weight: 400; }
+.page-work-link-arrow { position: relative; width: 20px; height: 20px; overflow: hidden; flex: none; }
+.page-work-link-arrow svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  transition: transform 440ms cubic-bezier(0.22, 1, 0.36, 1), opacity 440ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.page-work-link-arrow--outgoing { transform: translate(0, 0); opacity: 1; }
+.page-work-link-arrow--incoming { transform: translate(-100%, 100%); opacity: 0; }
+.page-work-link:is(:hover, :focus-visible) .page-work-link-arrow--outgoing { transform: translate(100%, -100%); opacity: 0; }
+.page-work-link:is(:hover, :focus-visible) .page-work-link-arrow--incoming { transform: translate(0, 0); opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .page-work-link-arrow svg { transition: none; }
+}
+@media (max-width: 700px) {
+  .page-work {
+    --work-top-space: 72px;
+    padding-inline: max(20px, env(safe-area-inset-left, 0px));
+    padding-bottom: 72px;
+  }
+  .page-work-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .page-work-project--macmix, .page-work-project--yumchicken, .page-work-more { grid-column: auto; grid-row: auto; }
+  .page-work-title { margin-top: 16px; font-size: 22px; }
+  .page-work-description { font-size: 16px; }
+  .page-work-links { flex-wrap: nowrap; column-gap: clamp(8px, 3vw, 16px); }
+  .page-work-link { gap: 4px; font-size: clamp(12px, 3.6vw, 14px); }
+  .page-work-link-arrow { width: 16px; height: 16px; }
+}
+/* Safari samples native sticky artwork into its toolbar. A compositor-driven
+   scroll animation pins the same artwork without a sticky layer or JS scroll
+   updates. Browsers without scroll timelines retain native sticky behavior. */
+@supports (animation-timeline: scroll()) {
+  @media (max-width: 700px) {
+    .page-gradient-hero {
+      position: relative;
+      top: auto;
+      animation: page-hero-pin 1s linear both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--hero-pin-start, 100svh) var(--hero-pin-end, 200svh);
+    }
+  }
+}
+@keyframes page-hero-pin {
+  from { transform: translateY(0); }
+  to { transform: translateY(var(--hero-pin-travel, 0px)); }
+}
+@media (max-width: 600px) {
+  .page-navigation { gap: 12px; padding-inline: max(20px, env(safe-area-inset-left, 0px)); }
+  .page-identity { font-size: 16px; }
+  .page-navigation-links { gap: 14px; }
+  .page-navigation-item { font-size: 12px; }
+  .page-navigation-play { display: none; }
+  .page-navigation-language { font-size: 11px; }
+}
+
+.page-contact {
+  padding: 64px max(32px, env(safe-area-inset-left, 0px)) 112px;
+  scroll-margin-top: calc(var(--page-navigation-height) + 32px);
+  color: var(--page-ink);
+}
+.page-contact-title {
+  margin: 0 0 48px;
+  text-align: center;
+  font-family: "Homepage Exposure", "Homepage GT Super Text", Georgia, serif;
+  font-size: clamp(30px, 4.4vw, 56px);
+  font-weight: 400;
+  font-variation-settings: "EXPO" 10;
+  line-height: 1.25;
+  letter-spacing: -.035em;
+}
+.page-contact:lang(zh) .page-contact-title {
+  font-family: "Homepage Work Xiangcui", "Homepage Exposure", serif;
+  letter-spacing: -.015em;
+}
+.page-contact-intro {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  text-align: left;
+  font-family: "Homepage Work Noto Serif SC", "Homepage GT Super Text", "Homepage Chinese Serif", serif;
+  font-size: 17px;
+  line-height: 1.65;
+}
+.page-contact-intro h3 { margin: 0 0 6px; }
+.page-contact-profile {
+  --contact-avatar-size: 72px;
+  --contact-avatar-gap: 14px;
+  position: relative;
+  width: fit-content;
+  margin-inline: auto;
+  transform: translateX(calc((var(--contact-avatar-size) + var(--contact-avatar-gap)) / 2));
+}
+.page-contact-avatar {
+  position: absolute;
+  right: calc(100% + var(--contact-avatar-gap));
+  bottom: .35em;
+  width: var(--contact-avatar-size);
+  height: var(--contact-avatar-size);
+  object-fit: cover;
+  border-radius: 50%;
+}
+.page-contact-intro p { margin: 8px 0 0; }
+.page-contact-intro > p { text-align: center; }
+.page-contact-intro .page-contact-profile + p { margin-top: 16px; }
+.page-contact-intro .page-contact-subtitle { margin-top: 0; color: var(--page-secondary); }
+.page-contact-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+.page-contact-links .page-work-link { color: var(--page-ink); }
+@media (max-width: 700px) {
+  .page-contact { padding: 40px max(20px, env(safe-area-inset-left, 0px)) 72px; }
+  .page-contact-title { margin-bottom: 32px; }
+  .page-contact-intro { font-size: 16px; }
+  .page-contact-profile { --contact-avatar-size: 64px; --contact-avatar-gap: 12px; }
+  .page-contact-links { margin-top: 24px; gap: 8px; }
+}
+@media (max-width: 600px) {
+  .page-contact-title { font-size: clamp(36px, 9.5vw, 50px); }
+}

@@ -1,0 +1,148 @@
+@font-face {
+  font-family: "Homepage Xiangcui";
+  src: url("/assets/fonts/xiangcui/hello-title.woff") format("woff");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+6211, U+662F;
+}
+@font-face {
+  font-family: "Homepage Exposure";
+  src: url("/assets/fonts/exposure/ExposureVAR.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 1 999;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Homepage Noto Serif SC";
+  src: url("/assets/fonts/noto-serif-sc/hello-regular.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+3001, U+4E00-9FFF;
+}
+@font-face {
+  font-family: "Homepage Noto Serif SC";
+  src: url("/assets/fonts/noto-serif-sc/hello-semibold.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  unicode-range: U+3001, U+4E00-9FFF;
+}
+.hello-scene {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  pointer-events: none;
+  text-shadow: 0 2px 18px #573d5520;
+}
+.hello-row {
+  --hello-height: 90px;
+  --hello-center-offset: 0px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: center;
+  column-gap: clamp(20px, 3.8vw, 56px);
+  width: min(900px, calc(100% - 48px));
+}
+.hello-lettering-position {
+  height: var(--hello-height);
+  min-width: 0;
+  transform: translateX(var(--hello-center-offset));
+}
+.hello-lettering, .hello-artwork, .hello-artwork svg { width: 100%; height: 100%; }
+.hello-artwork { margin-left: auto; }
+.hello-artwork[data-flip-y="true"] svg { transform: scaleY(-1); }
+.hello-lettering { opacity: 1; transition: opacity 550ms cubic-bezier(.4, 0, 1, 1); }
+.hello-lettering[data-fading="true"] { opacity: 0; }
+.hello-stroke-guide {
+  opacity: 0;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: hello-write var(--stroke-duration) linear var(--stroke-delay) both;
+}
+.hello-copy {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+  text-align: left;
+  -webkit-font-smoothing: antialiased;
+}
+.hello-copy p { margin: 0; white-space: nowrap; }
+.hello-name {
+  font-family: "Homepage Exposure", "Homepage GT Super Text", Georgia, serif;
+  font-size: clamp(30px, 4.4vw, 56px);
+  font-weight: 400;
+  font-variation-settings: "EXPO" 10;
+  line-height: 1.25;
+  letter-spacing: -.035em;
+  opacity: 0;
+  transform: translateX(-24px);
+  transition: opacity 1600ms cubic-bezier(.42, 0, .58, 1) 200ms, transform 1600ms cubic-bezier(.45, 0, .2, 1) 200ms;
+}
+.hello-copy .hello-description {
+  margin-top: clamp(10px, 1.1vw, 14px);
+  font-family: "Homepage GT Super Text", "Newsreader", Georgia, serif;
+  font-size: clamp(13px, 1.4vw, 18px);
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: rgb(255 255 255 / 82%);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 1100ms cubic-bezier(.42, 0, .58, 1), transform 1100ms cubic-bezier(.45, 0, .2, 1);
+}
+.hello-scene:lang(zh) .hello-name {
+  font-family: "Homepage Xiangcui", "Homepage Exposure", "Songti SC", serif;
+  font-weight: 400;
+  letter-spacing: -.015em;
+}
+.hello-scene:lang(en) .hello-name-prefix {
+  font-weight: 400;
+}
+.hello-scene:lang(zh) .hello-description {
+  font-family: "Homepage Noto Serif SC", "Homepage GT Super Text", "Songti SC", serif;
+  font-weight: 600;
+  letter-spacing: .025em;
+}
+.hello-interactive-name { cursor: default; }
+.hello-scene[data-introduced="true"] .hello-interactive-name { pointer-events: auto; }
+.hello-name-letter {
+  font-variation-settings: "EXPO" 10;
+}
+.hello-scene[data-introduced="true"] .hello-lettering-position,
+.hello-scene[data-introduced="true"] .hello-name { transform: translateX(0); }
+.hello-scene[data-introduced="true"] .hello-lettering-position { transition: transform 1600ms cubic-bezier(.45, 0, .2, 1); }
+.hello-scene[data-introduced="true"] .hello-name { opacity: 1; }
+.hello-scene[data-subtitle="true"] .hello-description { opacity: 1; transform: translateY(0); }
+.hello-scene[data-running="false"] .hello-stroke-guide { animation-play-state: paused; }
+.hello-scene[data-started="false"] .hello-lettering { visibility: hidden; }
+.hello-scene[data-static="true"] .hello-stroke-guide { animation: none; stroke-dashoffset: 0; opacity: 1; }
+.hello-scene[data-static="true"] :is(.hello-name, .hello-description, .hello-lettering-position) { transition: none; }
+/* Show the real introduction while original Apple vectors are unavailable. */
+.hello-scene[data-artwork="pending"] .hello-row { width: fit-content; max-width: calc(100% - 48px); grid-template-columns: 1fr; }
+@keyframes hello-write {
+  from { stroke-dashoffset: 1; opacity: 0; }
+  .1% { opacity: 1; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+@media (max-width: 600px) {
+  .hello-row {
+    width: calc(100% - 40px);
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .hello-lettering-position {
+    --hello-height: clamp(78px, 22vw, 110px);
+    transform: translateY(var(--hello-center-offset-y));
+  }
+  .hello-artwork { margin-inline: auto; }
+  .hello-copy { text-align: center; }
+  .hello-name { font-size: clamp(36px, 9.5vw, 50px); transform: translateY(12px); }
+  .hello-copy .hello-description { font-size: clamp(14px, 3.7vw, 18px); margin-top: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hello-scene * { animation: none !important; transition: none !important; }
+  .hello-stroke-guide { stroke-dashoffset: 0; opacity: 1; }
+}

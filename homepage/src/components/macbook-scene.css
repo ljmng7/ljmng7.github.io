@@ -1,0 +1,59 @@
+.mb-experience { height: 347vh; background: var(--paper-color, #F9F9F7); color: white; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; --hint-opacity: 1; --desktop-opacity: 0; }
+/* Safari extends sticky backgrounds into its toolbar. Keep that surface paper-colored;
+   the sky belongs to an ordinary positioned layer inside the clipped viewport. */
+.mb-viewport { height: 100vh; position: sticky; top: 0; overflow: hidden; background: var(--paper-color, #F9F9F7); }
+.mb-viewport::before { content: ""; position: absolute; inset: 0; background: #03070a; pointer-events: none; }
+.mb-webgl { position: absolute; inset: 0; z-index: 2; }
+.mb-webgl canvas { width: 100%; height: 100%; display: block; }
+.mb-starfield { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+
+:root:not(.dark) .mb-viewport::before { background: #8dc9f1; }
+
+.mb-celestial { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.mb-celestial-body {
+  position: absolute; top: 0; left: 0; width: 56px; height: 56px; margin: -28px;
+  padding: 0; border: 0; border-radius: 50%; background: none; opacity: 0;
+  pointer-events: auto; cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.mb-celestial[data-moving="true"] .mb-celestial-body,
+.mb-celestial-body:disabled { pointer-events: none; cursor: default; }
+.mb-celestial-body:focus-visible { outline: 2px solid currentColor; outline-offset: 12px; }
+.mb-celestial-disc { display: block; width: 100%; height: 100%; border-radius: 50%; }
+.mb-sun { color: #f4f8ff; }
+.mb-sun-atmosphere { position: absolute; inset: 0; pointer-events: none; }
+.mb-sun .mb-celestial-disc {
+  position: absolute; inset: -140%; width: 380%; height: 380%;
+  background: radial-gradient(circle, #fff 0 7%, #fffef9f5 10%, #f7faffb0 19%, #f8f4e965 30%, #fff5da22 48%, transparent 70%);
+  filter: blur(5px);
+}
+.mb-sun-rays {
+  position: absolute; inset: -160%; border-radius: 50%;
+  background: repeating-conic-gradient(from 12deg, transparent 0deg 18deg, #f3f7ff50 22deg 25deg, transparent 32deg 45deg);
+  mask-image: radial-gradient(circle, transparent 7%, #0009 20%, #0005 42%, transparent 69%);
+  filter: blur(7px); transform: rotate(12deg);
+}
+.mb-sun-flare { position: absolute; border-radius: 50%; filter: blur(2px); }
+.mb-sun-flare-one {
+  width: 32px; height: 32px; left: -54px; top: 102px;
+  background: radial-gradient(circle at 40% 36%, #dbe9ff12, #e6f3ff28 58%, transparent 72%);
+}
+.mb-sun-flare-two {
+  width: 18px; height: 18px; left: -96px; top: 174px;
+  background: radial-gradient(circle, #cde5ff24, #d0e5ff0c 62%, transparent 74%);
+}
+.mb-moon { color: #e5eeff; }
+.mb-moon .mb-celestial-disc { filter: drop-shadow(0 0 9px #e0e9ff24); }
+.mb-moon-disc { position: relative; opacity: 1; transition-property: opacity; transition-timing-function: ease-in-out; }
+.mb-moon-disc canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.mb-moon-shadow { opacity: 1; transition-property: opacity; transition-timing-function: ease-out; }
+.mb-moon-highlight { opacity: 0; transition-property: opacity; transition-timing-function: ease-out; }
+:root:not(.dark) .mb-moon-shadow { opacity: 0; }
+:root:not(.dark) .mb-moon-highlight { opacity: .22; }
+:root:not(.dark) .mb-moon-disc { opacity: 0; }
+@media (max-width: 600px) {
+  .mb-celestial-body { width: 44px; height: 44px; margin: -22px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mb-moon-disc, .mb-moon-shadow, .mb-moon-highlight { transition: none; }
+  .mb-experience { height: 100vh; }
+}

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="description" content="Jazmín's personal homepage">
+    <link rel="icon" type="image/x-icon" href="%BASE_URL%favicon.ico?v=avatar-20260912">
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%assets/avatar-favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png?v=avatar-20260912">
+    <title>Jazmín's Playground</title>
+    <script>
+      (() => {
+        let savedLanguage = null;
+        try {
+          savedLanguage = localStorage.getItem("language");
+        } catch {}
+        const language = savedLanguage === "zh" || savedLanguage === "en"
+          ? savedLanguage
+          : navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
+        let savedTheme = null;
+        try { savedTheme = localStorage.getItem("homepage-theme"); } catch {}
+        const mode = savedTheme === "light" || savedTheme === "dark" ? savedTheme : "system";
+        const theme = mode === "system"
+          ? matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+          : mode;
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.themeMode = mode;
+        document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+        document.documentElement.dataset.language = language;
+        document.documentElement.style.colorScheme = theme;
+        document.title = language === "zh" ? "Jazmín 的游乐园" : "Jazmín's Playground";
+        document.querySelector('meta[name="description"]')?.setAttribute(
+          "content",
+          language === "zh"
+            ? "Jazmín 的个人主页、独立开发作品与 GitHub 项目。"
+            : "Jazmín’s personal homepage, independent apps, and GitHub projects.",
+        );
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

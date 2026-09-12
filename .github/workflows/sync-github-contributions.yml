@@ -15,6 +15,9 @@ concurrency:
 jobs:
   sync:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: homepage
     steps:
       - name: Check out the homepage
         uses: actions/checkout@v7

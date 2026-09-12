@@ -1,28 +1,18 @@
 {
-  "name": "jazmin-homepage",
+  "name": "jazmin-websites",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.1.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "typecheck": "tsc -b --pretty false",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@radix-ui/react-icons": "^1.3.2",
-    "cobe": "^0.6.5",
-    "lucide-react": "^1.28.0",
-    "motion": "^12.43.0",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
-  },
-  "devDependencies": {
-    "@types/node": "^26.1.2",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
-    "@vitejs/plugin-react": "^6.0.5",
-    "typescript": "^7.0.2",
-    "vite": "^8.2.0"
+    "dev": "npm --prefix homepage run dev",
+    "dev:homepage": "npm --prefix homepage run dev",
+    "dev:yumchicken": "npm --prefix yumchicken run dev -- --port 5174",
+    "dev:macmix": "npm --prefix macmix run dev -- --port 5175",
+    "install:sites": "npm ci --prefix homepage && npm ci --prefix yumchicken && npm ci --prefix macmix",
+    "build": "npm run build:homepage && npm run build:yumchicken && npm run build:macmix",
+    "build:homepage": "npm --prefix homepage run build",
+    "build:yumchicken": "npm --prefix yumchicken run build",
+    "build:macmix": "npm --prefix macmix run build",
+    "typecheck": "npm --prefix homepage run typecheck && npm --prefix macmix run typecheck",
+    "test": "npm --prefix homepage test && npm --prefix macmix run test:releases && npm --prefix macmix run test:sites"
   }
 }

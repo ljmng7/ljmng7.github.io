@@ -1,0 +1,12 @@
+.site-pages { position: relative; min-height: 100svh; }
+.site-page { position: relative; display: flow-root; }
+/* Only the outgoing animation is viewport-bound. The visible page uses the
+   document scroller so Safari can render content behind its browser chrome. */
+.site-page[inert] { position: fixed; inset: 0; overflow: clip; }
+.site-page-scroll {
+  display: flow-root;
+}
+.site-page[inert] { pointer-events: none; }
+.site-page-loading { min-height: 100svh; display: grid; place-items: center; }
+.site-page-error { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 100; padding: 12px 18px; border-radius: 12px; background: var(--paper-color); color: var(--page-ink); box-shadow: 0 4px 24px #0002; }
+.site-page-error button { margin-inline-start: 12px; cursor: pointer; }

@@ -1,0 +1,50 @@
+- generic [ref=f2e3]:
+  - generic [aria-hidden]:
+    - main:
+      - navigation:
+        - link:
+          - /url: /
+          - text: Jazmín
+        - generic:
+          - link:
+            - /url: /#work
+            - text: 作品
+          - link:
+            - /url: /play.html
+            - text: 乐园
+          - generic: 联系
+          - button: EN
+      - generic:
+        - generic:
+          - generic:
+            - generic:
+              - paragraph:
+                - text: 我是
+                - generic [ref=f2e24]: Jazmín
+              - paragraph: 独立开发者、学生
+      - region:
+        - generic:
+          - article:
+            - heading [level=2]: MacMix
+            - paragraph: 轻量的 macOS 菜单栏音频混音器。
+          - article:
+            - heading [level=2]: 馋香鸡
+            - paragraph: 专注做饭的极简工具
+  - generic [ref=f2e26]:
+    - navigation "个人主页" [ref=f2e27]:
+      - link "Jazmín — 个人主页" [ref=f2e28] [cursor=pointer]:
+        - /url: /
+        - text: Jazmín
+      - generic [ref=f2e29]:
+        - link "作品" [ref=f2e30] [cursor=pointer]:
+          - /url: /#work
+        - link "乐园" [ref=f2e31] [cursor=pointer]:
+          - /url: /play.html
+        - generic [ref=f2e32]: 联系
+        - button "Switch to English" [ref=f2e33] [cursor=pointer]: EN
+    - main "滚动打开 MacBook，进入桌面" [ref=f2e34]:
+      - generic [ref=f2e35]:
+        - generic:
+          - button "切换到夜晚" [ref=f2e36] [cursor=pointer]
+          - button [disabled] [aria-hidden]
+        - generic "MacBook Pro M5 三维模型" [ref=f2e37]

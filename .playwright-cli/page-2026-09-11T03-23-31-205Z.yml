@@ -1,0 +1,26 @@
+- main [ref=f1e5]:
+  - navigation "个人主页" [ref=f1e6]:
+    - link "Jazmín — 个人主页" [ref=f1e7] [cursor=pointer]:
+      - /url: /
+      - text: Jazmín
+    - generic [ref=f1e8]:
+      - link "作品" [ref=f1e9] [cursor=pointer]:
+        - /url: "#work"
+      - generic [ref=f1e11]: 联系
+      - button "Switch to English" [ref=f1e12] [cursor=pointer]: EN
+  - generic:
+    - generic:
+      - generic:
+        - generic:
+          - paragraph:
+            - text: 我是
+            - generic "Jazmín" [ref=f1e23]
+          - paragraph: 独立开发者、学生
+  - region "精选应用" [ref=f1e13]:
+    - generic [ref=f1e14]:
+      - article [ref=f1e15]:
+        - heading "MacMix" [level=2] [ref=f1e17]
+        - paragraph [ref=f1e18]: 轻量的 macOS 菜单栏音频混音器。
+      - article [ref=f1e19]:
+        - heading "馋香鸡" [level=2] [ref=f1e21]
+        - paragraph [ref=f1e22]: 专注做饭的极简工具

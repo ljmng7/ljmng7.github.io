@@ -1,35 +1,51 @@
-# Jazmín’s Homepage
+# Jazmín websites
 
-Personal homepage built with React, Vite, and TypeScript.
+Three independent sites share this repository. Each site owns its source,
+public assets, dependencies, lockfile, and production output.
 
-## Project structure
-
-- `src/` — React components, page data, TypeScript types, and site styles.
-- `public/assets/` — images, icons, SVGs, and videos only.
-- `public/data/` — generated public data consumed by the site.
-- `scripts/` — repository automation scripts.
-- `.github/workflows/` — contribution syncing and GitHub Pages deployment.
+| Directory | Intended domain (not configured here) | Build output |
+| --- | --- | --- |
+| `homepage/` | jazminli.com | `homepage/dist/` |
+| `yumchicken/` | yumchicken.jazminli.com | `yumchicken/dist/` |
+| `macmix/` | macmix.jazminli.com | `macmix/dist/client/` |
 
 ## Development
 
-```bash
-npm install
-npm run dev
+Use Node.js 22.12+ and npm. From the repository root:
+
+```sh
+npm run install:sites
+npm run dev             # Homepage, http://localhost:5173
+npm run dev:yumchicken  # YumChicken, http://localhost:5174
+npm run dev:macmix      # MacMix, http://localhost:5175
 ```
 
-## Validation and production build
+Run each dev command in its own terminal. You can also run `npm ci`,
+`npm run dev`, and `npm run build` directly inside any site directory.
 
-```bash
-npm run typecheck
-npm run build
+```sh
+npm run build          # Build all three sites
+npm run typecheck      # TypeScript checks for both React sites
+npm test               # Hello timeline and MacMix release/hosting tests
 ```
 
-Vite writes the deployable site to `dist/`. Compiled JavaScript and CSS live in
-`dist/static/`, while `dist/assets/` remains reserved for media resources.
+## Pages and ownership
 
-## GitHub contribution data
+- Homepage `/`: gradient and multilingual handwriting introduction only.
+- Homepage `/play`: the original interactive MacBook and stickers with the
+  shared navigation. The Play navigation has no gradient background.
+- Homepage WORK and CONTACT are unlinked text placeholders. PLAY is hidden on mobile.
+- YumChicken `/`, `/privacy.html`, and `/support.html` retain the product content
+  and resolve their media from their own `public/assets/`. Author links return
+  to `https://jazminli.com/`.
+- MacMix was copied from the `Website/` directory of the local MacMix-Website
+  project. The original project is untouched. Its license, release snapshot,
+  routes, media, tests, and Sites-compatible build plumbing are preserved.
 
-`scripts/sync-github-contributions.mjs` fetches the rolling 26-week official
-GitHub contribution calendar and writes `public/data/github-contributions.json`.
-The scheduled workflow refreshes it every six hours, and a successful sync
-automatically triggers a new Pages deployment.
+## Automation
+
+The existing Pages workflow validates all three builds but still publishes only
+`homepage/dist/`. No DNS, CNAME, or subdomain deployment has been configured.
+GitHub profile-data synchronization now runs from `homepage/` and writes to
+`homepage/public/data/`. MacMix's release snapshot can be refreshed separately
+with `npm --prefix macmix run releases:snapshot`.
