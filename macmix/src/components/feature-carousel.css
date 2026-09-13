@@ -51,7 +51,11 @@
   place-items: center;
   background: #e8e4ed;
 }
-.feature-carousel__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; display: block; }
+.feature-carousel__media video,
+.feature-carousel__poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; display: block; }
+.feature-carousel__media video { z-index: 0; }
+.feature-carousel__poster { z-index: 1; transition: opacity 160ms ease-out; }
+.feature-carousel__poster--hidden { opacity: 0; }
 .feature-carousel__controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 28px; }
 .feature-carousel__pagination, .feature-carousel__toggle { background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 999px; }
 .feature-carousel__pagination { display: flex; align-items: center; padding: 0 14px; height: 56px; }

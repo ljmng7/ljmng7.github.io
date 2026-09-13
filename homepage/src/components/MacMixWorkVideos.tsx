@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 const clips = ["1-mix.mp4", "2-quickMute.mp4", "3-nowPlaying.mp4", "4-proControl.mp4", "5-scene.mp4"];
 
@@ -6,6 +6,13 @@ export function MacMixWorkVideos() {
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const [active, setActive] = useState(0);
   const [visible, setVisible] = useState(0);
+  const [painted, setPainted] = useState(() => clips.map(() => false));
+
+  const markPainted = (index: number) => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      setPainted(previous => previous[index] ? previous : previous.map((value, i) => i === index || value));
+    }));
+  };
 
   useEffect(() => {
     const video = videos.current[active];
@@ -19,30 +26,37 @@ export function MacMixWorkVideos() {
     return () => video.pause();
   }, [active]);
 
-  return clips.map((clip, index) => <video
-    key={clip}
-    ref={(video) => { videos.current[index] = video; }}
-    className="page-work-video"
-    style={{ opacity: visible === index ? 1 : 0 }}
-    src={`${import.meta.env.BASE_URL}assets/macmix/work/${clip}`}
-    poster={`${import.meta.env.BASE_URL}assets/macmix/work/${clip.replace(/\.mp4$/, ".jpg")}`}
-    preload="auto"
-    autoPlay={index === active}
-    muted
-    playsInline
-    disablePictureInPicture
-    disableRemotePlayback
-    controls={false}
-    controlsList="nodownload nofullscreen noremoteplayback"
-    x-webkit-airplay="deny"
-    aria-hidden="true"
-    tabIndex={-1}
-    onPlaying={() => {
-      // Keep the previous clip's last frame until the next clip is playing.
-      if (index === active) setVisible(index);
-    }}
-    onEnded={() => {
-      if (index === active) setActive((index + 1) % clips.length);
-    }}
-  />);
+  return clips.map((clip, index) => <Fragment key={clip}>
+    <img className="page-work-poster" alt="" aria-hidden="true" decoding="async" fetchPriority={index === 0 ? "high" : "auto"}
+      style={{ opacity: visible === index && !painted[index] ? 1 : 0 }}
+      src={`${import.meta.env.BASE_URL}assets/macmix/work/${clip.replace(/\.mp4$/, ".jpg")}`} />
+    <video
+      ref={(video) => { videos.current[index] = video; }}
+      className="page-work-video"
+      style={{ opacity: visible === index ? 1 : 0 }}
+      src={`${import.meta.env.BASE_URL}assets/macmix/work/${clip}`}
+      poster={`${import.meta.env.BASE_URL}assets/macmix/work/${clip.replace(/\.mp4$/, ".jpg")}`}
+      preload="auto"
+      autoPlay={index === active}
+      muted
+      playsInline
+      disablePictureInPicture
+      disableRemotePlayback
+      controls={false}
+      controlsList="nodownload nofullscreen noremoteplayback"
+      x-webkit-airplay="deny"
+      aria-hidden="true"
+      tabIndex={-1}
+      onPlaying={() => {
+        // Keep the previous clip's last frame until the next clip is playing.
+        if (index === active) {
+          setVisible(index);
+          markPainted(index);
+        }
+      }}
+      onEnded={() => {
+        if (index === active) setActive((index + 1) % clips.length);
+      }}
+    />
+  </Fragment>);
 }

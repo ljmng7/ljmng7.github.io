@@ -155,7 +155,7 @@ a:focus-visible {
   font-weight: 740;
   letter-spacing: -0.025em;
   white-space: nowrap;
-  transition: box-shadow 320ms var(--ease), background 320ms var(--ease);
+  transition: background 320ms var(--ease);
 }
 
 .download-button {
@@ -164,9 +164,6 @@ a:focus-visible {
   overflow: hidden;
   color: var(--paper);
   background: var(--ink);
-  box-shadow:
-    0 25px 46px rgba(111, 75, 48, 0.42),
-    0 9px 20px rgba(111, 75, 48, 0.24);
 }
 
 .download-button svg {
@@ -234,12 +231,6 @@ a:focus-visible {
     opacity 380ms var(--ease),
     filter 500ms var(--ease),
     transform 560ms var(--ease);
-}
-
-.download-button:hover {
-  box-shadow:
-    0 25px 46px rgba(111, 75, 48, 0.42),
-    0 9px 20px rgba(111, 75, 48, 0.24);
 }
 
 .download-button:hover .download-button__store-icon {
@@ -383,7 +374,6 @@ a:focus-visible {
   min-height: 60px;
   transition:
     background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
-    box-shadow 800ms cubic-bezier(.333333, 0, .666667, 1),
     color 360ms ease-out;
 }
 
@@ -391,9 +381,6 @@ a:focus-visible {
 .home-footer__downloads > .download-button:hover {
   color: #fff;
   background: #344e41;
-  box-shadow:
-    0 25px 46px rgb(218 215 205 / 42%),
-    0 9px 20px rgb(218 215 205 / 24%);
 }
 
 .home-footer__downloads > .download-button[data-store="android"],
@@ -952,13 +939,6 @@ a:focus-visible {
     box-shadow: none;
 }
 
-:root.dark .download-button,
-:root.dark .download-button:hover {
-    box-shadow:
-      0 25px 46px rgb(0 0 0 / 44%),
-      0 9px 20px rgb(0 0 0 / 28%);
-}
-
 :root.dark .download-button--compact,
 :root.dark .download-button--compact:hover {
     box-shadow: none;
@@ -968,9 +948,6 @@ a:focus-visible {
 :root.dark .home-footer__downloads > .download-button[data-store="appstore"]:hover {
     color: #344e41;
     background: #dad7cd;
-    box-shadow:
-      0 25px 46px rgb(52 78 65 / 42%),
-      0 9px 20px rgb(52 78 65 / 24%);
 }
 
 :root.dark .home-footer__downloads > .download-button[data-store="android"],

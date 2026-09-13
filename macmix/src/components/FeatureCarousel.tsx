@@ -63,6 +63,18 @@ export function FeatureCarousel() {
   const [paused, setPaused] = useState(false);
   const [finished, setFinished] = useState(false);
   const [pageVisible, setPageVisible] = useState(!document.hidden);
+  const [paintedVideos, setPaintedVideos] = useState<ReadonlySet<number>>(() => new Set());
+
+  const markVideoPainted = (videoIndex: number) => {
+    // WebKit can dispatch `playing` just before its first frame is composited.
+    // Keep the standalone image above the video for two frames so a loading
+    // surface never replaces it with the platform's gray video placeholder.
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      setPaintedVideos(previous => previous.has(videoIndex)
+        ? previous
+        : new Set(previous).add(videoIndex));
+    }));
+  };
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
@@ -262,11 +274,14 @@ export function FeatureCarousel() {
             <article key={slide.id} className="feature-carousel__slide" aria-hidden={i !== index}
               aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
               <div className="feature-carousel__media">
+                <img className={`feature-carousel__poster${paintedVideos.has(i) ? " feature-carousel__poster--hidden" : ""}`}
+                  src={slide.media.src.replace(/\.mp4$/, ".jpg")} alt="" aria-hidden="true" decoding="async" fetchPriority={i === 0 ? "high" : "auto"} />
                 <video ref={node => { videos.current[i] = node; }} src={slide.media.src}
                   poster={slide.media.src.replace(/\.mp4$/, ".jpg")}
                   aria-label={slide.media.alt} muted playsInline preload="auto"
                   controls={false} tabIndex={-1} x-webkit-airplay="deny"
-                  disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" />
+                  disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen"
+                  onPlaying={() => markVideoPainted(i)} />
               </div>
             </article>
           ))}

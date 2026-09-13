@@ -337,7 +337,7 @@ img.header-link__icon {
   font-weight: 740;
   letter-spacing: -0.025em;
   white-space: nowrap;
-  transition: box-shadow 320ms var(--ease), background 320ms var(--ease);
+  transition: background 320ms var(--ease);
 }
 
 .download-button {
@@ -346,9 +346,6 @@ img.header-link__icon {
   overflow: hidden;
   color: var(--paper);
   background: var(--ink);
-  box-shadow:
-    0 25px 46px rgba(111, 75, 48, 0.42),
-    0 9px 20px rgba(111, 75, 48, 0.24);
 }
 
 .download-button[data-language="zh"] {
@@ -445,12 +442,6 @@ img.header-link__icon {
     opacity 380ms var(--ease),
     filter 500ms var(--ease),
     transform 560ms var(--ease);
-}
-
-.download-button:hover {
-  box-shadow:
-    0 25px 46px rgba(111, 75, 48, 0.42),
-    0 9px 20px rgba(111, 75, 48, 0.24);
 }
 
 .download-button:hover .download-button__apple {
@@ -724,7 +715,6 @@ img.header-link__icon {
   min-height: 60px;
   transition:
     background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
-    box-shadow 800ms cubic-bezier(.333333, 0, .666667, 1),
     color 360ms ease-out;
 }
 
@@ -736,9 +726,6 @@ img.header-link__icon {
 .home-footer__content > .download-button:hover {
   color: #fff;
   background: #10002b;
-  box-shadow:
-    0 25px 46px rgb(224 170 255 / 42%),
-    0 9px 20px rgb(224 170 255 / 24%);
 }
 
 .home-footer__socials {
@@ -1715,13 +1702,6 @@ img.header-link__icon {
     box-shadow: none;
 }
 
-:root.dark .download-button,
-:root.dark .download-button:hover {
-    box-shadow:
-      0 25px 46px rgb(0 0 0 / 44%),
-      0 9px 20px rgb(0 0 0 / 28%);
-}
-
 :root.dark .download-button--compact,
 :root.dark .download-button--compact:hover {
     box-shadow: none;
@@ -1731,9 +1711,6 @@ img.header-link__icon {
 :root.dark .home-footer__content > .download-button:hover {
     color: #10002b;
     background: #e0aaff;
-    box-shadow:
-      0 25px 46px rgb(16 0 43 / 42%),
-      0 9px 20px rgb(16 0 43 / 24%);
 }
 
 
