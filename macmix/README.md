@@ -7,3 +7,5 @@ Run `npm ci`, `npm run dev`, `npm run build`, `npm run test:releases`, and
 `npm run test:sites` in this directory. Static files build to `dist/client/`;
 Sites-compatible output also includes `dist/server/` and `dist/.openai/`.
 `SITE_BASE` remains available for a future deployment. No subdomain was configured.
+
+Release synchronization and Cloudflare deployment configuration: [docs/release-sync.md](docs/release-sync.md). Cloudflare uses `npm run build:cloudflare` to refresh public MacMix Releases before every deployment.

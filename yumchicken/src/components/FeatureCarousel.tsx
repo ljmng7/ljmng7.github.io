@@ -1,21 +1,52 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import "./feature-carousel.css";
 import { publicUrl } from "../lib/sitePaths";
+import { useLanguage } from "./LanguageProvider";
 
 type FeatureSlide = {
   id: string;
   title: string;
-  media?: { type: "image" | "video"; src: string; alt: string; poster?: string };
+  media: { type: "video" | "image"; src: string; alt: string };
 };
 
-const PLACEHOLDERS: FeatureSlide[] = Array.from({ length: 4 }, (_, i) => ({
-  id: `feature-${i + 1}`,
-  title: `Feature ${String(i + 1).padStart(2, "0")}`,
-}));
+const FEATURES = [
+  { file: "1-recipeDetail.mp4", en: "Every recipe. Clearly laid out.", zh: "每道菜谱，一目了然。" },
+  { file: "2-cookAlong.mp4", en: "Step by step. Cook along.", zh: "一步一步，轻松跟做。" },
+  { file: "3-ingredients.mp4", en: "Pick ingredients. Find next meal.", zh: "选好食材，发现美味。" },
+  { file: "4-share.mp4", en: "Good recipes. Made to share.", zh: "好菜谱，一起分享。" },
+  { file: "devices.png", en: "All your devices. Ready to cook.", zh: "多种设备，随时开做。" },
+];
 const SLIDE_MS = 5000;
 
-export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSlide[] }) {
+// Derive title motion from the actual card position, including native gestures.
+function syncTitles(viewport: HTMLDivElement, titles: HTMLDivElement | null, pair?: [number, number] | null) {
+  if (!titles) return;
+  const cards = [...viewport.querySelectorAll<HTMLElement>(".feature-carousel__slide")];
+  const center = viewport.scrollLeft + viewport.clientWidth / 2;
+  const stride = cards.length > 1 ? cards[1].offsetLeft - cards[0].offsetLeft : viewport.clientWidth;
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  [...titles.children].forEach((node, i) => {
+    const title = node as HTMLElement;
+    if (pair && !pair.includes(i)) { title.style.opacity = "0"; return; }
+    const offset = cards[i].offsetLeft + cards[i].offsetWidth / 2 - center;
+    const span = pair ? Math.max(stride, Math.abs(cards[pair[1]].offsetLeft - cards[pair[0]].offsetLeft)) : stride;
+    const distance = Math.abs(offset) < 1 ? 0 : offset / span;
+    const proximity = Math.max(0, 1 - Math.abs(distance));
+    title.style.opacity = String(reduced ? Number(Math.abs(distance) < 0.5) : proximity ** 3);
+    title.style.transform = `translate3d(${reduced ? 0 : Math.max(-1, Math.min(1, distance)) * 48}px, 0, 0)`;
+  });
+}
+
+export function FeatureCarousel() {
+  const { language } = useLanguage();
+  const slides: FeatureSlide[] = FEATURES.map(feature => ({
+    id: feature.file,
+    title: feature[language],
+    media: { type: feature.file.endsWith(".mp4") ? "video" : "image", src: publicUrl(`/assets/YumChick/features/${feature.file}`), alt: feature[language] },
+  }));
   const viewport = useRef<HTMLDivElement>(null);
+  const titles = useRef<HTMLDivElement>(null);
+  const titlePair = useRef<[number, number] | null>(null);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const elapsed = useRef(0);
   const fill = useRef<HTMLSpanElement>(null);
@@ -42,6 +73,10 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
     document.addEventListener("visibilitychange", onVisibility);
     return () => { observer.disconnect(); document.removeEventListener("visibilitychange", onVisibility); };
   }, []);
+
+  useLayoutEffect(() => {
+    if (viewport.current) syncTitles(viewport.current, titles.current, titlePair.current);
+  });
 
   // A new slide/replay restarts its video. Carousel pause/resume never does.
   useEffect(() => {
@@ -110,6 +145,7 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
     if (programmatic.current) {
       cancelAnimationFrame(animation.current);
       programmatic.current = false;
+      titlePair.current = null;
       element.style.scrollSnapType = "";
     }
   };
@@ -126,6 +162,10 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
     const from = element.scrollLeft;
     const to = targetOffset(index);
     if (Math.abs(from - to) < 1) return;
+    const cards = [...element.querySelectorAll<HTMLElement>(".feature-carousel__slide")];
+    const previousIndex = cards.reduce((nearest, _card, i) =>
+      Math.abs(targetOffset(i) - from) < Math.abs(targetOffset(nearest) - from) ? i : nearest, 0);
+    titlePair.current = [previousIndex, index];
     programmatic.current = true;
     element.style.scrollSnapType = "none";
     const start = performance.now();
@@ -134,8 +174,11 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
       const progress = duration ? Math.min(1, (now - start) / duration) : 1;
       const ease = 1 - Math.pow(1 - progress, 4);
       element.scrollLeft = from + (to - from) * ease;
+      syncTitles(element, titles.current, titlePair.current);
       if (progress < 1) animation.current = requestAnimationFrame(tick);
       else {
+        titlePair.current = null;
+        syncTitles(element, titles.current);
         element.style.scrollSnapType = "";
         // Let the final scroll event pass before accepting native input updates.
         animation.current = requestAnimationFrame(() => { programmatic.current = false; });
@@ -164,6 +207,7 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
       }
     };
     const scroll = () => {
+      syncTitles(element, titles.current, titlePair.current);
       if (programmatic.current) return;
       setPaused(true);
       clearTimeout(settleTimer.current);
@@ -172,6 +216,7 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
     const resize = new ResizeObserver(() => {
       if (programmatic.current) interruptScroll();
       element.scrollLeft = targetOffset(activeIndex.current);
+      syncTitles(element, titles.current, titlePair.current);
     });
     resize.observe(element);
     element.addEventListener("scroll", scroll, { passive: true });
@@ -192,6 +237,13 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
   return (
     <section className="feature-carousel" aria-label="Features" aria-roledescription="carousel"
       data-state={finished ? "finished" : paused ? "paused" : started ? "playing" : "idle"}>
+      <div className="feature-carousel__titles" ref={titles}>
+        {slides.map((slide, i) => <h2 key={slide.id} aria-hidden={i !== index}><span>
+          {language === "en" ? slide.title.split(/(?<=[.,!?;:])\s+/).map((part, partIndex) =>
+            <span className="feature-carousel__title-phrase" key={partIndex}>{partIndex > 0 && " "}{part}</span>
+          ) : slide.title}
+        </span></h2>)}
+      </div>
       <div className="feature-carousel__viewport" ref={viewport}
         tabIndex={0} aria-label="Swipe or use arrow keys to change features"
         onKeyDown={event => {
@@ -206,15 +258,12 @@ export function FeatureCarousel({ slides = PLACEHOLDERS }: { slides?: FeatureSli
           {slides.map((slide, i) => (
             <article key={slide.id} className="feature-carousel__slide" aria-hidden={i !== index}
               aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
-              <h2>{slide.title}</h2>
-              <div className={`feature-carousel__media feature-carousel__media--${i % 4}`}>
-                {slide.media?.type === "video" ? (
-                  <video ref={node => { videos.current[i] = node; }} src={started && i === index ? slide.media.src : undefined}
-                    poster={slide.media.poster} aria-label={slide.media.alt} muted playsInline preload="none"
-                    disablePictureInPicture disableRemotePlayback controlsList="nodownload noremoteplayback nofullscreen" />
-                ) : slide.media ? (
-                  <img src={slide.media.src} alt={slide.media.alt} loading="lazy" draggable={false} />
-                ) : <span className="feature-carousel__placeholder" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>}
+              <div className="feature-carousel__media">
+                {slide.media.type === "video" ? <video ref={node => { videos.current[i] = node; }} src={slide.media.src}
+                  aria-label={slide.media.alt} muted playsInline preload="auto" controls={false}
+                  tabIndex={-1} x-webkit-airplay="deny" disablePictureInPicture disableRemotePlayback
+                  controlsList="nodownload noremoteplayback nofullscreen" />
+                  : <img src={slide.media.src} alt={slide.media.alt} loading="eager" decoding="async" />}
               </div>
             </article>
           ))}

@@ -1,5 +1,104 @@
 [
   {
+    "id": 385242193,
+    "tag_name": "v2.1.1",
+    "name": "MacMix 2.1.1",
+    "body": "### What’s New\r\n- Added **global Mix shortcuts**:\r\nHold your chosen modifier key and a number from 1–9, then use the system volume keys to adjust or mute the corresponding app.\r\n",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.1.1",
+    "published_at": "2026-09-09T05:34:17Z",
+    "created_at": "2026-09-08T13:40:43Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 384763051,
+    "tag_name": "v2.1",
+    "name": "MacMix 2.1",
+    "body": "### What's new\r\nMacMix 2.1 introduces **Scene Presets**—save your favorite audio setups and quickly switch between work, music, gaming, and more.\r\n\r\n- **Save your audio setup:** Capture input and output devices, volume levels, per-app mixing, and supported noise control and Spatial Audio modes.\r\n- **Make each scene your own:** Create up to 9 presets with custom names, icons, and colors.\r\n- **Switch quickly:** Activate scenes from the Scenes page, menu bar panel, or global keyboard shortcuts. Optionally launch the apps included in each scene.",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.1",
+    "published_at": "2026-09-08T13:40:41Z",
+    "created_at": "2026-09-02T14:46:11Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 381343667,
+    "tag_name": "v2.0.4",
+    "name": "MacMix 2.0.4",
+    "body": "### Fixed\r\n- Improved payment service stability.",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.0.4",
+    "published_at": "2026-09-02T14:46:09Z",
+    "created_at": "2026-09-02T10:38:46Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 381167610,
+    "tag_name": "v2.0.3",
+    "name": "MacMix 2.0.3",
+    "body": "### What's new\r\n- Added **Lock Input Device**.",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.0.3",
+    "published_at": "2026-09-02T10:38:45Z",
+    "created_at": "2026-08-29T15:16:00Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 379020802,
+    "tag_name": "v2.0.2",
+    "name": "MacMix 2.0.2",
+    "body": "### Fixed\r\n- Improve taking-over system volume control. ",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.0.2",
+    "published_at": "2026-08-29T15:15:59Z",
+    "created_at": "2026-08-29T09:17:13Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 378933435,
+    "tag_name": "v2.0.1",
+    "name": "MacMix 2.0.1",
+    "body": "### Introducing MacMix Studio!\r\n\r\nUnlock more ways to personalize and control your Mac’s audio experience:\r\n\r\n- Custom themes and appearance\r\n- Now Playing controls in the panel\r\n- Pro Bluetooth controls including battery status, listening modes and Spatial Audio\r\n- App blacklist for excluding selected apps from mixing\r\n\r\n### What's new\r\n\r\n- Added taking over system volume controls.\r\n",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.0.1",
+    "published_at": "2026-08-29T09:17:12Z",
+    "created_at": "2026-08-29T01:55:13Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 378843517,
+    "tag_name": "v2.0",
+    "name": "MacMix 2.0",
+    "body": "### Introducing MacMix Studio!\r\n\r\nUnlock more ways to personalize and control your Mac’s audio experience:\r\n\r\n- Custom themes and appearance\r\n- Now Playing controls in the panel\r\n- Pro Bluetooth controls including battery status, listening modes and Spatial Audio\r\n- App blacklist for excluding selected apps from mixing\r\n\r\n### Fixed\r\n\r\n- Fixed output Mix in FaceTime.\r\n",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v2.0",
+    "published_at": "2026-08-29T01:55:12Z",
+    "created_at": "2026-08-28T16:41:30Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 374469765,
+    "tag_name": "v1.7",
+    "name": "MacMix 1.7",
+    "body": "### What’s New\n\n- Added support for macOS 14.4 and later.\n- Improved multi-app audio mixing reliability.\n- Fixed brief mixing interruptions when a mixed app quits or its audio processes change.\n- Improved Process Tap and Aggregate Device lifecycle handling.\n- Enhanced compatibility with browser and media-app helper processes.\n- Improved real-time audio thread safety and overall stability.",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v1.7",
+    "published_at": "2026-08-21T14:39:12Z",
+    "created_at": "2026-08-21T14:39:00Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
+    "id": 373166307,
+    "tag_name": "v1.6",
+    "name": "MacMix 1.6",
+    "body": "## MacMix 1.6 release\n- Refactored multi-app mixing to share a single Aggregate Device and IOProc, reducing CPU and memory usage.\n- Optimized real-time gain processing for more stable multi-source mixing.\n- Improved audio device switching to reduce interruptions, latency, and temporary audio loss.\n- Fixed switching-to-Bluetooth noise when multi-mix is on without reducing audio quality.",
+    "html_url": "https://github.com/ljmng7/MacMix/releases/tag/v1.6",
+    "published_at": "2026-08-19T15:38:26Z",
+    "created_at": "2026-08-19T15:38:12Z",
+    "prerelease": false,
+    "draft": false
+  },
+  {
     "id": 353705057,
     "tag_name": "v1.5",
     "name": "MacMix 1.5",

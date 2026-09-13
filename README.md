@@ -47,5 +47,4 @@ npm test               # Hello timeline and MacMix release/hosting tests
 The existing Pages workflow validates all three builds but still publishes only
 `homepage/dist/`. No DNS, CNAME, or subdomain deployment has been configured.
 GitHub profile-data synchronization now runs from `homepage/` and writes to
-`homepage/public/data/`. MacMix's release snapshot can be refreshed separately
-with `npm --prefix macmix run releases:snapshot`.
+`homepage/public/data/`. MacMix release snapshots refresh before Cloudflare builds via `npm --prefix macmix run build:cloudflare`. App commits/releases can trigger that build with a Cloudflare Pages Deploy Hook; see [the setup and activation steps](macmix/docs/release-sync.md).

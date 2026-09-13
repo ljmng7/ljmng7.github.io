@@ -21,9 +21,20 @@
 }
 .feature-carousel__viewport:focus-visible { outline: 2px solid var(--ink); outline-offset: -4px; }
 .feature-carousel__slide { flex: 0 0 var(--slide-width); width: var(--slide-width); min-width: 0; scroll-snap-align: center; }
-.feature-carousel__slide h2 {
+.feature-carousel__titles {
+  display: grid;
+  width: var(--slide-width);
+  margin: 0 auto 24px;
+  overflow: hidden;
+}
+.feature-carousel__titles h2 {
+  grid-area: 1 / 1;
+  justify-content: center;
+  text-align: center;
+  opacity: 0;
+  will-change: transform, opacity;
   min-height: 2.4em;
-  margin: 0 0 24px;
+  margin: 0;
   display: flex;
   align-items: end;
   font-size: clamp(28px, 3vw, 44px);
@@ -39,13 +50,8 @@
   display: grid;
   place-items: center;
   background: #e8e4ed;
-  color: rgb(74 50 100 / 18%);
 }
-.feature-carousel__media--1 { background: #e4e8ed; }
-.feature-carousel__media--2 { background: #eae2e5; }
-.feature-carousel__media--3 { background: #e3e8e4; }
-.feature-carousel__media img, .feature-carousel__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; display: block; }
-.feature-carousel__placeholder { font-size: clamp(72px, 13vw, 180px); font-weight: 650; letter-spacing: -.07em; }
+.feature-carousel__media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; pointer-events: none; display: block; }
 .feature-carousel__controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 28px; }
 .feature-carousel__pagination, .feature-carousel__toggle { background: color-mix(in srgb, var(--ink) 7%, transparent); border-radius: 999px; }
 .feature-carousel__pagination { display: flex; align-items: center; padding: 0 14px; height: 56px; }
@@ -59,14 +65,12 @@
 .feature-carousel button:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
 @media (max-width: 640px) {
   .feature-carousel { --slide-width: 78vw; padding: 54px 0 44px; }
-  .feature-carousel__slide h2 { margin-bottom: 20px; }
+  .feature-carousel__titles { margin-bottom: 20px; }
+  .feature-carousel__title-phrase { display: block; }
   .feature-carousel__media { aspect-ratio: 3 / 4; border-radius: 20px; }
   .feature-carousel__controls { margin-top: 24px; gap: 12px; }
 }
-:root.dark .feature-carousel__media { background: #29252f; color: rgb(232 213 255 / 22%); }
-:root.dark .feature-carousel__media--1 { background: #252b32; }
-:root.dark .feature-carousel__media--2 { background: #30262c; }
-:root.dark .feature-carousel__media--3 { background: #252e29; }
+:root.dark .feature-carousel__media { background: #29252f; }
 @media (prefers-reduced-motion: reduce) {
   .feature-carousel__track, .feature-carousel__dot, .feature-carousel__dot-track { transition: none; }
 }

@@ -675,7 +675,7 @@ a:focus-visible {
   }
 
   .home-footer__downloads {
-    width: min(100%, 230px);
+    width: min(100%, 210px);
     flex-direction: column;
     gap: 13px;
   }

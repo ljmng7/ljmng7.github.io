@@ -54,7 +54,7 @@ export const normalizeReleases = (value) => {
 };
 
 export async function generateReleaseSnapshot({
-  repository = process.env.GITHUB_REPOSITORY || "ljmng7/MacMix",
+  repository = process.env.MACMIX_RELEASE_REPOSITORY || "ljmng7/MacMix",
   apiUrl = process.env.GITHUB_API_URL || "https://api.github.com",
   token = process.env.GITHUB_TOKEN,
   fetchImpl = fetch,

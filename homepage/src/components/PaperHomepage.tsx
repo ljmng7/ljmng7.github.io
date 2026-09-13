@@ -1,6 +1,8 @@
 import { useLayoutEffect, useRef } from "react";
 import { PhotographyGallery } from "./PhotographyGallery";
 import { HelloIntro } from "./HelloIntro";
+import { YumChickenWorkVideos } from "./YumChickenWorkVideos";
+import { MacMixWorkVideos } from "./MacMixWorkVideos";
 import { useLanguage } from "./LanguageProvider";
 import { profile } from "../data/profile";
 import "./paper-homepage.css";
@@ -53,7 +55,9 @@ export function PaperHomepage() {
       <div id="work" className="page-work-anchor" aria-hidden="true" />
       <div className="page-work-grid">
         <article className="page-work-project page-work-project--macmix">
-          <a className="page-work-media page-work-media--macmix" href="https://macmix.jazminli.com/" target="_blank" rel="noopener noreferrer" aria-label={`MacMix · ${messages.projects.visitWebsite}`} />
+          <a className="page-work-media page-work-media--macmix" href="https://macmix.jazminli.com/" target="_blank" rel="noopener noreferrer" aria-label={`MacMix · ${messages.projects.visitWebsite}`}>
+            <MacMixWorkVideos />
+          </a>
           <h2 className="page-work-title" lang="en">MacMix</h2>
           <p className="page-work-description">{messages.projects.macMixDescription}</p>
           <div className="page-work-links">
@@ -63,13 +67,15 @@ export function PaperHomepage() {
           </div>
         </article>
         <article className="page-work-project page-work-project--yumchicken">
-          <a className="page-work-media page-work-media--yumchicken" href="https://yumchicken.jazminli.com/" target="_blank" rel="noopener noreferrer" aria-label={`${messages.projects.yumChickenName} · ${messages.projects.visitWebsite}`} />
+          <a className="page-work-media page-work-media--yumchicken" href="https://yumchicken.jazminli.com/" target="_blank" rel="noopener noreferrer" aria-label={`${messages.projects.yumChickenName} · ${messages.projects.visitWebsite}`}>
+            <YumChickenWorkVideos />
+          </a>
           <h2 className="page-work-title">{messages.projects.yumChickenName}</h2>
           <p className="page-work-description">{messages.projects.yumChickenDescription}</p>
           <div className="page-work-links">
             <WorkLink href="https://yumchicken.jazminli.com/">{messages.projects.workWebsite}</WorkLink>
             <WorkLink href="https://apps.apple.com/us/app/%E9%A6%8B%E9%A6%99%E9%B8%A1/id6759188913">App Store</WorkLink>
-            <WorkLink href="https://github.com/ljmng7/YumChicken-Android-Release/releases/download/v1.2.4/YumChick-v1.2.4.apk">{messages.projects.workDownloadApk}</WorkLink>
+            <WorkLink href="https://download.jazminli.com/YumChicken/YumChicken.apk">{messages.projects.workDownloadApk}</WorkLink>
           </div>
         </article>
         <div className="page-work-more">
