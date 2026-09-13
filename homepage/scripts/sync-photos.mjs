@@ -4,7 +4,7 @@ import exifr from 'exifr';
 import sharp from 'sharp';
 
 const dataURL = new URL('../src/data/photo.json', import.meta.url);
-const folder = new URL('../public/photos/', import.meta.url);
+const folder = new URL('../public/photos/display/', import.meta.url);
 const photos = JSON.parse(await readFile(dataURL, 'utf8'));
 const files = (await readdir(folder)).filter(name => /\.(jpe?g|png|webp|avif)$/i.test(name)).sort();
 const missing = photos.filter(photo => !files.includes(photo.filename));

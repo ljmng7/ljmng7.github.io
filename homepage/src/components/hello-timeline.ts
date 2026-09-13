@@ -6,6 +6,18 @@ const FIRST_FADE_START = INTRO_END + 1200;
 export const HELLO_INTRO_MS = FIRST_FADE_START + HELLO_FADE_MS;
 export const HELLO_CYCLE_MS = HELLO_DRAW_MS + 2400 + HELLO_FADE_MS;
 
+/** Map the shared hello clock onto the hint's paused 4s animation. */
+export function scrollHintTimeAt(elapsed: number): number {
+  const first = elapsed < HELLO_INTRO_MS;
+  const time = first ? elapsed - MOVE_END
+    : (elapsed - HELLO_INTRO_MS) % HELLO_CYCLE_MS - HELLO_DRAW_MS;
+  if (time < 0) return 3200;
+  const fadeStart = first ? FIRST_FADE_START - MOVE_END : 2400;
+  if (time <= 1600) return time;
+  if (time < fadeStart) return 1600 + (time - 1600) / (fadeStart - 1600) * 800;
+  return Math.min(3200, 2400 + (time - fadeStart) / HELLO_FADE_MS * 800);
+}
+
 export type HelloFrame = {
   index: number;
   iteration: number;

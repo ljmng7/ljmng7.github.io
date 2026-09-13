@@ -1,16 +1,20 @@
-import { fileURLToPath } from "node:url";
 import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-const page = (name) => fileURLToPath(new URL(name, import.meta.url));
 export default defineConfig({
-  base: "/",
+  base: process.env.SITE_BASE || "/",
   build: {
-    rollupOptions: {
-      input: {
-        index: page("index.html"),
-        privacy: page("privacy.html"),
-        support: page("support.html"),
-      },
+    outDir: "dist/client",
+  },
+  optimizeDeps: {
+    include: ["react", "react-dom/client"],
+  },
+  server: {
+    host: "0.0.0.0",
+    allowedHosts: ["terminal.local"],
+    warmup: {
+      clientFiles: ["./src/main.tsx"],
     },
   },
+  plugins: [react()],
 });

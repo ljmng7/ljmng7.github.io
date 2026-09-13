@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="description" content="Jazmín's personal homepage">
-    <link rel="icon" type="image/x-icon" href="%BASE_URL%favicon.ico?v=avatar-20260912">
-    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%assets/avatar-favicon-32.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png?v=avatar-20260912">
+    <link rel="icon" type="image/x-icon" href="%BASE_URL%favicon.ico?v=avatar-20260913-circle">
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%assets/avatar-favicon-32.png?v=avatar-20260913-circle">
+    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png?v=avatar-20260913-circle">
     <title>Jazmín's</title>
     <script>
       (() => {
@@ -17,12 +17,8 @@
         const language = savedLanguage === "zh" || savedLanguage === "en"
           ? savedLanguage
           : navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
-        let savedTheme = null;
-        try { savedTheme = localStorage.getItem("homepage-theme"); } catch {}
-        const mode = savedTheme === "light" || savedTheme === "dark" ? savedTheme : "system";
-        const theme = mode === "system"
-          ? matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
-          : mode;
+        const mode = "system";
+        const theme = matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
         document.documentElement.classList.toggle("dark", theme === "dark");
         document.documentElement.dataset.theme = theme;
         document.documentElement.dataset.themeMode = mode;

@@ -51,12 +51,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       window.matchMedia("(prefers-color-scheme: dark)").matches,
     );
     applyThemeToDocument(nextTheme, nextMode);
-    try { localStorage.setItem("homepage-theme", nextMode); } catch { /* Storage may be unavailable. */ }
     setModeState(nextMode);
     setThemeState(nextTheme);
   }, []);
 
   useEffect(() => {
+    // Theme selection is intentionally session-only; discard the legacy persisted preference.
+    try { localStorage.removeItem("homepage-theme"); } catch { /* Storage may be unavailable. */ }
     const colorScheme = window.matchMedia("(prefers-color-scheme: dark)");
     const followSystemTheme = (event: MediaQueryListEvent) => {
       if (document.documentElement.dataset.themeMode !== "system") return;

@@ -7,26 +7,121 @@ type Photo = Omit<(typeof photoData)[number], "location"> & {
   location: { latitude: number; longitude: number; name?: string } | null;
 };
 const photos: Photo[] = photoData;
+const PHOTO_BASE = "/photos/display";
 
-const AUTO_SPEED = 22;
-const MAX_SPEED = 700;
-const RESUME_DELAY = 5000;
 const ropeY = (x: number) => 52 + Math.sin(x * Math.PI * 4) * 30;
+const AUTO_SCROLL_SPEED = 22;
+const AUTO_SCROLL_RESUME_DELAY = 3000;
+const SEAMLESS_BUFFER_CYCLES = 3;
 
 export function PhotographyGallery() {
   const { language } = useLanguage();
-  const viewport = useRef<HTMLDivElement>(null);
-  const track = useRef<HTMLDivElement>(null);
-  const [copies, setCopies] = useState(3);
   const zh = language === "zh";
   const [keyboardFocus, setKeyboardFocus] = useState(false);
   const [selected, setSelected] = useState<Photo | null>(null);
-  const dialog = useRef<HTMLDialogElement>(null);
+  const viewport = useRef<HTMLDivElement>(null);
+  const cycle = useRef<HTMLDivElement>(null);
   const previewOpen = useRef(false);
-  const suppressClick = useRef(false);
+  const dialog = useRef<HTMLDialogElement>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const animateClose = useRef<(() => void) | null>(null);
   const closePreview = () => animateClose.current?.();
+  previewOpen.current = Boolean(selected);
+
+  useEffect(() => {
+    const scroller = viewport.current;
+    const firstCycle = cycle.current;
+    if (!scroller || !firstCycle) return;
+
+    const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
+    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    let cycleWidth = 0;
+    let animationFrame = 0;
+    let previousTime = 0;
+    let automaticPosition = 0;
+    let knownScrollLeft = 0;
+    let hasCenteredCycle = false;
+    let resumeFromNativePosition = false;
+    // Start immediately on page load; only user-driven horizontal scrolling pauses the loop.
+    let resumeAt = performance.now();
+
+    const measure = () => {
+      const nextWidth = firstCycle.getBoundingClientRect().width;
+      if (!nextWidth) return;
+      cycleWidth = nextWidth;
+      if (!hasCenteredCycle) {
+        scroller.scrollLeft = cycleWidth;
+        hasCenteredCycle = true;
+      }
+      automaticPosition = scroller.scrollLeft;
+      knownScrollLeft = scroller.scrollLeft;
+    };
+    const pauseAutoScroll = () => {
+      resumeAt = performance.now() + AUTO_SCROLL_RESUME_DELAY;
+      resumeFromNativePosition = true;
+    };
+    const writeAutomaticPosition = () => {
+      // Safari repaints even when a fractional assignment resolves to the same native pixel.
+      const nextScrollLeft = isSafari ? Math.round(automaticPosition) : automaticPosition;
+      if (Math.abs(nextScrollLeft - knownScrollLeft) < .5) return;
+      scroller.scrollLeft = nextScrollLeft;
+      knownScrollLeft = scroller.scrollLeft;
+    };
+    const recenterWithinCycle = (position: number) => {
+      if (!cycleWidth) return position;
+      while (position < cycleWidth * .5) position += cycleWidth;
+      while (position >= cycleWidth * 1.5) position -= cycleWidth;
+      return position;
+    };
+    const handleNativeHorizontalScroll = () => {
+      let nextScrollLeft = scroller.scrollLeft;
+      // Native vertical page scrolling never changes this value, so it remains non-interrupting.
+      if (Math.abs(nextScrollLeft - knownScrollLeft) < .5) return;
+      const centeredScrollLeft = recenterWithinCycle(nextScrollLeft);
+      if (centeredScrollLeft !== nextScrollLeft) {
+        scroller.scrollLeft = centeredScrollLeft;
+        nextScrollLeft = centeredScrollLeft;
+      }
+      knownScrollLeft = nextScrollLeft;
+      automaticPosition = nextScrollLeft;
+      pauseAutoScroll();
+    };
+    const resizeObserver = new ResizeObserver(measure);
+
+    measure();
+    resizeObserver.observe(scroller);
+    resizeObserver.observe(firstCycle);
+    scroller.addEventListener("scroll", handleNativeHorizontalScroll, { passive: true });
+    document.addEventListener("visibilitychange", pauseAutoScroll);
+
+    const wrapAtCycleBoundary = () => {
+      automaticPosition = recenterWithinCycle(automaticPosition);
+    };
+
+    const tick = (now: number) => {
+      const elapsed = previousTime ? Math.min(now - previousTime, 50) / 1000 : 0;
+      previousTime = now;
+      if (!previewOpen.current && !reducedMotion.matches && !document.hidden && cycleWidth && now >= resumeAt) {
+        if (resumeFromNativePosition) {
+          automaticPosition = scroller.scrollLeft;
+          knownScrollLeft = automaticPosition;
+          resumeFromNativePosition = false;
+        }
+        automaticPosition += AUTO_SCROLL_SPEED * elapsed;
+        wrapAtCycleBoundary();
+        writeAutomaticPosition();
+      }
+      animationFrame = requestAnimationFrame(tick);
+    };
+    animationFrame = requestAnimationFrame(tick);
+
+    return () => {
+      cancelAnimationFrame(animationFrame);
+      resizeObserver.disconnect();
+      scroller.removeEventListener("scroll", handleNativeHorizontalScroll);
+      document.removeEventListener("visibilitychange", pauseAutoScroll);
+    };
+  }, []);
 
   useLayoutEffect(() => {
     if (!selected || !dialog.current) return;
@@ -79,7 +174,6 @@ export function PhotographyGallery() {
       details.forEach((element, index) => animate(element, [detailStates[index], { opacity: 0, transform: "translateY(8px)" }], 220));
       void retreat.finished.then(() => {
         if (disposed) return;
-        previewOpen.current = false;
         setSelected(null);
       }).catch(() => {});
     };
@@ -102,155 +196,31 @@ export function PhotographyGallery() {
     ? `https://maps.apple.com/?ll=${encodeURIComponent(coordinates)}&q=${encodeURIComponent(selected!.title[language])}`
     : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(coordinates)}`) : undefined;
 
-  useEffect(() => {
-    const surface = viewport.current;
-    const belt = track.current;
-    if (!surface || !belt || !photos.length) return;
-    const reduced = matchMedia("(prefers-reduced-motion: reduce)");
-    let width = 1, offset = 0, pending = 0, last = 0, lastInput = -Infinity;
-    let pointer: number | null = null, pointerX = 0, startX = 0, startY = 0, visible = false, frame = 0;
-    let axis: "horizontal" | "vertical" | null = null;
-    let wheelAxis: "horizontal" | "vertical" | null = null, wheelX = 0, wheelY = 0, wheelTime = -Infinity;
-    const measure = () => {
-      width = (belt.firstElementChild as HTMLElement).getBoundingClientRect().width;
-      setCopies(Math.max(3, Math.ceil(surface.clientWidth / width) + 2));
-    };
-    const resize = new ResizeObserver(measure);
-    resize.observe(surface);
-    measure();
-    const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; });
-    observer.observe(surface);
-    const input = (delta: number) => {
-      lastInput = performance.now();
-      // Bound the queue as well as the frame speed, so a fling cannot leave a long tail.
-      if (pending * delta < 0) pending = 0;
-      pending = Math.max(-140, Math.min(140, pending + delta));
-    };
-    const down = (event: PointerEvent) => {
-      if (!event.isPrimary || event.button !== 0) return;
-      suppressClick.current = false;
-      pointer = event.pointerId;
-      startX = pointerX = event.clientX;
-      startY = event.clientY;
-      axis = null;
-    };
-    const move = (event: PointerEvent) => {
-      if (pointer !== event.pointerId || axis === "vertical") return;
-      const dx = event.clientX - startX;
-      const dy = event.clientY - startY;
-      if (!axis) {
-        if (Math.max(Math.abs(dx), Math.abs(dy)) < 7) return;
-        suppressClick.current = true;
-        if (Math.abs(dy) > Math.abs(dx) * 1.4) { axis = "vertical"; return; }
-        if (Math.abs(dx) < Math.abs(dy) * 1.4) return;
-        axis = "horizontal";
-        surface.setPointerCapture(event.pointerId);
-        pending = 0;
-        surface.dataset.dragging = "true";
-      }
-      input(pointerX - event.clientX);
-      pointerX = event.clientX;
-    };
-    const up = (event: PointerEvent) => {
-      if (pointer !== event.pointerId) return;
-      pointer = null;
-      if (axis === "horizontal") lastInput = performance.now();
-      axis = null;
-      delete surface.dataset.dragging;
-      if (surface.hasPointerCapture(event.pointerId)) surface.releasePointerCapture(event.pointerId);
-    };
-    const wheel = (event: WheelEvent) => {
-      const now = performance.now();
-      if (now - wheelTime > 180) { wheelAxis = null; wheelX = 0; wheelY = 0; }
-      wheelTime = now;
-      const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? surface.clientWidth : 1;
-      const dx = (event.shiftKey && !event.deltaX ? event.deltaY : event.deltaX) * scale;
-      const dy = event.shiftKey ? 0 : event.deltaY * scale;
-      if (!wheelAxis) {
-        wheelX += dx; wheelY += dy;
-        if (Math.max(Math.abs(wheelX), Math.abs(wheelY)) < 6) return;
-        if (Math.abs(wheelY) > Math.abs(wheelX) * 1.4) wheelAxis = "vertical";
-        else if (Math.abs(wheelX) > Math.abs(wheelY) * 1.4) wheelAxis = "horizontal";
-        else return;
-        if (wheelAxis === "horizontal") { event.preventDefault(); input(wheelX); }
-        return;
-      }
-      if (wheelAxis === "vertical") return;
-      event.preventDefault();
-      if (Math.abs(dx) > .5) input(dx);
-    };
-    const key = (event: KeyboardEvent) => {
-      if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
-      event.preventDefault();
-      input(event.key === "ArrowRight" ? 130 : -130);
-    };
-    const tick = (now: number) => {
-      const dt = Math.min((now - (last || now)) / 1000, 0.04);
-      last = now;
-      if (previewOpen.current) {
-        pending = 0;
-        lastInput = now;
-      }
-      if (!previewOpen.current && visible && !document.hidden && !surface.closest("[inert]")) {
-        // Exponential follow-through eases toward the hand, then settles after release.
-        const eased = pending * (reduced.matches ? 1 : -Math.expm1(-dt / 0.09));
-        let step = Math.max(-MAX_SPEED * dt, Math.min(MAX_SPEED * dt, eased));
-        pending -= step;
-        if (Math.abs(pending) < .05) pending = 0;
-        if (axis !== "horizontal" && pending === 0 && now - lastInput >= RESUME_DELAY && !reduced.matches) {
-          const resume = Math.min(1, (now - lastInput - RESUME_DELAY) / 650);
-          step += AUTO_SPEED * (resume * resume * (3 - 2 * resume)) * dt;
-        }
-        offset = ((offset + step) % width + width) % width;
-        belt.style.transform = `translate3d(${-offset}px, 0, 0)`;
-      }
-      frame = requestAnimationFrame(tick);
-    };
-    surface.addEventListener("pointerdown", down);
-    surface.addEventListener("pointermove", move);
-    surface.addEventListener("pointerup", up);
-    surface.addEventListener("pointercancel", up);
-    surface.addEventListener("lostpointercapture", up);
-    surface.addEventListener("wheel", wheel, { passive: false });
-    surface.addEventListener("keydown", key);
-    frame = requestAnimationFrame(tick);
-    return () => {
-      cancelAnimationFrame(frame);
-      resize.disconnect(); observer.disconnect();
-      surface.removeEventListener("pointerdown", down);
-      surface.removeEventListener("pointermove", move);
-      surface.removeEventListener("pointerup", up);
-      surface.removeEventListener("pointercancel", up);
-      surface.removeEventListener("lostpointercapture", up);
-      surface.removeEventListener("wheel", wheel);
-      surface.removeEventListener("keydown", key);
-    };
-  }, []);
-
   if (!photos.length) return null;
   const path = Array.from({ length: 121 }, (_, i) => `${i ? "L" : "M"}${i / 120 * 1000},${ropeY(i / 120)}`).join(" ");
   return <section data-keyboard={keyboardFocus} onPointerDownCapture={() => setKeyboardFocus(false)} onKeyDownCapture={(event) => { if (event.key === "Tab") setKeyboardFocus(true); }} className="page-photography" id="photography" lang={zh ? "zh-CN" : "en"} aria-labelledby="photography-title">
     <div className="photo-heading">
       <h2 id="photography-title" className="page-contact-title">{zh ? "光影之间" : "Through my lens"}</h2>
     </div>
-    <div className="photo-viewport" ref={viewport} tabIndex={0} role="region" aria-label={zh ? "摄影作品，使用左右方向键浏览" : "Photography, use arrow keys to browse"}>
-      <div className="photo-track" ref={track}>
-        {Array.from({ length: copies }, (_, copy) => <div className="photo-cycle" key={copy} aria-hidden={copy > 0 ? true : undefined}>
+    <div className="photo-viewport" ref={viewport} tabIndex={0} role="region" aria-label={zh ? "摄影作品，横向滚动浏览" : "Photography, scroll horizontally to browse"}>
+      <div className="photo-track">
+        {Array.from({ length: SEAMLESS_BUFFER_CYCLES }, (_, copy) => <div className="photo-cycle" ref={copy === 0 ? cycle : undefined} key={copy} aria-hidden={copy > 0 || undefined}>
           <svg className="photo-rope" viewBox="0 0 1000 110" preserveAspectRatio="none" aria-hidden="true"><path d={path} /></svg>
-          {photos.map((photo, index) => <figure className={`photo-print ${photo.width > photo.height ? "photo-print--landscape" : "photo-print--portrait"}`} key={photo.filename} style={{ "--hang-y": `${ropeY((index + .5) / photos.length) + 10}px`, "--tilt": `${[-4, 3, -2, 5, -3, 2, -5, 3][index % 8]}deg` } as CSSProperties}>
+          {photos.map((photo) => {
+            const photoIndex = photos.indexOf(photo);
+            return <figure className={`photo-print ${photo.width > photo.height ? "photo-print--landscape" : "photo-print--portrait"}`} key={`${copy}:${photo.filename}`} style={{ "--hang-y": `${ropeY((photoIndex + .5) / photos.length) + 10}px`, "--tilt": `${[-4, 3, -2, 5, -3, 2, -5, 3][photoIndex % 8]}deg` } as CSSProperties}>
             <div className="photo-paper">
               <span className="photo-clip" aria-hidden="true" />
-              <button className="photo-open" type="button" tabIndex={copy > 0 ? -1 : 0} aria-label={zh ? `查看大图：${photo.title[language]}` : `View photo: ${photo.title[language]}`} onClick={(event) => {
-                if (event.detail !== 0 && suppressClick.current) return;
+              <button className="photo-open" type="button" tabIndex={copy ? -1 : undefined} aria-label={zh ? `查看大图：${photo.title[language]}` : `View photo: ${photo.title[language]}`} onClick={(event) => {
                 returnFocus.current = event.currentTarget;
-                previewOpen.current = true;
                 setSelected(photo);
               }}>
-                <img src={`/photos/${photo.filename}`} width={photo.width} height={photo.height} alt={photo.title[language]} draggable={false} loading="lazy" decoding="async" />
+                <img src={`${PHOTO_BASE}/${photo.filename}`} width={photo.width} height={photo.height} alt={photo.title[language]} draggable={false} loading="eager" decoding="async" />
               </button>
-              <figcaption><span>{photo.title[language]}</span><span className="photo-number">{String(index + 1).padStart(2, "0")}</span></figcaption>
+              <figcaption><span>{photo.title[language]}</span><span className="photo-number">{String(photoIndex + 1).padStart(2, "0")}</span></figcaption>
             </div>
-          </figure>)}
+          </figure>;
+          })}
         </div>)}
       </div>
     </div>
@@ -263,7 +233,7 @@ export function PhotographyGallery() {
         <figure className="photo-lightbox-content">
           <div className="photo-lightbox-photo">
             <div className="photo-lightbox-shadow" aria-hidden="true" />
-            <img className="photo-lightbox-image" src={`/photos/${selected.filename}`} width={selected.width} height={selected.height} alt={selected.title[language]} />
+            <img className="photo-lightbox-image" src={`${PHOTO_BASE}/${selected.filename}`} width={selected.width} height={selected.height} alt={selected.title[language]} />
           </div>
           <figcaption>
             <h3 id="photo-lightbox-title">{selected.title[language]}</h3>

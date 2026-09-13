@@ -35,7 +35,7 @@ npm test               # Hello timeline and MacMix release/hosting tests
 - Homepage `/play`: the original interactive MacBook and stickers with the
   shared navigation. The Play navigation has no gradient background.
 - Homepage WORK and CONTACT are unlinked text placeholders. PLAY is hidden on mobile.
-- YumChicken `/`, `/privacy.html`, and `/support.html` retain the product content
+- YumChicken `/`, `/privacy`, and `/support` retain the product content
   and resolve their media from their own `public/assets/`. Author links return
   to `https://jazminli.com/`.
 - MacMix was copied from the `Website/` directory of the local MacMix-Website

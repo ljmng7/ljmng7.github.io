@@ -1,0 +1,55 @@
+.page-scroll-hint {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  bottom: calc(var(--page-navigation-height) + env(safe-area-inset-bottom, 0px));
+  inset-inline: 20px;
+  display: grid;
+  justify-items: center;
+  grid-template-rows: 32px 20px;
+  gap: 12px;
+  color: rgb(255 255 255 / 90%);
+  text-align: center;
+  pointer-events: none;
+}
+
+/* Hello exposes its subtitle only after the initial move has finished. */
+.hello-scene[data-subtitle="true"] + .page-scroll-hint {
+  visibility: visible;
+}
+
+.page-scroll-hint-arrow {
+  width: 32px;
+  height: 32px;
+  animation: page-scroll-arrow 4s linear infinite;
+  animation-play-state: paused;
+}
+
+.page-scroll-hint-label {
+  font-family: "Homepage Work Noto Serif SC", "Homepage GT Super Text", "Homepage Chinese Serif", serif;
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  animation: page-scroll-label 4s linear infinite;
+  animation-play-state: paused;
+}
+
+/* Hello's shared clock seeks these poses, including its language-switch gap. */
+@keyframes page-scroll-label {
+  0% { opacity: 0; animation-timing-function: ease-in-out; }
+  15%, 40% { opacity: 1; animation-timing-function: ease-in-out; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes page-scroll-arrow {
+  0% { opacity: 0; transform: translateY(0); animation-timing-function: ease-in-out; }
+  15% { opacity: 1; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(0); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  60% { opacity: 1; transform: translateY(28px); animation-timing-function: ease-in-out; }
+  80%, 100% { opacity: 0; transform: translateY(28px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-scroll-hint-arrow, .page-scroll-hint-label { animation: none; }
+}

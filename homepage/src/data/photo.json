@@ -1,98 +1,136 @@
 [
   {
-    "filename": "placeholder-01.jpg",
+    "filename": "gilded-water.webp",
     "title": {
-      "zh": "山谷来信",
-      "en": "Valley light"
+      "zh": "水上碎金",
+      "en": "Gilded Water"
     },
-    "width": 960,
-    "height": 720,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1018"
+    "width": 1600,
+    "height": 1200,
+    "location": {
+      "latitude": 30.229686006666668,
+      "longitude": 120.13385027833333
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-02.jpg",
+    "filename": "under-the-blossoms.webp",
     "title": {
-      "zh": "向海而行",
-      "en": "By the sea"
+      "zh": "樱花成径",
+      "en": "Under the Blossoms"
     },
-    "width": 720,
-    "height": 960,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1011"
+    "width": 1200,
+    "height": 1600,
+    "location": {
+      "latitude": 30.422441666666668,
+      "longitude": 120.27437777777777
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-03.jpg",
+    "filename": "city-afterglow.webp",
     "title": {
-      "zh": "林间留白",
-      "en": "Into the woods"
+      "zh": "落日的十四行诗",
+      "en": "Sonnet by Sunset"
     },
-    "width": 720,
-    "height": 960,
+    "width": 1600,
+    "height": 1199,
     "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1015"
+    "placeholder": false
   },
   {
-    "filename": "placeholder-04.jpg",
+    "filename": "long-time-no-see.webp",
     "title": {
-      "zh": "远山",
-      "en": "Distant hills"
+      "zh": "好久不见",
+      "en": "For Khalil"
     },
-    "width": 960,
-    "height": 720,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1016"
+    "width": 1199,
+    "height": 1600,
+    "location": {
+      "latitude": 30.437350653333333,
+      "longitude": 120.27711594333333
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-05.jpg",
+    "filename": "fallen-gold.webp",
     "title": {
-      "zh": "静静流过",
-      "en": "Passing quietly"
+      "zh": "满地金黄",
+      "en": "Fallen Gold"
     },
-    "width": 720,
-    "height": 960,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1020"
+    "width": 1600,
+    "height": 1200,
+    "location": {
+      "latitude": 31.837821845,
+      "longitude": 117.24972579
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-06.jpg",
+    "filename": "clocktower.webp",
     "title": {
-      "zh": "日常之外",
-      "en": "Somewhere else"
+      "zh": "青瓦红砖",
+      "en": "Five at the Clocktower"
     },
-    "width": 720,
-    "height": 960,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1025"
+    "width": 1200,
+    "height": 1600,
+    "location": {
+      "latitude": 36.064699999999995,
+      "longitude": 120.32270277777778
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-07.jpg",
+    "filename": "lakeside-tree.webp",
     "title": {
-      "zh": "风的形状",
-      "en": "Shape of the wind"
+      "zh": "风息之处",
+      "en": "Where the Wind Rests"
     },
-    "width": 960,
-    "height": 720,
-    "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1035"
+    "width": 1600,
+    "height": 1200,
+    "location": {
+      "latitude": 25.592605555555554,
+      "longitude": 100.27547777777778
+    },
+    "placeholder": false
   },
   {
-    "filename": "placeholder-08.jpg",
+    "filename": "path-in-pink.webp",
     "title": {
-      "zh": "暮色未晚",
-      "en": "Before dusk"
+      "zh": "粉色海洋",
+      "en": "Pink Ocean"
     },
-    "width": 720,
-    "height": 960,
+    "width": 1600,
+    "height": 1200,
+    "location": {
+      "latitude": 31.903902777777777,
+      "longitude": 117.06700833333333
+    },
+    "placeholder": false
+  },
+  {
+    "filename": "evening-reflections.webp",
+    "title": {
+      "zh": "暮色入水",
+      "en": "Evening Reflections"
+    },
+    "width": 1600,
+    "height": 1200,
     "location": null,
-    "placeholder": true,
-    "source": "https://picsum.photos/id/1043"
+    "placeholder": false
+  },
+  {
+    "filename": "cloud-rising.webp",
+    "title": {
+      "zh": "梦幻之城",
+      "en": "City of Dreams"
+    },
+    "width": 1600,
+    "height": 1200,
+    "location": {
+      "latitude": 30.189594444444445,
+      "longitude": 120.11115
+    },
+    "placeholder": false
   }
 ]

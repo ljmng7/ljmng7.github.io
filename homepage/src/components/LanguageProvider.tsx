@@ -11,6 +11,7 @@ export type Language = "zh" | "en";
 
 const messages = {
   zh: {
+    scrollHint: "下滑探索更多",
     contact: {
       title: "保持联系",
       name: "嗨！👋 我是 Jazmín",
@@ -91,6 +92,7 @@ const messages = {
     },
   },
   en: {
+    scrollHint: "Scroll to explore more",
     contact: {
       title: "Get in touch",
       name: "Hi !👋 I'm Jazmín",

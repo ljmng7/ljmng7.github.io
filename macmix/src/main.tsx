@@ -1,6 +1,8 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App";
+import { LanguageProvider } from "./components/LanguageProvider";
+import { ThemeProvider } from "./components/ThemeProvider";
 import "./styles.css";
 
 const root = document.getElementById("root");
@@ -11,6 +13,10 @@ if (!root) {
 
 createRoot(root).render(
   <React.StrictMode>
-    <App />
+    <LanguageProvider>
+      <ThemeProvider>
+        <App />
+      </ThemeProvider>
+    </LanguageProvider>
   </React.StrictMode>,
 );

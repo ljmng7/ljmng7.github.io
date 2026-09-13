@@ -3,6 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="color-scheme" content="light dark" />
+    <script>
+      (() => {
+        let savedLanguage = null;
+        try {
+          savedLanguage = localStorage.getItem("language");
+        } catch {}
+        const language = savedLanguage === "zh" || savedLanguage === "en"
+          ? savedLanguage
+          : navigator.language.toLowerCase().startsWith("zh") ? "zh" : "en";
+        const theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+        const root = document.documentElement;
+        root.classList.toggle("dark", theme === "dark");
+        root.dataset.theme = theme;
+        root.dataset.themeMode = "system";
+        root.lang = language === "zh" ? "zh-CN" : "en";
+        root.dataset.language = language;
+        root.style.colorScheme = theme;
+        const titles = language === "zh"
+          ? {
+              home: "MacMix — 你的Mac音量，尽在MacMix",
+              changelog: "MacMix - 更新日志",
+              privacy: "MacMix - 隐私政策",
+              terms: "MacMix - 使用条款",
+            }
+          : {
+              home: "MacMix — Mac's sound. All in MacMix.",
+              changelog: "MacMix - Changelog",
+              privacy: "MacMix - Privacy Policy",
+              terms: "MacMix - Terms of Use",
+            };
+        const pathname = window.location.pathname.replace(/\/+$/, "");
+        document.title = pathname.endsWith("/changelog")
+          ? titles.changelog
+          : pathname.endsWith("/privacy-policy")
+            ? titles.privacy
+            : pathname.endsWith("/terms-of-use")
+              ? titles.terms
+              : titles.home;
+      })();
+    </script>
     <meta
       name="theme-color"
       content="#f5f2ec"
@@ -16,19 +58,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
-      content="Mac's sound. In one mix."
+      content="Mac's sound. All in MacMix."
     />
-    <link
-      rel="icon"
-      href="%BASE_URL%assets/MacMix/MacMix-macOS-Default-web-256.png"
-      media="(prefers-color-scheme: light)"
-    />
-    <link
-      rel="icon"
-      href="%BASE_URL%assets/MacMix/MacMix-macOS-Dark-web-256.png"
-      media="(prefers-color-scheme: dark)"
-    />
-    <title>MacMix — Mac's sound. In one mix.</title>
+    <link rel="icon" type="image/x-icon" href="%BASE_URL%favicon.ico?v=macmix-default-20260912" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%assets/MacMix/macmix-favicon-32.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="%BASE_URL%apple-touch-icon.png?v=macmix-default-20260912" />
+    <title>MacMix — Mac's sound. All in MacMix.</title>
   </head>
   <body>
     <div id="root"></div>

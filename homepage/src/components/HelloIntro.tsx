@@ -2,7 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 import { helloLetterings, type HelloLettering } from "../data/hello-letterings";
 import { useLanguage } from "./LanguageProvider";
-import { HELLO_DRAW_MS, helloFrameAt } from "./hello-timeline";
+import { HELLO_DRAW_MS, helloFrameAt, scrollHintTimeAt } from "./hello-timeline";
+import { ScrollHint } from "./ScrollHint";
 import "./hello-intro.css";
 
 function InteractiveName() {
@@ -122,6 +123,7 @@ export function HelloIntro() {
   const { language } = useLanguage();
   const reducedMotion = useReducedMotion();
   const sceneRef = useRef<HTMLDivElement>(null);
+  const hintRef = useRef<HTMLDivElement>(null);
   const rowRef = useRef<HTMLDivElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
@@ -164,11 +166,17 @@ export function HelloIntro() {
     let previousTime: number | null = null;
     let request = 0;
     let previousFrame = helloFrameAt(0, helloLetterings.length);
+    const hintAnimations = hintRef.current?.getAnimations({ subtree: true }) ?? [];
+    const updateHint = () => {
+      for (const animation of hintAnimations) animation.currentTime = scrollHintTimeAt(elapsed);
+    };
+    updateHint();
     setFrame(previousFrame);
     setStarted(false);
     const tick = (now: number) => {
       if (previousTime !== null) elapsed += now - previousTime;
       previousTime = now;
+      updateHint();
       const next = helloFrameAt(elapsed, helloLetterings.length);
       if (next.iteration !== previousFrame.iteration || next.phase !== previousFrame.phase) {
         previousFrame = next;
@@ -213,7 +221,7 @@ export function HelloIntro() {
   const staticScene = !hasArtwork || reducedMotion;
   const showSubtitle = staticScene || (frame.introduced && frame.phase !== "moving");
   const artwork = helloLetterings[frame.index];
-  return <div ref={sceneRef} className="hello-scene" lang={language === "zh" ? "zh-CN" : "en"}
+  return <><div ref={sceneRef} className="hello-scene" lang={language === "zh" ? "zh-CN" : "en"}
     data-artwork={hasArtwork ? "ready" : "pending"} data-running={running} data-started={started || staticScene}
     data-introduced={staticScene || frame.introduced} data-subtitle={showSubtitle} data-static={staticScene}>
     <div ref={rowRef} className="hello-row">
@@ -227,5 +235,5 @@ export function HelloIntro() {
         <p className="hello-description">{language === "zh" ? "独立开发者、学生" : "Independent Developer, Student"}</p>
       </div>
     </div>
-  </div>;
+  </div><ScrollHint ref={hintRef} /></>;
 }

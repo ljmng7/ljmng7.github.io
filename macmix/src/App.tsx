@@ -1,7 +1,6 @@
 import {
   IoArrowBack,
   IoArrowForward,
-  IoArrowUp,
   IoLogoApple,
 } from "react-icons/io5";
 import { FaGithub } from "react-icons/fa6";
@@ -11,23 +10,16 @@ import {
   useEffect,
   useRef,
   useState,
+  type CSSProperties,
   type MouseEvent,
 } from "react";
 import { useReducedMotion } from "motion/react";
-import { BlurFade } from "./components/BlurFade";
-import { AnimatedDeviceSwitchIcon } from "./components/AnimatedDeviceSwitchIcon";
-import { AnimatedInputGainIcon } from "./components/AnimatedInputGainIcon";
-import { AnimatedSpeakerIcon } from "./components/AnimatedSpeakerIcon";
-import { AnimatedSpeakerSlashIcon } from "./components/AnimatedSpeakerSlashIcon";
-import { AnimatedSlidersIcon } from "./components/AnimatedSlidersIcon";
-import { AnimatedStripedBoltIcon } from "./components/AnimatedStripedBoltIcon";
-import { AnimatedVolumeMixIcon } from "./components/AnimatedVolumeMixIcon";
+import { FeatureCarousel } from "./components/FeatureCarousel";
 import { ConfettiButton } from "./components/ConfettiButton";
-import { DiaTextReveal } from "./components/DiaTextReveal";
-import { DownloadCallout } from "./components/DownloadCallout";
-import { Highlighter } from "./components/Highlighter";
-import { MacDesktopPreview } from "./components/MacDesktopPreview";
-import { ThemeImage } from "./components/ThemeImage";
+import { FooterLanguageToggle } from "./components/FooterLanguageToggle";
+import { FooterThemeToggle } from "./components/FooterThemeToggle";
+import { GradientIntro } from "./components/GradientIntro";
+import { homeTitleForLanguage, useLanguage } from "./components/LanguageProvider";
 import { useGitHubReleases } from "./hooks/useGitHubReleases";
 import { formatDisplayVersion } from "./lib/githubReleases";
 import {
@@ -39,44 +31,10 @@ import {
 
 const DOWNLOAD_URL =
   "https://github.com/ljmng7/MacMix/releases/latest/download/MacMix.dmg";
-const REPOSITORY_URL = "https://github.com/ljmng7/MacMix";
+const STUDIO_CHECKOUT_URL =
+  "https://checkout.dodopayments.com/buy/pdt_0NmJ2vOqulR07tfZqwKtU?quantity=1";
 const ChangelogPage = lazy(() => import("./components/ChangelogPage"));
 const LegalPage = lazy(() => import("./components/LegalPage"));
-
-const FEATURES = [
-  {
-    title: "App-by-app volume mix",
-    icon: "sliders",
-  },
-  {
-    title: "Boost\u00a0up\u00a0to 200%",
-    icon: "speaker-wave",
-  },
-  {
-    title: "Instant device switching",
-    icon: "device-switch",
-  },
-  {
-    title: "Independent input gain",
-    icon: "input-gain",
-  },
-  {
-    title: "One-click muting",
-    icon: "speaker-slash",
-  },
-  {
-    title: "Always in the menu bar",
-    icon: "volume-mix",
-  },
-  {
-    title: "Crazy fast native app",
-    icon: "striped-bolt",
-  },
-  {
-    title: "Free and open source",
-    icon: "github",
-  },
-] as const;
 
 const SOCIAL_LINKS = [
   {
@@ -85,19 +43,19 @@ const SOCIAL_LINKS = [
     icon: "github-black.svg",
   },
   {
+    label: "X",
+    href: "https://x.com/jazminli57",
+    icon: "x-black.svg",
+  },
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@lucid.jasmine",
+    icon: "threads.svg",
+  },
+  {
     label: "小红书",
     href: "https://www.xiaohongshu.com/user/profile/66a6d5f2000000001d020f1b",
     icon: "xiaohongshu-black.svg",
-  },
-  {
-    label: "抖音",
-    href: "https://v.douyin.com/aTWTd9BPAFI/",
-    icon: "tiktok-black.svg",
-  },
-  {
-    label: "X",
-    href: "https://x.com/ming_li28643",
-    icon: "x-black.svg",
   },
   {
     label: "Instagram",
@@ -106,13 +64,21 @@ const SOCIAL_LINKS = [
   },
   {
     label: "Email",
-    href: "mailto:jazmin_li@icloud.com",
+    href: "mailto:jasmine@jazminli.com",
     icon: "email-black.svg",
   },
 ] as const;
 
 type SiteRoute = AppRoute;
 type PagePhase = "idle" | "leaving" | "entering";
+
+function usesSettledGradientHeader(route: SiteRoute) {
+  return (
+    route === "changelog" ||
+    route === "privacy-policy" ||
+    route === "terms-of-use"
+  );
+}
 
 function getRouteFromPathname(): SiteRoute {
   return appRouteFromPathname(window.location.pathname);
@@ -127,29 +93,30 @@ function Brand({
   onBrandClick: (event: MouseEvent<HTMLAnchorElement>) => void;
   onVersionClick: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
+  const { language } = useLanguage();
+  const chinese = language === "zh";
+
   return (
     <div className="brand-lockup">
       <a
         className="brand"
         href="#top"
-        aria-label="Back to top"
+        aria-label={chinese ? "返回页面顶部" : "Back to top"}
         onClick={onBrandClick}
       >
         <span className="brand__icon-frame" aria-hidden="true">
-          <ThemeImage
+          <img
             className="brand__icon"
-            lightSrc="/assets/MacMix/MacMix.png"
-            darkSrc="/assets/MacMix/MacMix_Dark.png"
+            src={publicUrl("/assets/MacMix/MacMix-macOS-Default-web-256.png")}
             alt=""
           />
-          <IoArrowUp className="brand__top-arrow" aria-hidden="true" />
         </span>
         <span className="brand__name">MacMix</span>
       </a>
       <a
         className="brand__version"
         href={appRoutePath("changelog")}
-        aria-label={`Open changelog for ${version}`}
+        aria-label={chinese ? `打开 ${version} 更新日志` : `Open changelog for ${version}`}
         onClick={onVersionClick}
       >
         {version}
@@ -167,11 +134,18 @@ function ChangelogRouteLink({
   isTransitioning: boolean;
   onClick: (event: MouseEvent<HTMLAnchorElement>) => void;
 }) {
+  const { language } = useLanguage();
+  const chinese = language === "zh";
+  const label = isBack
+    ? chinese ? "返回主页" : "Back home"
+    : chinese ? "更新日志" : "Changelog";
+
   return (
     <a
       className={[
         "header-link",
         "header-link--changelog",
+        chinese && "header-link--zh",
         isBack && "header-link--back",
         isTransitioning && "header-link--transitioning",
       ]
@@ -179,7 +153,7 @@ function ChangelogRouteLink({
         .join(" ")}
       href={appRoutePath(isBack ? "home" : "changelog")}
       onClick={onClick}
-      aria-label={isBack ? "Back home" : "Open changelog"}
+      aria-label={label}
       aria-disabled={isTransitioning || undefined}
     >
       <span
@@ -192,7 +166,7 @@ function ChangelogRouteLink({
           alt=""
           aria-hidden="true"
         />
-        <span>Changelog</span>
+        <span>{label}</span>
       </span>
       <span
         className="header-link__face header-link__face--back"
@@ -202,7 +176,7 @@ function ChangelogRouteLink({
           className="header-link__icon header-link__back-arrow header-link__back-arrow--left"
           aria-hidden="true"
         />
-        <span className="header-link__back-label">Back home</span>
+        <span className="header-link__back-label">{label}</span>
         <IoArrowBack
           className="header-link__icon header-link__back-arrow header-link__back-arrow--right"
           aria-hidden="true"
@@ -213,6 +187,8 @@ function ChangelogRouteLink({
 }
 
 function DownloadButton({ compact = false }: { compact?: boolean }) {
+  const { language } = useLanguage();
+  const chinese = language === "zh";
   const [isSuccessful, setIsSuccessful] = useState(false);
 
   const handleDownloadClick = () => {
@@ -234,6 +210,7 @@ function DownloadButton({ compact = false }: { compact?: boolean }) {
       ]
         .filter(Boolean)
         .join(" ")}
+      data-language={language}
       href={DOWNLOAD_URL}
       download="MacMix.dmg"
       confettiDisabled={isSuccessful}
@@ -259,61 +236,13 @@ function DownloadButton({ compact = false }: { compact?: boolean }) {
       ) : (
         <span className="download-button__content">
           <IoLogoApple className="download-button__apple" aria-hidden="true" />
-          <span className="download-button__label">Download for Mac</span>
+          <span className="download-button__label">
+            {chinese ? "下载 Mac 版本" : "Download for Mac"}
+          </span>
           <IoArrowForward className="download-button__arrow" aria-hidden="true" />
         </span>
       )}
     </ConfettiButton>
-  );
-}
-
-function Features() {
-  return (
-    <section className="features" aria-label="MacMix features">
-      <ul className="features__grid">
-        {FEATURES.map((feature) => (
-          <li
-            className={[
-              "feature",
-              feature.icon === "sliders" && "feature--sliders",
-              feature.icon === "volume-mix" && "feature--volume-mix",
-              feature.icon === "speaker-wave" && "feature--speaker-wave",
-              feature.icon === "device-switch" && "feature--device-switch",
-              feature.icon === "input-gain" && "feature--input-gain",
-              feature.icon === "speaker-slash" && "feature--speaker-slash",
-              feature.icon === "striped-bolt" && "feature--striped-bolt",
-              feature.icon === "github" && "feature--github",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-            key={feature.title}
-          >
-            <span className="feature__icon" aria-hidden="true">
-              {feature.icon === "sliders" ? (
-                <AnimatedSlidersIcon />
-              ) : feature.icon === "volume-mix" ? (
-                <AnimatedVolumeMixIcon />
-              ) : feature.icon === "speaker-wave" ? (
-                <AnimatedSpeakerIcon />
-              ) : feature.icon === "device-switch" ? (
-                <AnimatedDeviceSwitchIcon />
-              ) : feature.icon === "input-gain" ? (
-                <AnimatedInputGainIcon />
-              ) : feature.icon === "speaker-slash" ? (
-                <AnimatedSpeakerSlashIcon />
-              ) : feature.icon === "striped-bolt" ? (
-                <AnimatedStripedBoltIcon />
-              ) : feature.icon === "github" ? (
-                <FaGithub />
-              ) : (
-                null
-              )}
-            </span>
-            <h2>{feature.title}</h2>
-          </li>
-        ))}
-      </ul>
-    </section>
   );
 }
 
@@ -348,108 +277,63 @@ function HomeFooter() {
         </nav>
       </div>
 
+      <div className="home-footer__controls" aria-label="Appearance and language">
+        <FooterThemeToggle />
+        <FooterLanguageToggle />
+      </div>
       <div className="home-footer__wordmark" aria-hidden="true">
         MacMix
       </div>
+      <a
+        className="home-footer__credit"
+        href="https://jazminli.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Visit Jazmín's homepage"
+        lang="en"
+      >
+        <span className="home-footer__credit-prefix">by </span>Jazmín
+      </a>
     </footer>
   );
 }
 
 function HomePage() {
+  const { language } = useLanguage();
+
   return (
     <>
-      <section className="hero" aria-labelledby="hero-title">
-        <BlurFade className="hero__heading-wrap" delay={0.12}>
-          <h1 className="hero__heading" id="hero-title">
-            <span className="hero__heading-line--desktop">
-              Your{" "}
-              <Highlighter
-                action="highlight"
-                color="var(--accent-soft)"
-                strokeWidth={2}
-                animationDuration={650}
-                iterations={2}
-                padding={3}
-                multiline={false}
-                isView
-                className="hero__mac-highlight"
-              >
-                <span className="hero__mac-lockup">
-                  <IoLogoApple className="hero__apple" aria-hidden="true" />
-                  <span>Mac&rsquo;s</span>
+      <GradientIntro
+        actions={(
+          <div className="hero__actions" data-language={language}>
+            <div className="hero__download-wrap">
+              <DownloadButton />
+            </div>
+            <a
+              className="studio-button"
+              href={STUDIO_CHECKOUT_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span className="studio-button__content">
+                <span className="studio-button__icon-slot" aria-hidden="true">
+                  <span
+                    className="studio-button__icon"
+                    style={{
+                      "--studio-icon-url": `url("${publicUrl("/assets/MacMix/svgs/checkmark.seal.fill.svg")}")`,
+                    } as CSSProperties}
+                  />
                 </span>
-              </Highlighter>{" "}
-              sound.
-            </span>
-            <span className="hero__heading-line--desktop">
-              All in one{" "}
-              <DiaTextReveal
-                className="hero__mix-reveal"
-                text="Mix"
-                textColor="var(--ink)"
-              />
-            </span>
-            <span className="hero__heading-line--mobile">
-              <Highlighter
-                action="highlight"
-                color="var(--accent-soft)"
-                strokeWidth={2}
-                animationDuration={650}
-                iterations={2}
-                padding={3}
-                multiline={false}
-                isView
-                className="hero__mac-highlight"
-              >
-                <span className="hero__mac-lockup">
-                  <IoLogoApple className="hero__apple" aria-hidden="true" />
-                  <span>Mac&rsquo;s</span>
+                <span className="studio-button__label">
+                  <span>{language === "zh" ? "升级" : "Upgrade"}</span>
+                  <span className="studio-button__studio">Studio</span>
                 </span>
-              </Highlighter>{" "}
-              sound.
-            </span>
-            <span className="hero__heading-line--mobile">
-              In one{" "}
-              <DiaTextReveal
-                className="hero__mix-reveal"
-                text="Mix"
-                textColor="var(--ink)"
-              />
-            </span>
-          </h1>
-        </BlurFade>
-
-        <BlurFade className="hero__actions" delay={0.28} offset={10}>
-          <div className="hero__download-callout">
-            <DownloadButton />
-            <DownloadCallout />
-          </div>
-          <a
-            className="github-button"
-            href={REPOSITORY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span className="github-button__content">
-              <span className="github-button__icon-slot" aria-hidden="true">
-                <FaGithub className="github-button__icon" />
               </span>
-              <span className="github-button__label">View on GitHub</span>
-            </span>
-          </a>
-        </BlurFade>
-
-        <BlurFade className="hero__peek" delay={0.45} offset={18}>
-          <MacDesktopPreview />
-          <div className="preview-interaction-hint">
-            <span className="preview-interaction-hint__icon" aria-hidden="true">
-              <span className="preview-interaction-hint__hand" />
-            </span>
-            <span>Tips... It's interactive!</span>
+            </a>
           </div>
-        </BlurFade>
-      </section>
-      <Features />
+        )}
+      />
+      <FeatureCarousel />
       <HomeFooter />
     </>
   );
@@ -460,15 +344,22 @@ export function App() {
   const transitionTimerRef = useRef<number | null>(null);
   const enterFrameRef = useRef<number | null>(null);
   const prefersReducedMotion = useReducedMotion();
+  const { language } = useLanguage();
   const [route, setRoute] = useState<SiteRoute>(getRouteFromPathname);
   const [pagePhase, setPagePhase] = useState<PagePhase>("idle");
   const [transitionTarget, setTransitionTarget] = useState<SiteRoute | null>(null);
+  const [headerGradientVisible, setHeaderGradientVisible] = useState(
+    () => usesSettledGradientHeader(getRouteFromPathname()),
+  );
+  const [isChangelogContentReady, setIsChangelogContentReady] = useState(false);
   const { releases, isLoading, error, retry } = useGitHubReleases();
   const latestVersion = releases[0]
     ? formatDisplayVersion(releases[0].tag_name)
     : "v…";
 
   useEffect(() => {
+    // Gradient headers are entirely CSS-driven, as on the personal homepage.
+    if (route === "home" || usesSettledGradientHeader(route)) return;
     let frameId: number | null = null;
 
     const updateHeaderGlass = () => {
@@ -501,12 +392,14 @@ export function App() {
         window.cancelAnimationFrame(frameId);
       }
     };
-  }, []);
+  }, [route]);
 
   useEffect(() => {
     const handlePopState = () => {
+      const nextRoute = getRouteFromPathname();
       window.scrollTo(0, 0);
-      setRoute(getRouteFromPathname());
+      setRoute(nextRoute);
+      setHeaderGradientVisible(usesSettledGradientHeader(nextRoute));
       setPagePhase("entering");
       enterFrameRef.current = window.requestAnimationFrame(() => {
         setPagePhase("idle");
@@ -520,19 +413,25 @@ export function App() {
   useEffect(() => {
     switch (route) {
       case "changelog":
-        document.title = "Changelog — MacMix";
+        document.title = language === "zh"
+          ? "MacMix - 更新日志"
+          : "MacMix - Changelog";
         break;
       case "privacy-policy":
-        document.title = "Privacy Policy — MacMix";
+        document.title = language === "zh"
+          ? "MacMix - 隐私政策"
+          : "MacMix - Privacy Policy";
         break;
       case "terms-of-use":
-        document.title = "Terms of Use — MacMix";
+        document.title = language === "zh"
+          ? "MacMix - 使用条款"
+          : "MacMix - Terms of Use";
         break;
       case "home":
-        document.title = "MacMix — Mac's sound. In one mix.";
+        document.title = homeTitleForLanguage(language);
         break;
     }
-  }, [route]);
+  }, [language, route]);
 
   useEffect(() => {
     return () => {
@@ -552,6 +451,7 @@ export function App() {
     }
 
     setTransitionTarget(nextRoute);
+    if (usesSettledGradientHeader(nextRoute)) setHeaderGradientVisible(true);
     setPagePhase("leaving");
 
     transitionTimerRef.current = window.setTimeout(
@@ -560,6 +460,7 @@ export function App() {
         window.history.pushState(null, "", nextPath);
         window.scrollTo(0, 0);
         setRoute(nextRoute);
+        setHeaderGradientVisible(usesSettledGradientHeader(nextRoute));
         setTransitionTarget(null);
         setPagePhase("entering");
 
@@ -592,63 +493,69 @@ export function App() {
   const showBackControl = transitionTarget
     ? transitionTarget !== "home"
     : route !== "home";
+  const usesStaticPageContent = usesSettledGradientHeader(route);
 
   return (
-    <div className="site-shell" id="top">
-      <header ref={headerRef} className="site-header">
+    <div className={`site-shell${route === "home" || usesSettledGradientHeader(route) ? " site-shell--gradient" : ""}`} id="top">
+        <header ref={headerRef} className={route === "home" ? "gradient-navigation" : usesSettledGradientHeader(route) ? "gradient-navigation gradient-navigation--settled" : "site-header"}>
+        <div
+          className={`gradient-navigation__transition${headerGradientVisible ? " gradient-navigation__transition--visible" : ""}`}
+          aria-hidden="true"
+        />
         <div className="site-header__inner">
-          <BlurFade className="site-header__brand-reveal" delay={0.04} offset={6}>
+          <div className="site-header__brand-reveal">
             <Brand
               version={latestVersion}
               onBrandClick={handleBrandClick}
               onVersionClick={handleVersionClick}
             />
-          </BlurFade>
+          </div>
 
           <nav className="site-nav" aria-label="Primary navigation">
-            <BlurFade
-              className="site-nav__item-reveal site-nav__item-reveal--route"
-              delay={0.1}
-              offset={6}
-            >
+            <div className="site-nav__item-reveal site-nav__item-reveal--route">
               <ChangelogRouteLink
                 isBack={showBackControl}
                 isTransitioning={pagePhase === "leaving"}
                 onClick={handleChangelogRouteClick}
               />
-            </BlurFade>
-            <BlurFade
-              className="site-nav__item-reveal site-nav__item-reveal--download"
-              delay={0.16}
-              offset={6}
-            >
+            </div>
+            <div className="site-nav__item-reveal site-nav__item-reveal--download">
               <DownloadButton compact />
-            </BlurFade>
+            </div>
           </nav>
         </div>
-      </header>
+        </header>
 
+      <div className="site-page-surface">
       <main
-        className={`page-content page-content--${pagePhase}`}
+        className={`page-content page-content--${pagePhase}${usesStaticPageContent ? " page-content--static" : ""}`}
         aria-busy={pagePhase !== "idle"}
       >
         {route === "changelog" ? (
-          <Suspense fallback={<div className="changelog-module-loading" />}>
-            <ChangelogPage
-              releases={releases}
-              isLoading={isLoading}
-              error={error}
-              onRetry={retry}
-            />
-          </Suspense>
+          <>
+            <Suspense fallback={<div className="changelog-module-loading" />}>
+              <ChangelogPage
+                releases={releases}
+                isLoading={isLoading}
+                error={error}
+                onRetry={retry}
+                onReady={() => setIsChangelogContentReady(true)}
+              />
+            </Suspense>
+            {isChangelogContentReady ? <HomeFooter /> : null}
+          </>
         ) : route === "privacy-policy" || route === "terms-of-use" ? (
-          <Suspense fallback={<div className="changelog-module-loading" />}>
-            <LegalPage document={route} />
-          </Suspense>
+          <>
+            <Suspense fallback={<div className="changelog-module-loading" />}>
+              <LegalPage document={route} />
+            </Suspense>
+            <HomeFooter />
+          </>
         ) : (
           <HomePage />
         )}
       </main>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,1032 @@
+:root {
+  color-scheme: light dark;
+  color: #211f1d;
+  background: #f9f9f7;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  --ink: #211f1d;
+  --paper: #f9f9f7;
+  --paper-raised: #ece8e1;
+  --button-glass: rgba(155, 132, 109, 0.10);
+  --desktop-control-glass: rgb(255 255 255 / 30%);
+  --accent-soft: #c9dcff;
+  --callout-pink: #dad7cd;
+  --focus: #6c9bea;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+  transition:
+    background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 360ms ease-out;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  transition:
+    background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 360ms ease-out;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--focus) 72%, transparent);
+  outline-offset: 4px;
+}
+
+.site-shell {
+  --site-header-height: 92px;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.site-header {
+  --header-scroll-progress: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+}
+
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: rgba(245, 242, 236, 0.78);
+  -webkit-backdrop-filter: blur(18px) saturate(1.12);
+  backdrop-filter: blur(18px) saturate(1.12);
+  box-shadow: 0 18px 44px rgba(111, 75, 48, 0.2);
+  opacity: var(--header-scroll-progress);
+  transition: opacity 80ms linear;
+  will-change: opacity;
+}
+
+.site-header__inner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1720px);
+  min-height: var(--site-header-height);
+  margin: 0 auto;
+  padding: 16px clamp(28px, 3vw, 48px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.site-header__brand-reveal,
+.site-nav__item-reveal {
+  display: flex;
+  align-items: center;
+}
+
+.brand-lockup,
+.brand {
+  display: inline-flex;
+  align-items: center;
+}
+
+.brand-lockup {
+  gap: 8px;
+}
+
+.brand {
+  gap: 13px;
+  border-radius: 18px;
+  font-weight: 760;
+  letter-spacing: -0.035em;
+}
+
+.brand__icon-frame {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+}
+
+.brand__icon {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.brand__name {
+  font-size: 25px;
+  line-height: 1;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+}
+
+.download-button {
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 23px;
+  border-radius: 18px;
+  font-size: 18px;
+  font-weight: 740;
+  letter-spacing: -0.025em;
+  white-space: nowrap;
+  transition: box-shadow 320ms var(--ease), background 320ms var(--ease);
+}
+
+.download-button {
+  position: relative;
+  min-width: 230px;
+  overflow: hidden;
+  color: var(--paper);
+  background: var(--ink);
+  box-shadow:
+    0 25px 46px rgba(111, 75, 48, 0.42),
+    0 9px 20px rgba(111, 75, 48, 0.24);
+}
+
+.download-button svg {
+  flex: 0 0 auto;
+  font-size: 25px;
+}
+
+.download-button__content {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Match MacMix's primary download track: keep the store mark on an inset
+   inner rail and let the label own the remaining track. Compact header
+   buttons stay centred. */
+.download-button:not(.download-button--compact) .download-button__content {
+  position: absolute;
+  inset-block: 0;
+  left: 40px;
+  width: calc(100% - 80px);
+}
+
+.download-button:not(.download-button--compact) .download-button__label {
+  flex: 1;
+  text-align: right;
+}
+
+.download-button__store-icon,
+.download-button__label,
+.download-button__arrow {
+  pointer-events: none;
+  will-change: transform, filter, opacity;
+}
+
+.download-button .download-button__store-icon {
+  width: 23px;
+  height: 23px;
+  flex: 0 0 23px;
+  object-fit: contain;
+  opacity: 1;
+  filter: brightness(0) invert(1) blur(0);
+  transform: translateY(-1px) scale(1);
+  transition:
+    opacity 360ms var(--ease),
+    filter 480ms var(--ease),
+    transform 560ms var(--ease);
+}
+
+.download-button__label {
+  transform: translateX(0);
+  transition: transform 560ms var(--ease);
+}
+
+.download-button__arrow {
+  position: absolute;
+  inset-block: 0;
+  right: -1px;
+  margin-block: auto;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateX(20px) scale(0.86);
+  transition:
+    opacity 380ms var(--ease),
+    filter 500ms var(--ease),
+    transform 560ms var(--ease);
+}
+
+.download-button:hover {
+  box-shadow:
+    0 25px 46px rgba(111, 75, 48, 0.42),
+    0 9px 20px rgba(111, 75, 48, 0.24);
+}
+
+.download-button:hover .download-button__store-icon {
+  opacity: 0;
+  filter: brightness(0) invert(1) blur(8px);
+  transform: translate(-20px, -1px) scale(0.86);
+}
+
+.download-button:hover .download-button__label {
+  transform: translateX(-35px);
+}
+
+.download-button:not(.download-button--compact):hover .download-button__label {
+  text-align: left;
+}
+
+.download-button:hover .download-button__arrow {
+  opacity: 1;
+  filter: blur(0);
+  transform: translateX(0) scale(1);
+}
+
+.download-button--compact {
+  min-width: 154px;
+  min-height: 60px;
+  padding-inline: 23px;
+  color: var(--ink);
+  background: var(--button-glass);
+  box-shadow: none;
+}
+
+.download-button--compact[data-store="appstore"] {
+  min-width: 164px;
+}
+
+.download-button--compact:hover {
+  background: var(--button-glass);
+  box-shadow: none;
+}
+
+.hero__actions {
+  --cta-width: 210px;
+  --cta-height: 60px;
+  --cta-track-width: 164px;
+  --cta-edge-inset: calc((100% - var(--cta-track-width)) / 2);
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.hero__actions[data-language="zh"] .download-button,
+.home-footer__content > .download-button[data-language="zh"] {
+  font-size: 19px;
+}
+
+.hero__actions .download-button {
+  width: var(--cta-width);
+  min-width: var(--cta-width);
+  height: var(--cta-height);
+  min-height: var(--cta-height);
+}
+
+.hero__download-wrap {
+  position: relative;
+  width: var(--cta-width);
+  min-width: var(--cta-width);
+  height: var(--cta-height);
+}
+
+.hero__download-wrap > .download-button {
+  position: relative;
+  z-index: 2;
+}
+
+.hero__actions .download-button .download-button__store-icon,
+.hero__actions .download-button .download-button__arrow {
+  width: 23px;
+  height: 23px;
+  font-size: 23px;
+}
+
+.hero__actions .download-button .download-button__store-icon {
+  width: 23px;
+  height: 23px;
+  filter: none;
+}
+
+.download-button--glass,
+.download-button--glass:hover,
+.download-button--glass:focus-visible {
+  color: #fff;
+  background: rgb(255 255 255 / 24%);
+  box-shadow: none;
+}
+
+.hero__actions .download-button--glass .download-button__store-icon,
+.hero__actions .download-button--glass:hover .download-button__store-icon {
+  filter: brightness(0) invert(1);
+}
+
+.hero__actions .download-button__arrow {
+  right: 0;
+}
+
+.home-footer {
+  --footer-wordmark-gap-compensation: 0px;
+  position: relative;
+  width: 100%;
+  min-height: calc(
+    clamp(340px, calc(12.21vw + 248px), 446px) +
+      var(--footer-wordmark-gap-compensation)
+  );
+  padding: 36px clamp(28px, 5vw, 76px) 0;
+  display: flex;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.home-footer__content {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 80px;
+}
+
+.home-footer__downloads {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+}
+
+.home-footer__downloads > .download-button {
+  width: 210px;
+  min-width: 210px;
+  min-height: 60px;
+  transition:
+    background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    box-shadow 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 360ms ease-out;
+}
+
+.home-footer__downloads > .download-button,
+.home-footer__downloads > .download-button:hover {
+  color: #fff;
+  background: #344e41;
+  box-shadow:
+    0 25px 46px rgb(218 215 205 / 42%),
+    0 9px 20px rgb(218 215 205 / 24%);
+}
+
+.home-footer__downloads > .download-button[data-store="android"],
+.home-footer__downloads > .download-button[data-store="android"]:hover {
+  color: #344e41;
+  background: #dad7cd;
+}
+
+.home-footer__downloads > .download-button[data-store="android"] .download-button__store-icon,
+:root.dark .home-footer__downloads > .download-button[data-store="appstore"] .download-button__store-icon {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(21%) saturate(787%) hue-rotate(100deg) brightness(93%) contrast(88%);
+}
+
+.home-footer__socials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.home-footer__social {
+  --social-hover-filter: brightness(0) invert(0.3) sepia(1) saturate(1.71512825) hue-rotate(224.22585042deg) brightness(0.6) contrast(1.74);
+  width: 42px;
+  height: 42px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--button-glass);
+  box-shadow: none;
+}
+
+.home-footer__theme {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.home-footer__controls {
+  position: absolute;
+  left: clamp(28px, 3vw, 48px);
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3vw, 48px);
+}
+
+.home-footer__language {
+  min-height: 42px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font: 12px -apple-system, BlinkMacSystemFont, sans-serif;
+  cursor: pointer;
+}
+
+.home-footer__theme svg {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.6;
+  transition:
+    opacity 450ms ease,
+    transform 650ms cubic-bezier(.22, 1, .36, 1);
+}
+
+.home-footer__theme-sun { opacity: 1; transform: rotate(0) scale(1); }
+.home-footer__theme-moon { opacity: 0; transform: rotate(-90deg) scale(.5); }
+:root.dark .home-footer__theme-sun { opacity: 0; transform: rotate(90deg) scale(.5); }
+:root.dark .home-footer__theme-moon { opacity: 1; transform: rotate(0) scale(1); }
+
+.home-footer__social img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
+  filter: brightness(0) invert(0) sepia(0) saturate(1) hue-rotate(0deg) brightness(1) contrast(1);
+  opacity: 0.46;
+  transition:
+    filter 260ms var(--ease),
+    opacity 260ms var(--ease),
+    transform 360ms var(--ease);
+}
+
+.home-footer__social:hover img,
+.home-footer__social:focus-visible img {
+  filter: var(--social-hover-filter);
+  opacity: 1;
+  transform: scale(1.06);
+}
+
+.home-footer__wordmark {
+  position: absolute;
+  left: 50%;
+  bottom: -0.1em;
+  width: max-content;
+  padding-inline: 0.065em;
+  color: var(--ink);
+  /* YumChicken has more glyphs than MacMix. Keep its rendered wordmark on the
+     same visual width while softening the weight for the food brand. */
+  font-size: clamp(76px, 9.63vw, 160px);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  line-height: 0.76;
+  opacity: 0.085;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  transform: translateX(-50%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.6) 44%,
+    transparent 94%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    rgba(0, 0, 0, 0.6) 44%,
+    transparent 94%
+  );
+}
+
+.home-footer__credit {
+  position: absolute;
+  right: clamp(28px, 3vw, 48px);
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 2;
+  color: var(--ink);
+  font-family: "Zapfino", "Snell Roundhand", cursive;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.8;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+
+
+@media (max-width: 980px) {
+  .site-header__inner {
+    padding-inline: 28px;
+  }
+
+  .site-nav {
+    gap: 22px;
+  }
+
+}
+
+@media (min-width: 641px) and (max-width: 1120px) {
+
+  .home-footer__wordmark {
+    font-size: min(186px, calc((100vw - 16px) * 0.1705));
+  }
+}
+
+@media (min-width: 641px) and (max-width: 756px) {
+  .home-footer {
+    --footer-wordmark-gap-compensation: calc(18.117vw - 95.299px);
+  }
+}
+
+@media (min-width: 757px) and (max-width: 1109px) {
+  .home-footer {
+    --footer-wordmark-gap-compensation: calc(5.907vw - 2.899px);
+  }
+}
+
+@media (min-width: 1110px) and (max-width: 1120px) {
+  .home-footer {
+    --footer-wordmark-gap-compensation: calc(198px - 12.21vw);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 980px) and (orientation: portrait) {
+}
+
+@media (max-width: 640px) {
+  .site-shell {
+    --site-header-height: 76px;
+  }
+
+  .site-header__inner {
+    padding: 14px 18px;
+  }
+
+  .brand {
+    gap: 9px;
+  }
+
+  .brand__icon-frame {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand__name {
+    font-size: 23px;
+  }
+
+  .site-nav {
+    gap: 8px;
+  }
+
+  .site-nav__item-reveal--download {
+    display: flex;
+  }
+
+  .download-button--compact {
+    min-width: 48px;
+    min-height: 48px;
+    padding: 0;
+    border-radius: 15px;
+  }
+
+  .gradient-navigation .download-button--compact,
+  .gradient-navigation .download-button--compact[data-store="appstore"] {
+    width: 48px;
+    min-width: 48px;
+    padding: 0;
+  }
+
+  .download-button--compact .download-button__label,
+  .download-button--compact .download-button__arrow {
+    display: none;
+  }
+
+  .gradient-navigation .download-button--compact .download-button__store-icon,
+  .gradient-navigation .download-button--compact:hover .download-button__store-icon,
+  .gradient-navigation .download-button--compact:focus-visible .download-button__store-icon {
+    width: 20px;
+    height: 20px;
+    flex-basis: 20px;
+    opacity: 1;
+    filter: brightness(0) invert(1);
+    transform: none;
+    transition: none;
+  }
+
+  .hero__actions {
+    width: min(100%, 230px);
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .hero__actions .download-button {
+    width: 100%;
+    height: 60px;
+    min-height: 60px;
+    font-size: 18px;
+  }
+
+  .hero__download-wrap,
+  .hero__actions > .download-button {
+    width: 100%;
+  }
+
+
+  .home-footer {
+    /* Match MacMix's mobile footer height, plus exactly one extra 60px button
+       row and its 13px gap for the second YumChicken download action. */
+    min-height: calc(clamp(305px, calc(16.5vw + 244px), 331px) + 73px);
+    padding: 32px 18px 0;
+  }
+
+  .home-footer__content {
+    gap: 56px;
+  }
+
+  .home-footer__downloads {
+    width: min(100%, 230px);
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .home-footer__downloads > .download-button {
+    width: 100%;
+    min-width: 0;
+    min-height: 60px;
+  }
+
+  .home-footer__socials {
+    gap: 7px;
+  }
+
+  .home-footer__social {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+  }
+
+  .home-footer__theme {
+    width: 38px;
+    height: 38px;
+  }
+
+  .home-footer__controls {
+    left: 18px;
+    bottom: max(60px, calc(44px + env(safe-area-inset-bottom)));
+    flex-direction: row;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .home-footer__language {
+    min-height: 38px;
+  }
+
+  .home-footer__theme svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .home-footer__social img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .home-footer__wordmark {
+    bottom: -0.1em;
+    font-size: clamp(49px, 12.8vw, 69px);
+  }
+
+  .home-footer__credit {
+    right: 18px;
+    bottom: max(60px, calc(44px + env(safe-area-inset-bottom)));
+    font-size: 12px;
+  }
+
+  .home-footer__credit-prefix {
+    display: none;
+  }
+
+}
+
+.page-content {
+  min-height: calc(100vh - var(--site-header-height));
+  opacity: 1;
+  filter: blur(0);
+  transform: translateY(0);
+  transition:
+    opacity 460ms var(--ease),
+    filter 520ms var(--ease),
+    transform 560ms var(--ease);
+  will-change: opacity, filter, transform;
+}
+
+.page-content--entering {
+  pointer-events: none;
+  opacity: 0;
+  filter: blur(12px);
+  transform: translateY(10px);
+}
+
+.page-content.page-content--static,
+.page-content.page-content--static.page-content--entering {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: none;
+  will-change: auto;
+}
+
+.legal-page,
+.legal-document,
+.legal-document,
+.legal-document :is(h1, h2, h3, h4),
+.legal-document :is(h1, h2, h3, h4, p, li) {
+  transition:
+    background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    border-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 360ms ease-out;
+}
+
+.legal-page {
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  padding: 70px clamp(28px, 5vw, 74px) 120px;
+}
+
+.legal-module-loading {
+  min-height: 70vh;
+}
+
+.legal-page__intro {
+  max-width: none;
+  margin-left: 0;
+  text-align: center;
+}
+
+.legal-page__intro h1 {
+  margin: 0;
+  font-size: clamp(64px, 6.15vw, 92px);
+  font-weight: 720;
+  line-height: 1.04;
+  letter-spacing: -0.018em;
+}
+
+.legal-document {
+  margin: 92px auto 0;
+}
+
+.legal-document__updated {
+  color: rgba(33, 31, 29, 0.5);
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  text-align: center;
+}
+
+.legal-document {
+  max-width: 740px;
+  margin-top: 24px;
+  color: rgba(33, 31, 29, 0.72);
+  font-size: 16px;
+  font-weight: 480;
+  line-height: 1.7;
+  letter-spacing: -0.012em;
+}
+
+.legal-document > :first-child {
+  margin-top: 0;
+}
+
+.legal-document > :last-child {
+  margin-bottom: 0;
+}
+
+.legal-document h1,
+.legal-document h2,
+.legal-document h3,
+.legal-document h4 {
+  margin: 30px 0 10px;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 720;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+
+.legal-document p,
+.legal-document ul,
+.legal-document ol,
+.legal-document pre,
+.legal-document blockquote {
+  margin: 14px 0;
+}
+
+.legal-document ul,
+.legal-document ol {
+  padding-left: 1.25em;
+}
+
+.legal-document li {
+  margin: 7px 0;
+  padding-left: 4px;
+}
+
+.legal-document li::marker {
+  color: rgba(111, 75, 48, 0.58);
+}
+
+.legal-document a {
+  color: #365b89;
+  text-decoration: underline;
+  text-decoration-color: rgba(54, 91, 137, 0.32);
+  text-underline-offset: 3px;
+}
+
+.legal-document code {
+  padding: 2px 5px;
+  border-radius: 6px;
+  background: rgba(111, 75, 48, 0.09);
+  font-family: "SFMono-Regular", "SF Mono", Menlo, monospace;
+  font-size: 0.88em;
+}
+
+.legal-document pre {
+  overflow-x: auto;
+  padding: 18px;
+  border: 1px solid rgba(111, 75, 48, 0.12);
+  border-radius: 18px;
+  background: rgba(111, 75, 48, 0.07);
+}
+
+.legal-document pre code {
+  padding: 0;
+  background: transparent;
+}
+
+@media (max-width: 980px) {
+  .legal-page__intro h1 {
+    font-size: clamp(62px, 9vw, 86px);
+  }
+}
+
+@media (max-width: 760px) {
+  .legal-page {
+    padding: 56px 18px 82px;
+  }
+
+  .legal-page__intro {
+    margin-left: 0;
+  }
+
+  .legal-document {
+    margin: 66px 0 0;
+  }
+
+  .legal-document {
+    font-size: 15.5px;
+  }
+}
+
+@media (max-width: 640px) {
+  .legal-page__intro h1 {
+    font-size: clamp(32px, 9.6vw, 43px);
+    line-height: 1.04;
+    letter-spacing: -0.014em;
+  }
+}
+
+:root.dark {
+    color: #f4f0e9;
+    background: #1c1c1a;
+    --ink: #f4f0e9;
+    --paper: #1c1c1a;
+    --paper-raised: #211e1b;
+    --button-glass: rgb(255 246 237 / 10%);
+    --desktop-control-glass: rgb(255 255 255 / 22%);
+    --accent-soft: #5876ad;
+    --callout-pink: #dad7cd;
+    --focus: #8bb4ff;
+}
+
+:root.dark .site-header::before {
+    background: rgb(23 21 19 / 78%);
+    box-shadow: 0 18px 44px rgb(0 0 0 / 38%);
+}
+
+:root.dark .home-footer__social {
+    --social-hover-filter: brightness(0) invert(0.60985225) sepia(1) saturate(1.91893976) hue-rotate(228.22954953deg) brightness(1) contrast(1);
+}
+
+:root.dark .home-footer__social img {
+    filter: brightness(0) invert(1) sepia(0) saturate(1) hue-rotate(0deg) brightness(1) contrast(1);
+}
+
+:root.dark .download-button--compact,
+:root.dark .download-button--compact:hover,
+:root.dark .home-footer__social {
+    box-shadow: none;
+}
+
+:root.dark .download-button,
+:root.dark .download-button:hover {
+    box-shadow:
+      0 25px 46px rgb(0 0 0 / 44%),
+      0 9px 20px rgb(0 0 0 / 28%);
+}
+
+:root.dark .download-button--compact,
+:root.dark .download-button--compact:hover {
+    box-shadow: none;
+}
+
+:root.dark .home-footer__downloads > .download-button[data-store="appstore"],
+:root.dark .home-footer__downloads > .download-button[data-store="appstore"]:hover {
+    color: #344e41;
+    background: #dad7cd;
+    box-shadow:
+      0 25px 46px rgb(52 78 65 / 42%),
+      0 9px 20px rgb(52 78 65 / 24%);
+}
+
+:root.dark .home-footer__downloads > .download-button[data-store="android"],
+:root.dark .home-footer__downloads > .download-button[data-store="android"]:hover {
+    color: #fff;
+    background: #344e41;
+}
+
+:root.dark .home-footer__downloads > .download-button[data-store="android"] .download-button__store-icon {
+    filter: brightness(0) invert(1);
+}
+
+:root.dark .legal-document a {
+    color: #9dbcf0;
+}
+
+:root.dark .legal-document {
+    color: rgb(244 240 233 / 72%);
+}
+
+:root.dark .legal-document__updated {
+    color: rgb(244 240 233 / 50%);
+}
+
+:root.dark .legal-document li::marker {
+    color: rgb(223 205 190 / 58%);
+}
+
+:root.dark .legal-document a {
+    text-decoration-color: rgb(157 188 240 / 36%);
+}
+
+:root.dark .legal-document code {
+    background: rgb(255 246 237 / 9%);
+}
+
+:root.dark .legal-document pre {
+    border-color: rgb(255 246 237 / 12%);
+    background: rgb(255 246 237 / 7%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

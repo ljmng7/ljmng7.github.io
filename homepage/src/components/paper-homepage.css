@@ -14,7 +14,7 @@
 }
 @font-face {
   font-family: "Homepage Work Noto Serif SC";
-  src: url("/assets/fonts/noto-serif-sc/work-regular.ttf") format("truetype");
+  src: url("/assets/fonts/noto-serif-sc/work-regular.ttf?v=20260912") format("truetype");
   font-style: normal;
   font-weight: 400;
   font-display: swap;
@@ -56,7 +56,7 @@ html.dark:has(.paper-homepage, .play-page) {
   --page-hover: #373734;
 }
 body:has(.paper-homepage, .play-page) { background: var(--paper-color); }
-/* Match the MacBook's 2.4s smoothstep color interpolation (3t² - 2t³). */
+/* Let text settle quickly while paper and media surfaces keep their slower fade. */
 html:has(.paper-homepage, .play-page),
 body:has(.paper-homepage, .play-page),
 .paper-homepage,
@@ -67,7 +67,7 @@ body:has(.paper-homepage, .play-page),
 .page-contact,
 .page-contact-subtitle {
   transition: background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
-    color 2400ms cubic-bezier(.333333, 0, .666667, 1);
+    color 360ms ease-out;
 }
 @media (prefers-reduced-motion: reduce) {
   html:has(.paper-homepage, .play-page), body:has(.paper-homepage, .play-page),

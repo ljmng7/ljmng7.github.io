@@ -1,20 +1,15 @@
-import type { CSSProperties } from "react";
 import { IoArrowForward, IoRefresh } from "react-icons/io5";
 import ReactMarkdown, { type Components } from "react-markdown";
+import { useEffect } from "react";
 import remarkGfm from "remark-gfm";
 import type { GitHubRelease } from "../lib/githubReleases";
-import { BlurFade } from "./BlurFade";
-import { HyperText } from "./HyperText";
 
 type ChangelogPageProps = {
   releases: GitHubRelease[];
   isLoading: boolean;
   error: string | null;
   onRetry: () => void;
-};
-
-type ReleaseEntryStyle = CSSProperties & {
-  "--release-index": number;
+  onReady?: () => void;
 };
 
 const markdownComponents: Components = {
@@ -68,14 +63,17 @@ export function ChangelogPage({
   isLoading,
   error,
   onRetry,
+  onReady,
 }: ChangelogPageProps) {
+  useEffect(() => {
+    onReady?.();
+  }, [onReady]);
+
   return (
     <section className="changelog-page" aria-labelledby="changelog-title">
-      <BlurFade className="changelog-intro" delay={0.05} offset={10} blur={false}>
-        <HyperText as="h1" id="changelog-title">
-          Changelog
-        </HyperText>
-      </BlurFade>
+      <div className="changelog-intro">
+        <h1 id="changelog-title">Changelog</h1>
+      </div>
 
       {isLoading && releases.length === 0 ? <LoadingTimeline /> : null}
 
@@ -94,10 +92,9 @@ export function ChangelogPage({
           {releases.map((release, index) => {
             const releaseDate = release.published_at ?? release.created_at;
             const title = release.name?.trim() || `MacMix ${release.tag_name}`;
-            const style: ReleaseEntryStyle = { "--release-index": index };
 
             return (
-              <article className="release-entry" key={release.id} style={style}>
+              <article className="release-entry" key={release.id}>
                 <aside className="release-entry__meta">
                   <time dateTime={releaseDate}>{formatReleaseDate(releaseDate)}</time>
                   <a
@@ -158,6 +155,7 @@ export function ChangelogPage({
           Showing the most recently cached releases while GitHub reconnects.
         </p>
       ) : null}
+
     </section>
   );
 }

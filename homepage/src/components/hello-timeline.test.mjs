@@ -1,6 +1,29 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { helloFrameAt, HELLO_CYCLE_MS, HELLO_INTRO_MS } from "./hello-timeline.ts";
+import { helloFrameAt, scrollHintTimeAt, HELLO_CYCLE_MS, HELLO_INTRO_MS } from "./hello-timeline.ts";
+
+test("scroll hint waits for the first move, then fades with the first hello", () => {
+  assert.equal(scrollHintTimeAt(3399), 3200);
+  assert.equal(scrollHintTimeAt(3400), 0);
+  assert.equal(scrollHintTimeAt(4000), 600);
+  assert.equal(scrollHintTimeAt(5000), 1600);
+  assert.equal(scrollHintTimeAt(5700), 2400);
+  assert.equal(scrollHintTimeAt(5975), 2800);
+});
+
+test("each later language owns one hint cycle with a one-second hold and a hidden writing gap", () => {
+  for (let cycle = 0; cycle < 6; cycle++) {
+    const start = HELLO_INTRO_MS + cycle * HELLO_CYCLE_MS;
+    assert.equal(scrollHintTimeAt(start), 3200);
+    assert.equal(scrollHintTimeAt(start + 1799), 3200);
+    assert.equal(scrollHintTimeAt(start + 1800), 0);
+    assert.equal(scrollHintTimeAt(start + 2400), 600);
+    assert.equal(scrollHintTimeAt(start + 3400), 1600);
+    assert.equal(scrollHintTimeAt(start + 4200), 2400);
+    assert.equal(scrollHintTimeAt(start + 4475), 2800);
+    assert.equal(scrollHintTimeAt(start + HELLO_CYCLE_MS), 3200);
+  }
+});
 
 test("English finishes drawing before the introduction, then fades after both lines appear", () => {
   assert.deepEqual(helloFrameAt(0, 3), { index: 0, iteration: 0, phase: "drawing", introduced: false });

@@ -1,0 +1,424 @@
+.site-shell.site-shell--gradient {
+  --site-header-height: calc(68px + env(safe-area-inset-top, 0px));
+  position: relative;
+  min-height: 100svh;
+  overflow: visible;
+}
+
+/* Match homepage's PageSurface: all page artwork stays in one stacking
+   context below the fixed navigation, including when its filters are idle. */
+.site-shell--gradient > .site-page-surface {
+  position: relative;
+  display: flow-root;
+  z-index: 1;
+  transition:
+    background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
+    color 360ms ease-out;
+}
+
+.site-shell--gradient > .site-page-surface > .page-content {
+  display: flow-root;
+}
+
+/* Keep the scrolling artwork out of a persistent filtered/translated layer.
+   Route transitions still use the existing leaving/entering animation. */
+.site-shell--gradient > .site-page-surface > .page-content--idle {
+  filter: none;
+  transform: none;
+  will-change: auto;
+}
+
+.gradient-navigation {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 30;
+  height: var(--site-header-height);
+  padding-top: env(safe-area-inset-top, 0px);
+  background: linear-gradient(180deg, #344e411a, transparent);
+  color: #fff;
+  --button-glass: rgb(255 255 255 / 14%);
+}
+
+.gradient-navigation .site-header__inner {
+  position: relative;
+  z-index: 1;
+  min-height: 68px;
+  padding-block: 11px;
+}
+
+.gradient-navigation .site-nav {
+  gap: 16px;
+}
+
+.gradient-navigation .download-button--compact {
+  min-height: 44px;
+  border-radius: 14px;
+  font-size: 15px;
+  color: #fff;
+}
+
+.gradient-navigation .download-button--compact {
+  min-width: 154px;
+  padding-inline: 16px;
+  background: var(--button-glass);
+}
+
+.gradient-navigation .download-button--compact[data-store="appstore"] {
+  min-width: 164px;
+}
+
+.gradient-navigation .download-button__content {
+  gap: 8px;
+}
+
+.gradient-navigation .download-button__store-icon {
+  width: 20px;
+  height: 20px;
+  flex-basis: 20px;
+}
+
+.gradient-navigation .download-button:hover .download-button__label {
+  transform: translateX(-28px);
+}
+
+.gradient-navigation .download-button svg {
+  font-size: 20px;
+}
+
+/* Static legal pages only paint the top slice inside their 68px header. The homepage
+   leaves this transparent, so its fixed controls sit directly over the
+   scrollable full-screen artwork just as they do in homepage/. */
+.gradient-navigation--settled {
+  position: fixed;
+  background: transparent;
+}
+
+.gradient-navigation--settled + .site-page-surface {
+  padding-top: var(--site-header-height);
+}
+
+.gradient-navigation__transition {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(ellipse at 82% 22%, #84a98c80 0%, transparent 48%),
+    radial-gradient(ellipse at 12% 18%, #1b4332b3 0%, transparent 48%),
+    radial-gradient(ellipse at 80% 75%, #dad7cd80 0%, transparent 43%),
+    linear-gradient(135deg, #1b4332 8%, #244d3d 27%, #2d6a4f 46%, #52796f 61%, #84a98c 75%, #b7c4aa 88%, #dad7cd 100%);
+  transition: opacity 460ms var(--ease);
+}
+
+.gradient-navigation__transition--visible {
+  opacity: 1;
+}
+
+/* Static legal pages sample the top of a viewport-sized gradient. These values match
+   the full artwork's -12% overscan instead of sizing each layer to 68px. */
+.gradient-navigation__transition {
+  background-size: 124vw 124svh;
+  background-position: -12vw -12svh;
+  background-repeat: no-repeat;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-navigation__transition {
+    transition: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .gradient-navigation .site-header__inner {
+    padding-block: 12px;
+    gap: 16px;
+  }
+}
+
+.gradient-intro {
+  position: sticky;
+  top: calc(var(--site-header-height) - 100vh);
+  top: calc(var(--site-header-height) - 100svh);
+  z-index: 10;
+  height: 100vh;
+  height: 100svh;
+  pointer-events: none;
+}
+
+.gradient-intro__visual {
+  --intro-title-reveal-duration: 1300ms;
+  --intro-title-move-duration: 1200ms;
+  --intro-actions-reveal-duration: 1100ms;
+  --intro-hint-pause: 400ms;
+  --intro-title-move-delay: var(--intro-title-reveal-duration);
+  --intro-actions-reveal-delay: calc(
+    var(--intro-title-reveal-duration) + var(--intro-title-move-duration)
+  );
+  --intro-hint-delay: calc(
+    var(--intro-actions-reveal-delay) + var(--intro-actions-reveal-duration) +
+      var(--intro-hint-pause)
+  );
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100vw;
+  overflow: hidden;
+  isolation: isolate;
+  background: #344e41;
+  pointer-events: none;
+}
+
+.gradient-intro__colors {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse at 82% 22%, #84a98c80 0%, transparent 48%),
+    radial-gradient(ellipse at 12% 18%, #1b4332b3 0%, transparent 48%),
+    radial-gradient(ellipse at 80% 75%, #dad7cd80 0%, transparent 43%),
+    linear-gradient(135deg, #1b4332 8%, #244d3d 27%, #2d6a4f 46%, #52796f 61%, #84a98c 75%, #b7c4aa 88%, #dad7cd 100%);
+  will-change: transform;
+  backface-visibility: hidden;
+  animation: macmix-gradient-drift 36s ease-in-out infinite alternate;
+}
+
+.gradient-intro__colors::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 48%, #2d6a4f99 0%, transparent 48%),
+    radial-gradient(ellipse at 75% 36%, #84a98c66 0%, transparent 48%),
+    radial-gradient(ellipse at 65% 95%, #dad7cd99 0%, transparent 45%);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  animation: macmix-gradient-bloom 24s ease-in-out infinite alternate;
+}
+
+/* Match the homepage's stationary grain and slow color movement. */
+.gradient-intro__visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256' viewBox='0 0 256 256'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Cpath fill='%23808080' filter='url(%23grain)' d='M0 0h256v256H0z'/%3E%3C/svg%3E");
+  background-size: 256px 256px;
+  opacity: .19;
+  mix-blend-mode: soft-light;
+}
+
+@keyframes macmix-gradient-drift {
+  0% { transform: translate3d(-2%, -2%, 0) rotate(-3deg) scale(1.02); }
+  50% { transform: translate3d(2%, 1%, 0) rotate(2deg) scale(1.05); }
+  100% { transform: translate3d(-1%, 3%, 0) rotate(4deg) scale(1.02); }
+}
+
+@keyframes macmix-gradient-bloom {
+  from { opacity: .15; transform: translate3d(-5%, 3%, 0) scale(1.05); }
+  to { opacity: .85; transform: translate3d(5%, -3%, 0) scale(1.15); }
+}
+
+.gradient-intro__content {
+  --intro-actions-height: 60px;
+  --intro-content-gap: 58px;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--intro-content-gap);
+  padding: var(--site-header-height) clamp(24px, 5vw, 76px);
+  color: #fff;
+  text-align: center;
+  text-shadow: 0 2px 18px rgb(57 48 68 / 20%);
+  pointer-events: none;
+}
+
+.gradient-intro__headline {
+  transform: translateY(
+    calc((var(--intro-actions-height) + var(--intro-content-gap)) / 2)
+  );
+  animation: macmix-headline-move var(--intro-title-move-duration)
+    cubic-bezier(.45, 0, .2, 1) var(--intro-title-move-delay) both;
+}
+
+.gradient-intro__heading {
+  margin: 0;
+  font-size: clamp(64px, 6.15vw, 92px);
+  font-weight: 720;
+  line-height: 1.04;
+  letter-spacing: -0.018em;
+  opacity: 0;
+  animation: macmix-headline-in var(--intro-title-reveal-duration)
+    cubic-bezier(.42, 0, .58, 1) both;
+}
+
+.gradient-intro__heading:lang(zh-CN) {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Microsoft YaHei", sans-serif;
+  line-height: 1.15;
+  letter-spacing: -0.028em;
+}
+
+.gradient-intro__heading > span {
+  display: block;
+}
+
+.gradient-intro__en-mobile-line {
+  display: none !important;
+}
+
+.gradient-intro__heading > .gradient-intro__zh-line {
+  position: relative;
+  display: table;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.gradient-intro__zh-punctuation {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: .02em;
+  font: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  pointer-events: none;
+}
+
+@keyframes macmix-headline-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes macmix-headline-move {
+  to { transform: translateY(0); }
+}
+
+.gradient-intro__actions {
+  display: flex;
+  justify-content: center;
+  opacity: 0;
+  animation: macmix-actions-in var(--intro-actions-reveal-duration)
+    cubic-bezier(.42, 0, .58, 1) var(--intro-actions-reveal-delay) both;
+  pointer-events: none;
+}
+
+@keyframes macmix-actions-in {
+  to { opacity: 1; pointer-events: auto; }
+}
+
+.gradient-intro__actions .hero__actions {
+  margin-top: 0;
+}
+
+.gradient-intro__actions .download-button,
+.gradient-intro__actions .download-button:hover {
+  color: #211f1d;
+  background: #fff;
+  box-shadow: none;
+}
+
+.gradient-intro__actions .download-button--glass,
+.gradient-intro__actions .download-button--glass:hover,
+.gradient-intro__actions .download-button--glass:focus-visible {
+  color: #fff;
+  background: rgb(255 255 255 / 24%);
+}
+
+.gradient-intro__scroll-hint {
+  position: absolute;
+  z-index: 1;
+  bottom: calc(var(--site-header-height) + env(safe-area-inset-bottom, 0px));
+  inset-inline: 20px;
+  display: grid;
+  justify-items: center;
+  grid-template-rows: 32px 20px;
+  gap: 12px;
+  color: rgb(255 255 255 / 90%);
+  text-align: center;
+  pointer-events: none;
+}
+
+.gradient-intro__scroll-arrow {
+  width: 32px;
+  height: 32px;
+  animation: macmix-scroll-arrow 4s linear var(--intro-hint-delay) infinite both;
+}
+
+.gradient-intro__scroll-label {
+  font-size: 13px;
+  line-height: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  animation: macmix-scroll-label 4s linear var(--intro-hint-delay) infinite both;
+}
+
+/* 600ms fade-in, 1s hold, simultaneous text exit / arrow movement, 800ms gap. */
+@keyframes macmix-scroll-label {
+  0% { opacity: 0; animation-timing-function: ease-in-out; }
+  15%, 40% { opacity: 1; animation-timing-function: ease-in-out; }
+  50%, 100% { opacity: 0; }
+}
+
+@keyframes macmix-scroll-arrow {
+  0% { opacity: 0; transform: translateY(0); animation-timing-function: ease-in-out; }
+  15% { opacity: 1; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(0); animation-timing-function: cubic-bezier(.65, 0, .35, 1); }
+  60% { opacity: 1; transform: translateY(28px); animation-timing-function: ease-in-out; }
+  80%, 100% { opacity: 0; transform: translateY(28px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gradient-intro__colors, .gradient-intro__colors::after { animation: none; }
+  .gradient-intro__colors::after { opacity: .4; }
+  .gradient-intro__headline { transform: none; animation: none; }
+  .gradient-intro__heading { opacity: 1; animation: none; }
+  .gradient-intro__actions { opacity: 1; animation: none; }
+  .gradient-intro__actions { pointer-events: auto; }
+  .gradient-intro__scroll-arrow, .gradient-intro__scroll-label { animation: none; }
+}
+
+@media (max-width: 640px) {
+  .gradient-intro__content {
+    --intro-actions-height: 133px;
+    --intro-content-gap: 44px;
+    padding-inline: 18px;
+  }
+
+  .gradient-intro__heading {
+    font-size: clamp(36px, 10.8vw, 46px);
+    line-height: 1.04;
+    letter-spacing: -0.014em;
+  }
+
+  .gradient-intro__heading > .gradient-intro__en-desktop-line {
+    display: none;
+  }
+
+  .gradient-intro__en-mobile-line {
+    display: block !important;
+  }
+
+  .gradient-intro__heading > span {
+    white-space: nowrap;
+  }
+
+}
+
+/* Use the homepage's compositor pin on mobile Safari. */
+@supports (animation-timeline: scroll()) {
+  @media (max-width: 700px) {
+    .gradient-intro {
+      position: relative;
+      top: auto;
+      animation: macmix-hero-pin 1s linear both;
+      animation-timeline: scroll(root block);
+      animation-range: var(--hero-pin-start, 100svh) var(--hero-pin-end, 200svh);
+    }
+  }
+}
+
+@keyframes macmix-hero-pin {
+  from { transform: translateY(0); }
+  to { transform: translateY(var(--hero-pin-travel, 0px)); }
+}

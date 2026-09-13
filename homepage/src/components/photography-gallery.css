@@ -2,16 +2,16 @@
 .photo-heading { padding: 0 24px; text-align: center; }
 .photo-heading .page-contact-title { margin-bottom: 18px; }
 .page-photography:lang(zh) .page-contact-title { font-family: "Homepage Work Xiangcui", "Homepage Exposure", serif; letter-spacing: -.015em; }
-.photo-viewport { margin-top: 26px; height: 525px; width: 100%; overflow: hidden; touch-action: pan-y pinch-zoom; cursor: grab; user-select: none; -webkit-user-select: none; }
-.photo-viewport[data-dragging] { cursor: grabbing; }
+.photo-viewport { margin-top: 26px; height: 525px; width: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-inline: contain; touch-action: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; will-change: scroll-position; }
+.photo-viewport::-webkit-scrollbar { display: none; }
 .page-photography[data-keyboard="true"] .photo-viewport:focus-visible { outline: 1px solid var(--page-secondary); outline-offset: -5px; }
-.photo-track { display: flex; width: max-content; will-change: transform; }
+.photo-track { display: flex; width: max-content; min-width: 100%; }
 .photo-cycle { position: relative; display: flex; flex: 0 0 auto; height: 510px; }
-.photo-rope { position: absolute; top: 0; left: 0; width: 100%; height: 110px; overflow: visible; fill: none; stroke: #8a8071; stroke-width: 1.5; filter: drop-shadow(0 2px 1px #0002); }
+.photo-rope { position: absolute; top: 0; left: 0; width: 100%; height: 110px; overflow: visible; fill: none; stroke: #8a8071; stroke-width: 1.5; filter: drop-shadow(0 2px 1px #0002); transform: translateZ(0); }
 .photo-rope path { vector-effect: non-scaling-stroke; }
 .photo-print { position: relative; flex: 0 0 380px; width: 380px; margin: 0; padding-top: var(--hang-y); display: flex; align-items: flex-start; justify-content: center; }
-.photo-paper { position: relative; padding: 10px 10px 0; background: #f5f3ec; color: #595950; box-shadow: 1px 3px 5px #0002, 3px 14px 22px -10px #0004; transform: rotate(var(--tilt)); transform-origin: 50% -10px; }
-.photo-paper img { display: block; object-fit: cover; pointer-events: none; background: #d7d4ca; }
+.photo-paper { position: relative; padding: 10px 10px 0; background: #f5f3ec; color: #595950; box-shadow: 1px 3px 5px #0002, 3px 14px 22px -10px #0004; transform: translate3d(0, 0, 0) rotate(var(--tilt)); transform-origin: 50% -10px; will-change: transform; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+.photo-paper img { display: block; object-fit: cover; pointer-events: none; background: #d7d4ca; transform: translateZ(0); backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 .photo-print--portrait img { width: 252px; height: 336px; }
 .photo-print--landscape img { width: 324px; height: 243px; }
 .photo-paper figcaption { display: flex; justify-content: space-between; align-items: center; gap: 10px; min-height: 38px; font-size: 11px; letter-spacing: .04em; }
@@ -32,7 +32,6 @@
 
 .photo-open { display: block; padding: 0; border: 0; background: transparent; color: inherit; cursor: zoom-in; }
 .page-photography[data-keyboard="true"] .photo-open:focus-visible { outline: 2px solid #777; outline-offset: 4px; }
-.photo-viewport[data-dragging] .photo-open { cursor: grabbing; }
 .photo-lightbox { position: fixed; inset: 0; width: 100%; height: 100%; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: max(60px, env(safe-area-inset-top)) 24px max(24px, env(safe-area-inset-bottom)); border: 0; background: transparent; color: #fff; overflow: auto; font-family: var(--page-font-body); }
 .photo-lightbox[open] { display: grid; place-items: center; }
 .photo-lightbox::backdrop { background: transparent; }

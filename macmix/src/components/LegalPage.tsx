@@ -1,4 +1,3 @@
-import { BlurFade } from "./BlurFade";
 
 type LegalDocument = "privacy-policy" | "terms-of-use";
 
@@ -368,13 +367,13 @@ export function LegalPage({ document }: LegalPageProps) {
 
   return (
     <section className="changelog-page legal-page" aria-labelledby="legal-page-title">
-      <BlurFade className="changelog-intro" delay={0.05} offset={10} blur={false}>
+      <div className="changelog-intro">
         <h1 id="legal-page-title">{title}</h1>
-      </BlurFade>
+      </div>
 
-      <BlurFade className="legal-document release-entry__markdown" delay={0.12} offset={14}>
+      <div className="legal-document release-entry__markdown">
         {isPrivacyPolicy ? <PrivacyPolicy /> : <TermsOfUse />}
-      </BlurFade>
+      </div>
     </section>
   );
 }
