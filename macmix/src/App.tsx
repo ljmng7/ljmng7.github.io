@@ -292,7 +292,7 @@ function HomeFooter() {
         aria-label="Visit Jazmín's homepage"
         lang="en"
       >
-        <span className="home-footer__credit-prefix">by </span>Jazmín
+        <span className="home-footer__credit-wordmark" aria-hidden="true" />
       </a>
     </footer>
   );

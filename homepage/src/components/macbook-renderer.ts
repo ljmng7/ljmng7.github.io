@@ -66,7 +66,6 @@ export function createMacBookRenderer(host: HTMLDivElement, track: HTMLElement, 
   glow.lookAt(screenCenter.clone().add(screenNormal));
   pivot.attach(glow); pivot.rotation.x = 0;
   const resources = new Set<THREE.Texture>();
-  let screenMesh: THREE.Mesh | null = null;
   let painter: ScreenPainter | null = null;
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
@@ -74,11 +73,6 @@ export function createMacBookRenderer(host: HTMLDivElement, track: HTMLElement, 
     const rect = host.getBoundingClientRect();
     pointer.set((event.clientX - rect.left) / rect.width * 2 - 1, -(event.clientY - rect.top) / rect.height * 2 + 1);
     raycaster.setFromCamera(pointer, camera);
-  };
-  const hitsScreen = (event: MouseEvent) => {
-    if (!screenMesh) return false;
-    setRay(event);
-    return raycaster.intersectObject(screenMesh, false).length > 0;
   };
   // The sky controls are visually behind WebGL. Forward only unoccluded sky
   // clicks, so the transparent canvas does not block them or make the sun
@@ -95,13 +89,11 @@ export function createMacBookRenderer(host: HTMLDivElement, track: HTMLElement, 
     });
     return obscured ? null : button;
   };
-  // Clicking the display (or anywhere once the lid is fully open) unlocks it.
+  // Preserve sticker and celestial interactions without treating the display as a lock screen.
   const click = (event: MouseEvent) => {
     if (stickerClick || stickers.consumeDrag()) { stickerClick = false; return; }
     const celestial = celestialAt(event);
     if (celestial) { celestial.click(); return; }
-    if (!painter?.locked || !(lastActive || hitsScreen(event))) return;
-    painter.unlock(); host.style.cursor = "";
   };
   const hover = (event: PointerEvent) => {
     if (capturedPointer !== null && capturedPointer !== event.pointerId) return;
@@ -109,7 +101,7 @@ export function createMacBookRenderer(host: HTMLDivElement, track: HTMLElement, 
     if (stickers.busy) stickers.move(raycaster);
     const over = stickers.hover(raycaster);
     const overCelestial = !stickers.busy && celestialAt(event);
-    host.style.cursor = stickers.busy ? "grabbing" : over ? "grab" : overCelestial ? "pointer" : painter?.locked && (lastActive || hitsScreen(event)) ? "pointer" : "";
+    host.style.cursor = stickers.busy ? "grabbing" : over ? "grab" : overCelestial ? "pointer" : "";
     schedule();
   };
   const down = (event: PointerEvent) => {
@@ -247,12 +239,11 @@ export function createMacBookRenderer(host: HTMLDivElement, track: HTMLElement, 
     model.traverse(soften); lid.traverse(soften); applyTheme();
     const screen = lid.getObjectByName("tfTbkkzhxqpKRgC");
     if (screen instanceof THREE.Mesh) {
-      screenMesh = screen;
       const desktop = document.createElement('canvas');
       const texture = new THREE.CanvasTexture(desktop);
       texture.colorSpace = THREE.SRGBColorSpace; texture.flipY = false; resources.add(texture);
       texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
-      // The display shows a lock screen until clicked, then just the wallpaper.
+      // The display retains the lock-screen artwork without a click-to-unlock state.
       painter = createScreenPainter(desktop, () => { texture.needsUpdate = true; schedule(); }, () => { if (!disposed) callbacks.onError(); }, (r, g, b) => {
         glow.color.setRGB(r, g, b, THREE.SRGBColorSpace); schedule();
       });

@@ -10,7 +10,9 @@ export function PageNavigation({ play = false, hidden = false }: { play?: boolea
   const chinese = language === "zh";
   const page = chinese ? "个人主页" : "Personal page";
   return <nav className="page-navigation" data-play={play || undefined} data-hidden={hidden || undefined} aria-label={page}>
-    <a className="page-identity" href="/" lang="en" aria-label={`${profile.name} — ${page}`}>{profile.name}</a>
+    <a className="page-identity" href="/" lang="en" aria-label={`${profile.name} — ${page}`}>
+      <span className="jazmin-wordmark" aria-hidden="true" />
+    </a>
     <div className="page-navigation-links" lang={chinese ? "zh-CN" : "en"}>
       <a className="page-navigation-item" href="/#work">{chinese ? "作品" : "WORK"}</a>
       <a className="page-navigation-item page-navigation-play" href="/play" aria-current={play ? "page" : undefined}>{chinese ? "乐园" : "PLAY"}</a>

@@ -10,7 +10,7 @@ const DARK_WALLPAPER = "/assets/desktop/wallpaper_dark.jpg";
 const AVATAR = "/assets/avatar.png";
 const FONT = '-apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", "Helvetica Neue", Arial, sans-serif';
 
-export interface ScreenPainter { readonly locked: boolean; unlock(): void; dispose(): void }
+export interface ScreenPainter { readonly locked: boolean; dispose(): void }
 
 export function createScreenPainter(canvas: HTMLCanvasElement, onPaint: () => void, onError: () => void, onWallpaperColor: (r: number, g: number, b: number) => void): ScreenPainter {
   const W = SCREEN_WIDTH, H = SCREEN_HEIGHT;
@@ -112,8 +112,6 @@ export function createScreenPainter(canvas: HTMLCanvasElement, onPaint: () => vo
     lctx.restore();
     lctx.shadowColor = "rgba(0,0,0,.4)"; lctx.shadowBlur = 12; lctx.shadowOffsetY = 2;
     lctx.fillStyle = "#fff"; lctx.font = `600 24px ${FONT}`; lctx.fillText("Jazmín", cx, 1064);
-    lctx.fillStyle = "rgba(255,255,255,.8)"; lctx.font = `400 17px ${FONT}`;
-    lctx.fillText(zh() ? "点击屏幕继续" : "Click the screen to continue", cx, 1100);
     lctx.shadowColor = "transparent";
   };
   const compose = () => {
@@ -169,18 +167,6 @@ export function createScreenPainter(canvas: HTMLCanvasElement, onPaint: () => vo
   document.addEventListener("visibilitychange", visibility);
   return {
     get locked() { return locked; },
-    unlock() {
-      if (!locked || disposed) return;
-      locked = false; clearTimeout(timer);
-      if (matchMedia("(prefers-reduced-motion: reduce)").matches) { fade = 0; compose(); return; }
-      const start = performance.now();
-      const step = (now: number) => {
-        fade = Math.max(0, 1 - (now - start) / 450);
-        compose();
-        if (fade > 0 && !disposed) frame = requestAnimationFrame(step);
-      };
-      frame = requestAnimationFrame(step);
-    },
     dispose() {
       disposed = true; themeObserver.disconnect(); clearTimeout(timer); cancelAnimationFrame(frame);
       document.removeEventListener("visibilitychange", visibility);
