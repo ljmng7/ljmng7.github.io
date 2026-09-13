@@ -25,6 +25,7 @@ export function MacMixWorkVideos() {
     className="page-work-video"
     style={{ opacity: visible === index ? 1 : 0 }}
     src={`${import.meta.env.BASE_URL}assets/macmix/work/${clip}`}
+    poster={`${import.meta.env.BASE_URL}assets/macmix/work/${clip.replace(/\.mp4$/, ".jpg")}`}
     preload="auto"
     autoPlay={index === active}
     muted

@@ -260,6 +260,7 @@ export function FeatureCarousel() {
               aria-roledescription="slide" aria-label={`${i + 1} / ${slides.length}`}>
               <div className="feature-carousel__media">
                 {slide.media.type === "video" ? <video ref={node => { videos.current[i] = node; }} src={slide.media.src}
+                  poster={slide.media.src.replace(/\.mp4$/, ".jpg")}
                   aria-label={slide.media.alt} muted playsInline preload="auto" controls={false}
                   tabIndex={-1} x-webkit-airplay="deny" disablePictureInPicture disableRemotePlayback
                   controlsList="nodownload noremoteplayback nofullscreen" />
