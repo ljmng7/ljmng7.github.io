@@ -687,13 +687,9 @@ img.header-link__icon {
 }
 
 .home-footer {
-  --footer-wordmark-gap-compensation: 0px;
   position: relative;
   width: 100%;
-  min-height: calc(
-    clamp(340px, calc(12.21vw + 248px), 446px) +
-      var(--footer-wordmark-gap-compensation)
-  );
+  min-height: clamp(340px, calc(12.21vw + 248px), 446px);
   padding: 36px clamp(28px, 5vw, 76px) 0;
   display: flex;
   justify-content: flex-start;
@@ -824,7 +820,8 @@ img.header-link__icon {
   width: max-content;
   padding-inline: 0.065em;
   color: var(--ink);
-  font-size: clamp(118px, 15.5vw, 250px);
+  /* Reserve both side controls and breathing room before scaling the wordmark. */
+  font-size: min(250px, 15.5vw, calc((100vw - 400px) * 0.26));
   font-weight: 760;
   letter-spacing: -0.03em;
   line-height: 0.76;
@@ -884,27 +881,6 @@ img.header-link__icon {
     );
   }
 
-  .home-footer__wordmark {
-    font-size: min(300px, calc((100vw - 16px) * 0.2745));
-  }
-}
-
-@media (min-width: 641px) and (max-width: 756px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(18.117vw - 95.299px);
-  }
-}
-
-@media (min-width: 757px) and (max-width: 1109px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(5.907vw - 2.899px);
-  }
-}
-
-@media (min-width: 1110px) and (max-width: 1120px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(198px - 12.21vw);
-  }
 }
 
 @media (min-width: 768px) and (max-width: 980px) and (orientation: portrait) {
@@ -1115,8 +1091,7 @@ img.header-link__icon {
   }
 
   .home-footer__wordmark {
-    bottom: -0.1em;
-    font-size: clamp(78px, 20vw, 108px);
+    display: none;
   }
 
   .home-footer__credit {

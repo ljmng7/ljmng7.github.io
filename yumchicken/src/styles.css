@@ -338,13 +338,9 @@ a:focus-visible {
 }
 
 .home-footer {
-  --footer-wordmark-gap-compensation: 0px;
   position: relative;
   width: 100%;
-  min-height: calc(
-    clamp(340px, calc(12.21vw + 248px), 446px) +
-      var(--footer-wordmark-gap-compensation)
-  );
+  min-height: clamp(340px, calc(12.21vw + 248px), 446px);
   padding: 36px clamp(28px, 5vw, 76px) 0;
   display: flex;
   justify-content: flex-start;
@@ -492,7 +488,8 @@ a:focus-visible {
   color: var(--ink);
   /* YumChicken has more glyphs than MacMix. Keep its rendered wordmark on the
      same visual width while softening the weight for the food brand. */
-  font-size: clamp(76px, 9.63vw, 160px);
+  /* Reserve both side controls and breathing room before scaling the wordmark. */
+  font-size: min(160px, 9.63vw, calc((100vw - 400px) * 0.161));
   font-weight: 650;
   letter-spacing: -0.03em;
   line-height: 0.76;
@@ -539,31 +536,6 @@ a:focus-visible {
     gap: 22px;
   }
 
-}
-
-@media (min-width: 641px) and (max-width: 1120px) {
-
-  .home-footer__wordmark {
-    font-size: min(186px, calc((100vw - 16px) * 0.1705));
-  }
-}
-
-@media (min-width: 641px) and (max-width: 756px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(18.117vw - 95.299px);
-  }
-}
-
-@media (min-width: 757px) and (max-width: 1109px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(5.907vw - 2.899px);
-  }
-}
-
-@media (min-width: 1110px) and (max-width: 1120px) {
-  .home-footer {
-    --footer-wordmark-gap-compensation: calc(198px - 12.21vw);
-  }
 }
 
 @media (min-width: 768px) and (max-width: 980px) and (orientation: portrait) {
@@ -710,8 +682,7 @@ a:focus-visible {
   }
 
   .home-footer__wordmark {
-    bottom: -0.1em;
-    font-size: clamp(49px, 12.8vw, 69px);
+    display: none;
   }
 
   .home-footer__credit {
