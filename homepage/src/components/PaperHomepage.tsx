@@ -99,9 +99,9 @@ export function PaperHomepage() {
       <div className="page-contact-links">
         <WorkLink href="https://github.com/ljmng7">GitHub</WorkLink>
         <WorkLink href="https://x.com/jazminli57">Twitter / 𝕏</WorkLink>
-        <WorkLink href="https://www.threads.com/@lucid.jasmine">Threads</WorkLink>
+        <WorkLink href="https://www.threads.com/@jazminli57">Threads</WorkLink>
         <WorkLink href="https://www.xiaohongshu.com/user/profile/66a6d5f2000000001d020f1b">{messages.contact.rednote}</WorkLink>
-        <WorkLink href="https://www.instagram.com/lucid.jasmine/">Instagram</WorkLink>
+        <WorkLink href="https://www.instagram.com/jazminli57/">Instagram</WorkLink>
         <WorkLink href="mailto:jasmine@jazminli.com">{messages.contact.email}</WorkLink>
       </div>
     </section>

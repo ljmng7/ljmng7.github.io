@@ -49,7 +49,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "Threads",
-    href: "https://www.threads.com/@lucid.jasmine",
+    href: "https://www.threads.com/@jazminli57",
     icon: "threads.svg",
   },
   {
@@ -59,7 +59,7 @@ const SOCIAL_LINKS = [
   },
   {
     label: "Instagram",
-    href: "https://www.instagram.com/lucid.jasmine/",
+    href: "https://www.instagram.com/jazminli57/",
     icon: "instagram-black.svg",
   },
   {
