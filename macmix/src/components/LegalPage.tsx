@@ -176,7 +176,7 @@ function PrivacyPolicy() {
         This policy may be updated when MacMix features, service providers, or legal
         requirements change. The date at the top of this page will identify the latest
         version. Questions or privacy requests can be sent to{" "}
-        <a href="mailto:jazmin_li@icloud.com">jazmin_li@icloud.com</a>.
+        <a href="mailto:jasmine@jazminli.com">jasmine@jazminli.com</a>.
       </p>
     </>
   );
@@ -355,7 +355,7 @@ function TermsOfUse() {
       </p>
       <p>
         Questions about MacMix or these terms can be sent to{" "}
-        <a href="mailto:jazmin_li@icloud.com">jazmin_li@icloud.com</a>.
+        <a href="mailto:jasmine@jazminli.com">jasmine@jazminli.com</a>.
       </p>
     </>
   );
