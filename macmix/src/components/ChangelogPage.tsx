@@ -33,7 +33,10 @@ function normalizeReleaseBody(body: string | null) {
     return "Release details are available on GitHub.";
   }
 
-  const lines = body.replace(/\r\n/g, "\n").trim().split("\n");
+  // GitHub release translations are grouped in HTML disclosure blocks.
+  // The website keeps the English Markdown outside those blocks.
+  const lines = body.replace(/<details\b[^>]*>[\s\S]*?<\/details\s*>/gi, "")
+    .replace(/\r\n/g, "\n").trim().split("\n");
   if (/^#{0,3}\s*MacMix\b.*\brelease\s*$/i.test(lines[0]?.trim() ?? "")) {
     lines.shift();
   }

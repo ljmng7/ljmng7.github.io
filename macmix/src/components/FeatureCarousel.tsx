@@ -11,7 +11,8 @@ export type FeatureSlide = {
 
 const FEATURES = [
   { file: "1-mix.mp4", en: "Every app. Its own volume.", zh: "每个 App，独立音量。" },
-  { file: "2-quickMute.mp4", en: "One click. Instant quiet.", zh: "一键静音，即刻安静。" },
+  { file: "2-eq.mp4", en: "Every app. Your own sound.", zh: "每个 App，专属音色。" },
+  { file: "2-multiOutput.mp4", en: "One app. Multiple outputs.", zh: "一个 App，多路输出。" },
   { file: "3-nowPlaying.mp4", en: "Your music. At your fingertips.", zh: "音乐播放，随手掌控。" },
   { file: "4-proControl.mp4", en: "Pro controls. Effortless.", zh: "Pro 级控制，易如反掌。" },
   { file: "5-scene.mp4", en: "Sound presets. For every scene.", zh: "不同场景，一键切换。" },

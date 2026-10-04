@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 
-const clips = ["1-mix.mp4", "2-quickMute.mp4", "3-nowPlaying.mp4", "4-proControl.mp4", "5-scene.mp4"];
+const clips = ["1-mix.mp4", "2-eq.mp4", "2-multiOutput.mp4", "3-nowPlaying.mp4", "4-proControl.mp4", "5-scene.mp4"];
 
 export function MacMixWorkVideos() {
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
