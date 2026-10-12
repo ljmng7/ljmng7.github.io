@@ -38,7 +38,7 @@ function parseReleases(value: unknown): GitHubRelease[] {
 
   return value
     .filter(isGitHubRelease)
-    .filter((release) => !release.draft)
+    .filter((release) => !release.draft && !release.prerelease)
     .sort((a, b) => {
       const aDate = a.published_at ?? a.created_at;
       const bDate = b.published_at ?? b.created_at;

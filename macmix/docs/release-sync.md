@@ -44,6 +44,7 @@ install the same workflow and Secret in `ljmng7/MacMix`. The `workflow_run` trig
 there is harmless when that repository has no matching release workflow.
 
 App commits trigger a rebuild; only published GitHub Release bodies become notes.
+Pre-releases (Beta builds) are excluded from the changelog and the version badge.
 The hook always builds the website repository's production branch, not App source.
 
 ## Activation and validation

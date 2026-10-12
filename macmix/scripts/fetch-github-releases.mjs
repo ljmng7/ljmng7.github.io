@@ -45,7 +45,8 @@ export const normalizeReleases = (value) => {
 
   return value
     .map(normalizeRelease)
-    .filter((release) => !release.draft)
+    // Beta builds are GitHub pre-releases; the website lists stable releases only.
+    .filter((release) => !release.draft && !release.prerelease)
     .sort((a, b) => {
       const aDate = a.published_at ?? a.created_at;
       const bDate = b.published_at ?? b.created_at;

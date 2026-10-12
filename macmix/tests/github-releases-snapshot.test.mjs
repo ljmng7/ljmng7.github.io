@@ -18,11 +18,12 @@ const release = (overrides = {}) => ({
   ...overrides,
 });
 
-test("normalizes, filters drafts, and sorts releases newest first", () => {
+test("normalizes, filters drafts and pre-releases, and sorts releases newest first", () => {
   const result = normalizeReleases([
     release(),
     release({ id: 2, tag_name: "v1.1.0", published_at: "2026-02-01T00:00:00Z" }),
     release({ id: 3, tag_name: "v2.0.0", draft: true }),
+    release({ id: 4, tag_name: "v2.3.0-beta.1", published_at: "2026-03-01T00:00:00Z", prerelease: true }),
   ]);
 
   assert.deepEqual(
