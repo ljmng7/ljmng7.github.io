@@ -30,7 +30,7 @@ import {
 } from "./lib/sitePaths";
 
 const DOWNLOAD_URL =
-  "https://github.com/ljmng7/MacMix/releases/latest/download/MacMix.dmg";
+  "https://download.jazminli.com/MacMix/MacMix.dmg";
 const STUDIO_CHECKOUT_URL =
   "https://checkout.dodopayments.com/buy/pdt_0NmJ2vOqulR07tfZqwKtU?quantity=1";
 const ChangelogPage = lazy(() => import("./components/ChangelogPage"));
