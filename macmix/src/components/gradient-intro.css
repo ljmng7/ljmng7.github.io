@@ -340,6 +340,12 @@
   to { transform: translateY(0); }
 }
 
+/* The scroll hint is a later sibling at the same level, so an open Download
+   menu needs its content layer lifted above it. */
+.gradient-intro__content:has(.download-menu--open) {
+  z-index: 2;
+}
+
 .gradient-intro__actions {
   display: flex;
   justify-content: center;
