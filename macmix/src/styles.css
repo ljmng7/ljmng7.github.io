@@ -482,6 +482,165 @@ img.header-link__icon {
   box-shadow: none;
 }
 
+/* Every Download control opens a menu of the three installers. The trigger
+   keeps its original look and hover animation; the panel hangs below it with
+   an invisible 8px bridge so the pointer can travel into it. The panel is
+   opaque rather than blurred so the header never nests backdrop filters. */
+.download-menu {
+  position: relative;
+  display: inline-flex;
+}
+
+.download-menu__panel {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  z-index: 40;
+  min-width: max(100%, 236px);
+  padding-top: 8px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, -6px) scale(0.98);
+  transform-origin: top center;
+  transition:
+    opacity 220ms var(--ease),
+    transform 320ms var(--ease),
+    visibility 0s linear 320ms;
+}
+
+.download-menu--compact .download-menu__panel {
+  right: 0;
+  left: auto;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top right;
+}
+
+.download-menu--open .download-menu__panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0) scale(1);
+  transition:
+    opacity 220ms var(--ease),
+    transform 320ms var(--ease),
+    visibility 0s;
+}
+
+.download-menu--compact.download-menu--open .download-menu__panel {
+  transform: translateY(0) scale(1);
+}
+
+.download-menu__list {
+  display: grid;
+  gap: 2px;
+  padding: 6px;
+  border: 1px solid rgb(33 31 29 / 8%);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow:
+    0 18px 40px rgb(16 0 43 / 16%),
+    0 2px 8px rgb(16 0 43 / 8%);
+}
+
+.download-menu__item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 54px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  color: #211f1d;
+  text-align: left;
+  white-space: nowrap;
+  transition: background-color 220ms var(--ease);
+}
+
+.download-menu__item:hover,
+.download-menu__item:focus-visible {
+  background: rgb(155 132 109 / 12%);
+}
+
+.download-menu__item-text {
+  display: grid;
+  gap: 2px;
+  transition:
+    opacity 260ms var(--ease),
+    filter 360ms var(--ease);
+}
+
+.download-menu__item-name {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.download-menu__item-detail {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgb(33 31 29 / 56%);
+}
+
+.download-menu__item--successful .download-menu__item-text {
+  opacity: 0;
+  filter: blur(7px);
+}
+
+.download-menu__item-success {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 740;
+  letter-spacing: -0.015em;
+  animation: download-success-in 480ms var(--ease) both;
+}
+
+:root.dark .download-menu__list {
+  border-color: rgb(255 246 237 / 10%);
+  background: #2a2826;
+  box-shadow:
+    0 18px 40px rgb(0 0 0 / 40%),
+    0 2px 8px rgb(0 0 0 / 24%);
+}
+
+:root.dark .download-menu__item {
+  color: #f4f0e9;
+}
+
+:root.dark .download-menu__item:hover,
+:root.dark .download-menu__item:focus-visible {
+  background: rgb(255 246 237 / 8%);
+}
+
+:root.dark .download-menu__item-detail {
+  color: rgb(244 240 233 / 56%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .download-menu__panel,
+  .download-menu--open .download-menu__panel,
+  .download-menu--compact .download-menu__panel,
+  .download-menu--compact.download-menu--open .download-menu__panel {
+    transition: opacity 120ms linear, visibility 0s;
+  }
+
+  .download-menu__panel {
+    transform: translate(-50%, 0);
+  }
+
+  .download-menu--open .download-menu__panel {
+    transform: translate(-50%, 0);
+  }
+
+  .download-menu--compact .download-menu__panel,
+  .download-menu--compact.download-menu--open .download-menu__panel {
+    transform: none;
+  }
+}
+
 .hero__actions {
   --cta-width: 230px;
   --cta-height: 60px;
@@ -501,7 +660,7 @@ img.header-link__icon {
 
 .hero__actions[data-language="zh"] .download-button,
 .hero__actions[data-language="zh"] .studio-button,
-.home-footer__content > .download-button[data-language="zh"] {
+.home-footer__content > .download-menu > .download-button[data-language="zh"] {
   font-size: 19px;
 }
 
@@ -520,9 +679,11 @@ img.header-link__icon {
   height: var(--cta-height);
 }
 
-.hero__download-wrap > .download-button {
+.hero__download-wrap > .download-menu {
   position: relative;
   z-index: 2;
+  width: 100%;
+  height: 100%;
 }
 
 .download-callout {
@@ -706,20 +867,24 @@ img.header-link__icon {
   gap: 80px;
 }
 
-.home-footer__content > .download-button {
+.home-footer__content > .download-menu {
   width: 230px;
+}
+
+.home-footer__content > .download-menu:has(.download-button[data-language="zh"]) {
+  width: 210px;
+}
+
+.home-footer__content > .download-menu > .download-button {
+  width: 100%;
   min-height: 60px;
   transition:
     background-color 800ms cubic-bezier(.333333, 0, .666667, 1),
     color 360ms ease-out;
 }
 
-.home-footer__content > .download-button[data-language="zh"] {
-  width: 210px;
-}
-
-.home-footer__content > .download-button,
-.home-footer__content > .download-button:hover {
+.home-footer__content > .download-menu > .download-button,
+.home-footer__content > .download-menu > .download-button:hover {
   color: #fff;
   background: #10002b;
 }
@@ -988,11 +1153,6 @@ img.header-link__icon {
     border-radius: 15px;
   }
 
-  .download-button--compact.download-button--successful {
-    min-width: 128px;
-    padding-inline: 16px;
-  }
-
   .download-button--compact .download-button__label,
   .download-button--compact .download-button__arrow {
     display: none;
@@ -1039,12 +1199,11 @@ img.header-link__icon {
     gap: 56px;
   }
 
-  .home-footer__content > .download-button {
+  .home-footer__content > .download-menu {
     width: min(100%, 260px);
-    min-height: 60px;
   }
 
-  .home-footer__content > .download-button[data-language="zh"] {
+  .home-footer__content > .download-menu:has(.download-button[data-language="zh"]) {
     width: min(100%, 230px);
   }
 
@@ -1682,8 +1841,8 @@ img.header-link__icon {
     box-shadow: none;
 }
 
-:root.dark .home-footer__content > .download-button,
-:root.dark .home-footer__content > .download-button:hover {
+:root.dark .home-footer__content > .download-menu > .download-button,
+:root.dark .home-footer__content > .download-menu > .download-button:hover {
     color: #10002b;
     background: #e0aaff;
 }

@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type FocusEvent,
   type MouseEvent,
 } from "react";
 import { useReducedMotion } from "motion/react";
@@ -29,8 +30,29 @@ import {
   type AppRoute,
 } from "./lib/sitePaths";
 
-const DOWNLOAD_URL =
-  "https://download.jazminli.com/MacMix/MacMix.dmg";
+const DOWNLOAD_BASE_URL = "https://download.jazminli.com/MacMix/";
+const DOWNLOAD_VARIANTS = [
+  {
+    id: "universal",
+    name: "Universal",
+    file: "MacMix.dmg",
+    detail: { en: "All Macs", zh: "适用于所有 Mac" },
+  },
+  {
+    id: "apple-silicon",
+    name: "Apple Silicon",
+    file: "MacMix-Apple-Silicon.dmg",
+    detail: { en: "M-series chips", zh: "M 系列芯片" },
+  },
+  {
+    id: "intel",
+    name: "Intel",
+    file: "MacMix-Intel.dmg",
+    detail: { en: "Intel processors", zh: "Intel 处理器" },
+  },
+] as const;
+const DOWNLOAD_URL = DOWNLOAD_BASE_URL + DOWNLOAD_VARIANTS[0].file;
+const DOWNLOAD_MENU_CLOSE_DELAY = 160;
 const STUDIO_CHECKOUT_URL =
   "https://checkout.dodopayments.com/buy/pdt_0NmJ2vOqulR07tfZqwKtU?quantity=1";
 const ChangelogPage = lazy(() => import("./components/ChangelogPage"));
@@ -189,51 +211,133 @@ function ChangelogRouteLink({
 function DownloadButton({ compact = false }: { compact?: boolean }) {
   const { language } = useLanguage();
   const chinese = language === "zh";
-  const [isSuccessful, setIsSuccessful] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [successfulVariants, setSuccessfulVariants] = useState<ReadonlySet<string>>(
+    () => new Set(),
+  );
+  const menuRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLAnchorElement>(null);
+  const closeTimerRef = useRef<number | null>(null);
 
-  const handleDownloadClick = () => {
-    if (isSuccessful) {
+  const cancelClose = () => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  };
+
+  const closeMenu = () => {
+    cancelClose();
+    setIsOpen(false);
+    setIsPinned(false);
+  };
+
+  useEffect(() => cancelClose, []);
+
+  // A click or tap pins the menu open; dismiss it from anywhere else.
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    const handlePointerDown = (event: PointerEvent) => {
+      if (!menuRef.current?.contains(event.target as Node)) {
+        closeMenu();
+      }
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMenu();
+        triggerRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  const canHover = () =>
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  const handlePointerEnter = () => {
+    if (!canHover()) {
+      return;
+    }
+    cancelClose();
+    setIsOpen(true);
+  };
+
+  const handlePointerLeave = () => {
+    if (!canHover() || isPinned) {
+      return;
+    }
+    cancelClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      closeTimerRef.current = null;
+      setIsOpen(false);
+    }, DOWNLOAD_MENU_CLOSE_DELAY);
+  };
+
+  const handleTriggerClick = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    cancelClose();
+    if (isOpen && isPinned) {
+      closeMenu();
+      return;
+    }
+    setIsOpen(true);
+    setIsPinned(true);
+  };
+
+  const handleBlur = (event: FocusEvent<HTMLDivElement>) => {
+    if (!menuRef.current?.contains(event.relatedTarget as Node | null)) {
+      closeMenu();
+    }
+  };
+
+  const handleVariantClick = (variantId: string) => {
+    if (successfulVariants.has(variantId)) {
       return;
     }
 
     window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => setIsSuccessful(true));
+      window.requestAnimationFrame(() =>
+        setSuccessfulVariants((current) => new Set(current).add(variantId)),
+      );
     });
   };
 
   return (
-    <ConfettiButton
+    <div
+      ref={menuRef}
       className={[
-        "download-button",
-        compact && "download-button--compact",
-        isSuccessful && "download-button--successful",
+        "download-menu",
+        compact && "download-menu--compact",
+        isOpen && "download-menu--open",
       ]
         .filter(Boolean)
         .join(" ")}
-      data-language={language}
-      href={DOWNLOAD_URL}
-      download="MacMix.dmg"
-      confettiDisabled={isSuccessful}
-      effect={compact ? "fireworks" : "burst"}
-      onClick={handleDownloadClick}
-      options={{
-        particleCount: 50,
-        spread: 45,
-        startVelocity: 45,
-        decay: 0.9,
-        gravity: 1,
-        ticks: 200,
-        scalar: 0.9,
-        zIndex: 100,
-        disableForReducedMotion: true,
-        colors: ["#6c9bea", "#c9dcff", "#f4c65d", "#f2766b", "#f5f2ec"],
-      }}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
+      onBlur={handleBlur}
     >
-      {isSuccessful ? (
-        <span className="download-button__success" role="status" aria-live="polite">
-          Successfully!
-        </span>
-      ) : (
+      <a
+        ref={triggerRef}
+        className={["download-button", compact && "download-button--compact"]
+          .filter(Boolean)
+          .join(" ")}
+        data-language={language}
+        href={DOWNLOAD_URL}
+        role="button"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        onClick={handleTriggerClick}
+      >
         <span className="download-button__content">
           <IoLogoApple className="download-button__apple" aria-hidden="true" />
           <span className="download-button__label">
@@ -241,8 +345,63 @@ function DownloadButton({ compact = false }: { compact?: boolean }) {
           </span>
           <IoArrowForward className="download-button__arrow" aria-hidden="true" />
         </span>
-      )}
-    </ConfettiButton>
+      </a>
+
+      <div
+        className="download-menu__panel"
+        role="menu"
+        aria-label={chinese ? "选择下载版本" : "Choose a download"}
+      >
+        <div className="download-menu__list">
+          {DOWNLOAD_VARIANTS.map((variant) => {
+            const isSuccessful = successfulVariants.has(variant.id);
+
+            return (
+              <ConfettiButton
+                key={variant.id}
+                className={[
+                  "download-menu__item",
+                  isSuccessful && "download-menu__item--successful",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+                href={DOWNLOAD_BASE_URL + variant.file}
+                download={variant.file}
+                role="menuitem"
+                tabIndex={isOpen ? 0 : -1}
+                confettiDisabled={isSuccessful}
+                effect={compact ? "fireworks" : "burst"}
+                onClick={() => handleVariantClick(variant.id)}
+                options={{
+                  particleCount: 50,
+                  spread: 45,
+                  startVelocity: 45,
+                  decay: 0.9,
+                  gravity: 1,
+                  ticks: 200,
+                  scalar: 0.9,
+                  zIndex: 100,
+                  disableForReducedMotion: true,
+                  colors: ["#6c9bea", "#c9dcff", "#f4c65d", "#f2766b", "#f5f2ec"],
+                }}
+              >
+                <span className="download-menu__item-text" aria-hidden={isSuccessful}>
+                  <span className="download-menu__item-name">{variant.name}</span>
+                  <span className="download-menu__item-detail">
+                    {chinese ? variant.detail.zh : variant.detail.en}
+                  </span>
+                </span>
+                {isSuccessful ? (
+                  <span className="download-menu__item-success" role="status" aria-live="polite">
+                    Successfully!
+                  </span>
+                ) : null}
+              </ConfettiButton>
+            );
+          })}
+        </div>
+      </div>
+    </div>
   );
 }
 
