@@ -45,7 +45,8 @@ function PrivacyPolicy() {
         Per-app mixing, equalization, and routing use macOS audio process taps for local,
         real-time processing. MacMix does not record, save, transmit, or upload the audio
         content it processes. Audio samples are used only in memory to produce the
-        adjusted output on your Mac.
+        adjusted output on your Mac. Now Playing information is likewise read and
+        controlled locally through macOS and is not uploaded.
       </p>
 
       <h2>2. Permissions</h2>
@@ -72,11 +73,6 @@ function PrivacyPolicy() {
           system volume keys or use volume-key shortcuts. MacMix observes keyboard events
           to recognize those keys and shortcuts; it does not record, store, or transmit
           what you type.
-        </li>
-        <li>
-          <strong>Now Playing:</strong> when enabled, MacMix reads and controls the
-          current media session through macOS on your Mac. This information is not
-          uploaded.
         </li>
       </ul>
       <p>
@@ -457,9 +453,6 @@ function UpdatedZh() {
         <strong>最后更新：</strong>
         <time dateTime={LAST_UPDATED_ISO}>{LAST_UPDATED_ZH}</time>
       </p>
-      <p>
-        本文为中文译本，供参考。中文与英文版本如有不一致，以英文版本为准。
-      </p>
     </>
   );
 }
@@ -486,7 +479,7 @@ function PrivacyPolicyZh() {
         分 App 混音、均衡和路由使用 macOS
         音频进程捕获在本机进行实时处理。MacMix
         不会录制、保存、传输或上传它所处理的音频内容。音频样本只在内存中用于在你的 Mac
-        上生成调整后的输出。
+        上生成调整后的输出。“正在播放”信息同样只通过 macOS 在本机读取和控制，不会上传。
       </p>
 
       <h2>2. 系统权限</h2>
@@ -509,10 +502,6 @@ function PrivacyPolicyZh() {
           <strong>辅助功能：</strong>仅在你允许 MacMix
           接管系统音量键或使用音量键快捷键时需要。MacMix
           会观察键盘事件以识别这些按键和快捷键，但不会记录、保存或传输你输入的内容。
-        </li>
-        <li>
-          <strong>正在播放：</strong>开启后，MacMix 通过 macOS 在你的 Mac
-          上读取和控制当前媒体会话。这些信息不会上传。
         </li>
       </ul>
       <p>
