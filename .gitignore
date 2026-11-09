@@ -4,3 +4,4 @@ dist/
 *.local
 macmix/public/assets/MacMix/GoldenGate_6k.png
 macmix/public/assets/MacMix/Golden_Dark_6k.png
+.claude/
