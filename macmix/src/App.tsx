@@ -54,7 +54,7 @@ const DOWNLOAD_VARIANTS = [
 const DOWNLOAD_URL = DOWNLOAD_BASE_URL + DOWNLOAD_VARIANTS[0].file;
 const DOWNLOAD_MENU_CLOSE_DELAY = 160;
 const STUDIO_CHECKOUT_URL =
-  "https://checkout.dodopayments.com/buy/pdt_0NmJ2vOqulR07tfZqwKtU?quantity=1";
+  "https://checkout.dodopayments.com/buy/pdt_0NmJ2vOqulR07tfZqwKtU?quantity=1&singlePage=true";
 const ChangelogPage = lazy(() => import("./components/ChangelogPage"));
 const LegalPage = lazy(() => import("./components/LegalPage"));
 
